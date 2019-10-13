@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Lamar;
+using Lib.AspNetCore.ServerSentEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,9 +36,20 @@ namespace plodo.Backend.API
         public void ConfigureContainer(ServiceRegistry services)
         {
             services.AddOptions();
+            
+            services.AddServerSentEvents(x =>
+            {
+                x.OnClientConnected += async (service, args) =>
+                {
+                    var sessionId = args.Client.User.FindFirstValue("session_id");
+                    await service.AddToGroupAsync(sessionId, args.Client);
+                };
+            });
 
             services.AddHealthChecks()
                 .AddCheck<ContainerHealthCheck>("ioc");
+            
+            services.AddAuthenticationConfiguration(_config);
             
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -48,7 +61,6 @@ namespace plodo.Backend.API
 
             
             services.AddSwaggerConfiguration();
-
             services.AddCorsConfiguration();
         }
         
@@ -73,7 +85,14 @@ namespace plodo.Backend.API
                 app.UseHsts();
             }
 
+            app.MapServerSentEvents("/session-stream", new ServerSentEventsOptions
+            {
+                Authorization = ServerSentEventsAuthorization.Default
+            });
+            
             app.UseHealthChecks("/health");
+            
+            app.UseAuthentication();
 
             app.UseStaticFiles();
             app.UseCors();
