@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plodo.Backend.API", "plodo.Backend.API\plodo.Backend.API.csproj", "{EAA43A94-A8C2-4DA1-9543-0FD54FF07C9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plodo.Backend.Services", "plodo.Backend.Services\plodo.Backend.Services.csproj", "{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{EAA43A94-A8C2-4DA1-9543-0FD54FF07C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAA43A94-A8C2-4DA1-9543-0FD54FF07C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAA43A94-A8C2-4DA1-9543-0FD54FF07C9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

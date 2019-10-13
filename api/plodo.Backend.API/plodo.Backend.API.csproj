@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="4.0.0" />
+        <PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="4.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="Serilog.AspNetCore" Version="3.0.0" />
@@ -23,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
+      <ProjectReference Include="..\plodo.Backend.Services\plodo.Backend.Services.csproj" />
     </ItemGroup>
 
 </Project>
