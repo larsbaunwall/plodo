@@ -1,4 +1,4 @@
-# clap-app
+# plodo
 
 ## Project setup
 ```

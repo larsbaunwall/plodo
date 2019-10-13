@@ -12,7 +12,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let win
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: 'clap', privileges: { secure: true, standard: true } }])
+protocol.registerSchemesAsPrivileged([{ scheme: 'plodo', privileges: { secure: true, standard: true } }])
 
 function createWindow () {
   // Create the browser window.
@@ -30,9 +30,9 @@ function createWindow () {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
-    createProtocol('clap')
+    createProtocol('plodo')
     // Load the index.html when not in development
-    win.loadURL('clap://./index.html')
+    win.loadURL('plodo://./index.html')
   }
 
   win.on('closed', () => {
