@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test the plodo event stream</title>
+</head>
+<body>
+<script>
+    var source = new EventSource('/session-stream');
+    source.addEventListener("vote", function(e){
+        console.log(e.data);
+    });
+</script>
+</body>
+</html>
