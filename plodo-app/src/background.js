@@ -1,15 +1,64 @@
 'use strict'
-
-import { app, protocol, BrowserWindow } from 'electron'
+/* global __static */
+import { app, protocol, BrowserWindow, screen, Tray } from 'electron'
+import path from 'path'
 import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+import './store.js'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+let tray
+
+// Don't show the app in dock
+app.dock.hide();
+
+const createTray = () => {
+  tray = new Tray(path.join(__static, "icon.png"))
+  tray.setToolTip("Configure plodo")
+  tray.on('right-click', toggleWindow)
+  tray.on('double-click', toggleWindow)
+  tray.on('click', function (event) {
+    toggleWindow()
+
+    // Show devtools when command clicked
+    if (win.isVisible() && process.defaultApp && event.metaKey) {
+      win.openDevTools({ mode: 'detach' })
+    }
+  })
+}
+
+const toggleWindow = () => {
+  if (win.isVisible()) {
+    win.hide()
+  } else {
+    showWindow()
+  }
+}
+const showWindow = () => {
+  const position = getWindowPosition()
+  win.setPosition(position.x, position.y, false)
+  win.show()
+  win.focus()
+}
+
+const getWindowPosition = () => {
+  const windowBounds = win.getBounds()
+  const trayBounds = tray.getBounds()
+
+  // Center window horizontally below the tray icon
+  const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2))
+
+  // Position window 4 pixels vertically below the tray icon
+  const y = Math.round(trayBounds.y + trayBounds.height + 4)
+
+  return { x: x, y: y }
+}
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'plodo', privileges: { secure: true, standard: true } }])
@@ -17,13 +66,18 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'plodo', privileges: { secure: t
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 200,
-    height: 100,
+    width: 400,
+    height: 500,
+    icon: path.join(__static, "icon.png"),
     // transparent: true,
     frame: false,
+    // focusable: false,
     webPreferences: {
       nodeIntegration: true
-    } })
+    }
+  })
+
+  // win.setIgnoreMouseEvents(true);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -34,6 +88,12 @@ function createWindow () {
     // Load the index.html when not in development
     win.loadURL('plodo://./index.html')
   }
+
+  win.on('blur', () => {
+    if (!win.webContents.isDevToolsOpened()) {
+      win.hide()
+    }
+  })
 
   win.on('closed', () => {
     win = null
@@ -75,6 +135,7 @@ app.on('ready', async () => {
     // }
 
   }
+  createTray()
   createWindow()
 })
 
