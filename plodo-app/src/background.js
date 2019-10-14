@@ -16,7 +16,7 @@ let win
 let tray
 
 // Don't show the app in dock
-app.dock.hide();
+// app.dock.hide();
 
 const createTray = () => {
   tray = new Tray(path.join(__static, "icon.png"))
