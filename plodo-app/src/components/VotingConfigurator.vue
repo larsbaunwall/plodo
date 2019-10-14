@@ -1,36 +1,123 @@
 <template>
-  <div>
-      <base-dropdown>      
-        <base-button slot="title" type="default" class="dropdown-toggle">
-            <img src="https://demos.creative-tim.com/argon-design-system/assets/img/icons/flags/US.png" /> Flags
-        </base-button>
-        <li v-for="opt in options" :key="opt.name">
-            <a class="dropdown-item" href="#">
-                <img src="https://demos.creative-tim.com/argon-design-system/assets/img/icons/flags/DE.png" /> {{opt.name}}
-            </a>
-        </li>
-      </base-dropdown>
-    <base-button outline type="primary">+</base-button>
-  </div>
+	<div class="form-group">
+		<span
+			v-for="(n, idx) in maxOptions"
+			:key="idx"
+		>
+			<base-button
+				outline
+				type="primary"
+				style="margin-right: 8px"
+				v-if="selectedOptions[idx] !== undefined"
+				@click="unselectOption(idx)"
+			><img
+					:src="toSvgPath(selectedOptions[idx])"
+					width="20px"
+					height="20px"
+				></base-button>
+			<base-dropdown
+				v-else
+				hideArrow
+				menuClasses="emoji-dropdown"
+			>
+				<base-button
+					outline
+					slot="title"
+					icon="fa fa-2x fa-question"
+					type="secondary"
+				/>
+				<li
+					v-for="opt in options"
+					:key="opt.id"
+				>
+					<a
+						class="dropdown-item"
+						href="#"
+						@click="chooseOption(idx, opt)"
+					>
+						<img
+							:src="toSvgPath(opt)"
+							width="30px"
+							height="30px"
+						>
+					</a>
+				</li>
+			</base-dropdown>
+		</span>
+
+		<base-button
+		v-if="addingAllowed"
+			style="margin-right: 8px"
+			class="btn-tooltip"
+			v-b-tooltip.hover.bottom
+			title="Add one more"
+			outline
+			type="secondary"
+			icon="fa fa-plus"
+			@click="addOption"
+		/>
+		<base-button
+			outline
+			class="btn-tooltip"
+			v-b-tooltip.hover.bottom
+			title="Start over"
+			type="secondary"
+			icon="fa fa fa-trash"
+			@click="reset"
+		/>
+	</div>
 </template>
 
 <script>
 export default {
-    name: "VotingConfigurator",
-    components: {
-        },
-    data: {
-        options: [
-            {icon: "", name: "Like"},
-            {icon: "", name: "Dislike"},
-            {icon: "", name: "Yay"},
-            {icon: "", name: "Nay"},
-            {icon: "", name: "Break"}
-        ]
-    }
-}
+	name: "VotingConfigurator",
+	components: {},
+	data () {
+		return {
+			options: [
+				{ id: "smile", name: "coffee" },
+				{ id: "angry", name: "coffee" },
+				{ id: "heart", name: "coffee" },
+				{ id: "dislike", name: "dislike" },
+				{ id: "like", name: "like" },
+				{ id: "coffee", name: "coffee" },
+				{ id: "poh", name: "coffee" },
+			],
+			selectedOptions: [],
+			maxOptions: this.maxNumberOfOptions,
+		};
+	},
+	computed: {},
+	props: {
+		maxNumberOfOptions: Number,
+		addingAllowed: Boolean
+	},
+	methods: {
+		chooseOption (idx, option) {
+			this.$set(this.selectedOptions, idx, option);
+			this.$emit("selectedOption", { index: idx, option: option });
+		},
+		unselectOption (idx) {
+			this.$set(this.selectedOptions, idx, undefined);
+			this.$emit("unselectedOption", { index: idx });
+		},
+		addOption () {
+			this.maxOptions += 1;
+		},
+		reset () {
+			this.selectedOptions = [];
+			this.maxOptions = this.maxNumberOfOptions;
+			this.$emit("reset");
+		},
+		toSvgPath (option) {
+			return require(`@/assets/artwork/emojis/svg/${option.id}.svg`);
+		}
+	}
+};
 </script>
 
 <style>
-
+.emoji-dropdown {
+	min-width: 1rem !important;
+}
 </style>

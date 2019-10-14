@@ -1,6 +1,7 @@
 import Badge from "../components/Badge";
 import BaseAlert from "../components/BaseAlert";
 import BaseButton from "../components/BaseButton";
+import BaseDropdown from "../components/BaseDropdown";
 import BaseCheckbox from "../components/BaseCheckbox";
 import BaseInput from "../components/BaseInput";
 import BasePagination from "../components/BasePagination";
@@ -12,10 +13,11 @@ import Card from "../components/Card";
 import Icon from "../components/Icon";
 
 export default {
-  install(Vue) {
+  install (Vue) {
     Vue.component(Badge.name, Badge);
     Vue.component(BaseAlert.name, BaseAlert);
     Vue.component(BaseButton.name, BaseButton);
+    Vue.component(BaseDropdown.name, BaseDropdown);
     Vue.component(BaseInput.name, BaseInput);
     Vue.component(BaseCheckbox.name, BaseCheckbox);
     Vue.component(BasePagination.name, BasePagination);
