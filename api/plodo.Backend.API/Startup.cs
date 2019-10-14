@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using plodo.Backend.API.Configurations;
 using plodo.Backend.API.Health;
@@ -45,7 +46,7 @@ namespace plodo.Backend.API
                     await service.AddToGroupAsync(sessionId, args.Client);
                 };
             });
-
+            
             services.AddHealthChecks()
                 .AddCheck<ContainerHealthCheck>("ioc");
             
@@ -60,7 +61,6 @@ namespace plodo.Backend.API
                 });
 
             
-            services.AddSwaggerConfiguration();
             services.AddCorsConfiguration();
         }
         
@@ -68,10 +68,17 @@ namespace plodo.Backend.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddApiVersioning(x => x.ReportApiVersions = true);
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
+            services.AddSwaggerConfiguration();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
         {
             _logger.LogInformation("Starting application in {env}", _env.EnvironmentName);
 
@@ -101,11 +108,16 @@ namespace plodo.Backend.API
             app.UseMvc();
             
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(options =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "plodo API");
-                c.RoutePrefix = "";
-                c.InjectStylesheet("/swagger-ui.css");
+                foreach ( var description in provider.ApiVersionDescriptions )
+                {
+                    options.SwaggerEndpoint(
+                        $"/swagger/{description.GroupName}/swagger.json",
+                        description.GroupName.ToUpperInvariant() );
+                }
+                options.RoutePrefix = "";
+                options.InjectStylesheet("/swagger-ui.css");
             });
         }
     }

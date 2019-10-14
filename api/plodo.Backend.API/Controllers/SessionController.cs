@@ -11,8 +11,9 @@ using plodo.Backend.Services.Models;
 
 namespace plodo.Backend.API.Controllers
 {
-    [Route("api/v1/sessions")] 
+    [Route("api/v{version:apiVersion}/sessions")] 
     [ApiController]
+    [ApiVersion("1")]
     public class SessionController : Controller
     {
         private readonly ISecurityTokenService _sts;
@@ -32,14 +33,14 @@ namespace plodo.Backend.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("")]
-        public async Task<ActionResult> Create(CreateSessionRequest createSession)
+        public async Task<ActionResult<CreateSessionResponse>> Create(CreateSessionRequest request)
         {
-            var options = createSession.VotingOptions.Select(x => new Session.VoteOption {Name = x.ToString().ToLower()});
+            var options = request.VotingOptions.Select(x => new Session.VoteOption {Name = x.ToString().ToLower()});
             
             var session = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
             var token = _sts.IssueToken(session, Guid.Empty, new []{"Host"});
 
-            return Ok(new CreateSessionResponse {SessionId = session, Token = new AccessToken(token)});
+            return new CreateSessionResponse {SessionId = session, Token = new AccessToken(token)};
         }
         
         /// <summary>
@@ -49,11 +50,10 @@ namespace plodo.Backend.API.Controllers
         [HttpDelete]
         [Authorize(Roles = "Host")]
         [Route("{sessionId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Delete(string sessionId)
         {
-            var sessionIdClaim = HttpContext.User.FindFirst("session_id")?.Value ?? "";
-
-            if (sessionIdClaim != sessionId)
+            if (HttpContext.User.HasClaim("session_id", sessionId))
                 return Unauthorized();
 
             await _serverSentEventsService.SendEventAsync(sessionId, new ServerSentEvent {Type = "terminate"});
@@ -69,7 +69,7 @@ namespace plodo.Backend.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("{sessionId}/audience")]
-        public async Task<ActionResult> Join(string sessionId)
+        public async Task<ActionResult<JoinSessionResponse>> Join(string sessionId)
         {
             var session = _sessionService.GetSession(sessionId);
 
@@ -80,33 +80,8 @@ namespace plodo.Backend.API.Controllers
             
             var token = _sts.IssueToken(sessionId, Guid.NewGuid(), new []{"Audience"});
 
-            return Ok(new JoinSessionResponse{VotingOptions = votingOptions, Token = new AccessToken(token)});
+            return new JoinSessionResponse{VotingOptions = votingOptions, Token = new AccessToken(token)};
         }
-        
-//        /// <summary>
-//        /// Remove respondent from the session audience
-//        /// </summary>
-//        /// <param name="sessionId"></param>
-//        /// <param name="audienceId"></param>
-//        /// <returns></returns>
-//        [HttpDelete]
-//        [Authorize(Roles= "Host, Audience")]
-//        [Route("{sessionId}/audience/{audienceId}")]
-//        public async Task<ActionResult> Join(string sessionId, Guid audienceId)
-//        {
-//            var sessionIdClaim = HttpContext.User.FindFirst("session_id")?.Value ?? "";
-//            var audienceIdClaim = HttpContext.User.FindFirst("audience_id")?.Value ?? "";
-//
-//            if (sessionIdClaim != sessionId)
-//                return Unauthorized();
-//            
-//            if (Guid.Parse(audienceIdClaim) != audienceId)
-//                return Unauthorized();
-//            
-//            _serverSentEventsService.GetClients(sessionId).Where(x => x.)
-//            
-//            return StatusCode(StatusCodes.Status501NotImplemented);
-//        }
         
         /// <summary>
         /// Cast a vote in the feedback session
@@ -118,17 +93,15 @@ namespace plodo.Backend.API.Controllers
         [Route("{sessionId}/votes")]
         public async Task<ActionResult> Vote(string sessionId, CastVoteRequest request)
         {
-            var sessionIdClaim = HttpContext.User.FindFirst("session_id")?.Value ?? "";
-
-            if (sessionIdClaim != sessionId)
-                return Unauthorized();
+            if (HttpContext.User.HasClaim("session_id", sessionId))
+                return Unauthorized("Audience not in the session specified");
             
             var session = _sessionService.GetSession(sessionId);
 
             if (session == null)
                 return BadRequest("Session not found");
 
-            await _serverSentEventsService.SendEventAsync(
+            await _serverSentEventsService.SendEventAsync(sessionId,
                 new ServerSentEvent {Type = "vote", Data = new[] {request.Vote.ToString().ToLower()}});
 
             return Ok();
