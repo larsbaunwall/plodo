@@ -11,5 +11,10 @@ module.exports = {
           `
         }
       }
+    },
+    pluginOptions: {
+      electronBuilder: {
+        customFileProtocol: 'plodo://./' // Make sure to add "./" to the end of the protocol
+      }
     }
   };
