@@ -5,6 +5,7 @@
 				<div class="form-group">
 					<voting-configurator
 						:maxNumberOfOptions="3"
+						v-on:optionsChanged="handleOptionsChanged"
 					/>
 				</div>
 			</div>
@@ -46,6 +47,11 @@ import VotingConfigurator from "@/components/VotingConfigurator";
 export default {
 	components: {
 		VotingConfigurator
+	},
+	methods: {
+		handleOptionsChanged (args) {
+			console.log(args.selected);
+		},
 	}
 };
 </script>

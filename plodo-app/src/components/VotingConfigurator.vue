@@ -57,6 +57,7 @@
 			@click="addOption"
 		/>
 		<base-button
+			v-if="selectedOptions.length > 0"
 			outline
 			class="btn-tooltip"
 			v-b-tooltip.hover.bottom
@@ -95,11 +96,11 @@ export default {
 	methods: {
 		chooseOption (idx, option) {
 			this.$set(this.selectedOptions, idx, option);
-			this.$emit("selectedOption", { index: idx, option: option });
+			this.$emit("optionsChanged", { selected: this.selectedOptions });
 		},
 		unselectOption (idx) {
-			this.$set(this.selectedOptions, idx, undefined);
-			this.$emit("unselectedOption", { index: idx });
+			this.$set(this.selectedOptions, idx, undefined); // TODO: use an object as dictionary instead
+			this.$emit("optionsChanged", { selected: this.selectedOptions });
 		},
 		addOption () {
 			this.maxOptions += 1;
@@ -107,7 +108,7 @@ export default {
 		reset () {
 			this.selectedOptions = [];
 			this.maxOptions = this.maxNumberOfOptions;
-			this.$emit("reset");
+			this.$emit("optionsChanged", { selected: this.selectedOptions });
 		},
 		toSvgPath (option) {
 			return require(`@/assets/artwork/emojis/svg/${option.id}.svg`);
