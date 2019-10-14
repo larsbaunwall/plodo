@@ -55,17 +55,17 @@ export default {
       description: "Dropdown html tag (e.g div, li etc)"
     }
   },
-  data() {
+  data () {
     return {
       isOpen: false
     };
   },
   methods: {
-    toggleDropDown() {
+    toggleDropDown () {
       this.isOpen = !this.isOpen;
       this.$emit("change", this.isOpen);
     },
-    closeDropDown() {
+    closeDropDown () {
       this.isOpen = false;
       this.$emit("change", this.isOpen);
     }
