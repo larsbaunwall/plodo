@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import MainWindow from './views/MainWindow.vue'
+import SetupScreen from './views/SetupScreen.vue'
 
 Vue.use(Router)
 
@@ -9,7 +10,7 @@ export default new Router({
     {
       path: '/',
       name: 'main',
-      component: MainWindow
+      component: SetupScreen
     },
     {
       path: '/about',
