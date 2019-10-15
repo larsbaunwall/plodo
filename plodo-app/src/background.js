@@ -6,7 +6,29 @@ import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
-import './store.js'
+
+// Configure store and axiios
+
+import store from './store.js'
+import axios from "axios";
+
+const axiosInstance = axios.create({
+  baseURL: `http://localhost:5000/api/v1`
+});
+
+axiosInstance.interceptors.request.use(
+  config => {
+    if (store.getters.accessToken) {
+      config.headers.Authorization = `Bearer ${store.getters.accessToken}`;
+    }
+    return config;
+  },
+  error => {
+    Promise.reject(error);
+  }
+);
+
+store.$api = axiosInstance;
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
