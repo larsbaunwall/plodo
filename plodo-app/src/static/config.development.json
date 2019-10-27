@@ -1,0 +1,5 @@
+{
+    "apiEndpoint": "https://localhost:5001",
+    "apiVersion": "v1",
+    "streamEndpoint": "https://localhost:5001/session-stream'"
+}

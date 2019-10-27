@@ -1,29 +1,44 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
-import { apiEndpoint, apiVersion } from "@/config.json";
+import https from 'https';
+import EventSource from 'eventsource';
+
+const { apiEndpoint, apiVersion, streamEndpoint } = require(`../static/config.${process.env.NODE_ENV}.json`);
 
 const axiosInstance = axios.create({
-  baseURL: `${apiEndpoint}/api/${apiVersion}`
+  baseURL: `${apiEndpoint}/api/${apiVersion}`,
+  httpsAgent: new https.Agent({ rejectUnauthorized: process.env.NODE_ENV !== "development" })
 });
 
-const BackendApi = {
-  install(Vue, options) {
-    const { store } = options;
+const api = {
+  configure (store) {
     axiosInstance.interceptors.request.use(
-      config => {
+      request => {
         if (store.getters.accessToken) {
-          config.headers.Authorization = `Bearer ${store.getters.accessToken}`;
+          request.headers.Authorization = `Bearer ${store.getters.accessToken}`;
         }
-        return config;
+        return request;
       },
       error => {
+        console.log({ error });
         Promise.reject(error);
       }
     );
 
-    Vue.prototype.$api = axiosInstance;
-    store.$api = axiosInstance;
+    store.$api = {
+      axios: axiosInstance,
+      connectEventStream () {
+        let sse = new EventSource(streamEndpoint, { authorizationHeader: `Bearer ${store.getters.accessToken}` });
+
+        console.log({ sse })
+        sse.addEventListener("vote", msg => {
+          store.dispatch("processVote", msg);
+        });
+
+        return sse;
+      }
+    };
   }
 };
 
-export default BackendApi;
+export default api;
