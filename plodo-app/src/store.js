@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { strictEqual } from 'assert';
-
 import { createPersistedState, createSharedMutations } from "vuex-electron"
+import createPromiseAction from './promise-action'
+import api from "./api";
 
 Vue.use(Vuex)
 
@@ -19,8 +20,8 @@ export default new Vuex.Store({
     setToken (state, { token }) {
       state.accessToken = token;
     },
-    setSession (state, { session }) {
-      state.session = session;
+    setSession (state, { sessionId, votingOptions }) {
+      state.session = { id: sessionId, options: votingOptions };
     },
     destroySession (state) {
       state.session = {
@@ -31,21 +32,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async createSession (commit, { votingOptions }) {
+    async createSession ({ commit, getters }, { votingOptions }) {
       try {
-        const { data } = await this.$api.post("sessions", {
-          votingOptions: votingOptions
+        const { data } = await this.$api.axios.post("sessions", {
+          votingOptions: votingOptions.map(x => x.id)
         });
 
         commit("setToken", { token: data.token.access_Token });
-        commit("setSession", { session: data.sessionId });
+        commit("setSession", { sessionId: data.sessionId, votingOptions: votingOptions });
+
+        this.$sse = this.$api.connectEventStream();
       } catch (e) {
-        console.log({ e });
+          throw new Error(e);
       } finally {}
     },
-    async removeActiveSession (commit, getters) {
+    async removeActiveSession ({ commit, getters }) {
       try {
-        await this.$api.delete(`sessions/${getters.activeSession.id}`);
+        await this.$api.axios.delete(`sessions/${getters.activeSession.id}`);
 
         commit("destroySession");
       } catch (e) {
@@ -59,6 +62,9 @@ export default new Vuex.Store({
   },
   plugins: [
     createPersistedState(),
-    createSharedMutations()
+    createSharedMutations(),
+    createPromiseAction(),
+    api.configure
   ],
-})
+  strict: process.env.NODE_ENV !== 'production'
+});
