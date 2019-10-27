@@ -25,6 +25,7 @@
 			<div class="col-12">
 				<div class="form-group">
 					<base-button
+            @click="startSession"
 						block
 						style="primary"
 					>Start</base-button>
@@ -47,11 +48,24 @@ import VotingConfigurator from "@/components/VotingConfigurator";
 export default {
 	components: {
 		VotingConfigurator
-	},
+  },
+  data () {
+return {
+    votingOptions: [],
+  };
+},
 	methods: {
 		handleOptionsChanged (args) {
-			console.log(args.selected);
-		},
+      this.votingOptions = args.selected;
+    },
+    async startSession () {
+      try {
+        await this.$store.dispatchPromise("createSession", { votingOptions: this.votingOptions });
+        this.$router.push("/session");
+      } catch (error) {
+        console.log({ error });
+      }
+    }
 	}
 };
 </script>

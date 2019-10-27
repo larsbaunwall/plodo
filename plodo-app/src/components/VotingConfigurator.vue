@@ -27,7 +27,7 @@
 					type="secondary"
 				/>
 				<li
-					v-for="opt in options"
+					v-for="opt in options.filter(x => selectedOptions.indexOf(x) === -1)"
 					:key="opt.id"
 				>
 					<a
@@ -96,11 +96,11 @@ export default {
 	methods: {
 		chooseOption (idx, option) {
 			this.$set(this.selectedOptions, idx, option);
-			this.$emit("optionsChanged", { selected: this.selectedOptions });
+			this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
 		},
 		unselectOption (idx) {
-			this.$set(this.selectedOptions, idx, undefined); // TODO: use an object as dictionary instead
-			this.$emit("optionsChanged", { selected: this.selectedOptions });
+			this.$set(this.selectedOptions, idx, undefined); // TODO: use an object as dictionary instead (instead of array, as change detection in Vue is not great with arrays)
+			this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
 		},
 		addOption () {
 			this.maxOptions += 1;
@@ -108,7 +108,7 @@ export default {
 		reset () {
 			this.selectedOptions = [];
 			this.maxOptions = this.maxNumberOfOptions;
-			this.$emit("optionsChanged", { selected: this.selectedOptions });
+			this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
 		},
 		toSvgPath (option) {
 			return require(`@/assets/artwork/emojis/svg/${option.id}.svg`);
