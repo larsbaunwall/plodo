@@ -44,7 +44,9 @@ namespace plodo.Backend.API
                 {
                     var sessionId = args.Client.User.FindFirstValue("session_id");
                     _logger.LogInformation("SSE client trying to connect to session {SessionId} ", sessionId);
-                    await service.AddToGroupAsync(sessionId, args.Client);
+                    
+                    if(sessionId != null) 
+                        await service.AddToGroupAsync(sessionId, args.Client);
                 };
             });
             
