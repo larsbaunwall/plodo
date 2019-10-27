@@ -4,6 +4,6 @@ namespace plodo.Backend.API.Models
 {
     public class CreateSessionRequest
     {
-        public IEnumerable<Vote> VotingOptions { get; set; }
+        public IEnumerable<string> VotingOptions { get; set; }
     }
 }

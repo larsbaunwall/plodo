@@ -43,6 +43,7 @@ namespace plodo.Backend.API
                 x.OnClientConnected += async (service, args) =>
                 {
                     var sessionId = args.Client.User.FindFirstValue("session_id");
+                    _logger.LogInformation("SSE client trying to connect to session {SessionId} ", sessionId);
                     await service.AddToGroupAsync(sessionId, args.Client);
                 };
             });
@@ -94,7 +95,8 @@ namespace plodo.Backend.API
 
             app.MapServerSentEvents("/session-stream", new ServerSentEventsOptions
             {
-                Authorization = ServerSentEventsAuthorization.Default
+                Authorization = ServerSentEventsAuthorization.Default, 
+                OnPrepareAccept = x => _logger.LogInformation("", x)
             });
             
             app.UseHealthChecks("/health");

@@ -35,7 +35,7 @@ namespace plodo.Backend.API.Controllers
         [Route("")]
         public async Task<ActionResult<CreateSessionResponse>> Create(CreateSessionRequest request)
         {
-            var options = request.VotingOptions.Select(x => new Session.VoteOption {Name = x.ToString().ToLower()});
+            var options = request.VotingOptions.Select(x => new Session.VoteOption {Name = x.ToLower()});
             
             var session = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
             var token = _sts.IssueToken(session, Guid.Empty, new []{"Host"});
@@ -53,7 +53,7 @@ namespace plodo.Backend.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Delete(string sessionId)
         {
-            if (HttpContext.User.HasClaim("session_id", sessionId))
+            if (!HttpContext.User.HasClaim("session_id", sessionId))
                 return Unauthorized();
 
             await _serverSentEventsService.SendEventAsync(sessionId, new ServerSentEvent {Type = "terminate"});
