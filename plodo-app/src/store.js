@@ -1,20 +1,19 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { strictEqual } from 'assert';
-import { createPersistedState, createSharedMutations } from "vuex-electron"
-import createPromiseAction from './promise-action'
+import Vue from "vue";
+import Vuex from "vuex";
+import { strictEqual } from "assert";
+import { createPersistedState, createSharedMutations } from "vuex-electron";
+import createPromiseAction from "./promise-action";
 import api from "./api";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     accessToken: "",
     session: {
       id: "",
-      options: [],
+      options: []
     }
-
   },
   mutations: {
     setToken (state, { token }) {
@@ -26,7 +25,7 @@ export default new Vuex.Store({
     destroySession (state) {
       state.session = {
         id: "",
-        options: [],
+        options: []
       };
       state.accessToken = "";
     }
@@ -43,8 +42,9 @@ export default new Vuex.Store({
 
         this.$sse = this.$api.connectEventStream();
       } catch (e) {
-          throw new Error(e);
-      } finally {}
+        throw new Error(e);
+      } finally {
+      }
     },
     async removeActiveSession ({ commit, getters }) {
       try {
@@ -53,7 +53,8 @@ export default new Vuex.Store({
         commit("destroySession");
       } catch (e) {
         console.log({ e });
-      } finally {}
+      } finally {
+      }
     }
   },
   getters: {
@@ -66,5 +67,5 @@ export default new Vuex.Store({
     createPromiseAction(),
     api.configure
   ],
-  strict: process.env.NODE_ENV !== 'production'
+  strict: process.env.NODE_ENV !== "production"
 });

@@ -47,33 +47,6 @@
     "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.6.10"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
-    ],
-    "rules": {
-      "semi": 0,
-      "indent": 0,
-      "max-len": 0,
-      "quotes": [
-        "off",
-        "double"
-      ],
-      "no-tabs": 0,
-      "import/prefer-default-export": "warn",
-      "no-unused-vars": "warn",
-      "comma-dangle": "off",
-      "operator-linebreak": "off"
-    },
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
