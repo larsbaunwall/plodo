@@ -3,10 +3,11 @@ module.exports = {
         "node": true,
         "es6": true
     },
+    "plugins": ["prettier"],
     "extends": [
-        "eslint:recommended",
-        "plugin:vue/essential",
-        "@vue/standard"
+        // "eslint:recommended",
+         "plugin:vue/recommended",
+        // "@vue/standard"
     ],
     "rules": {
         "indent": [

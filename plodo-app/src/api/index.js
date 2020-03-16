@@ -28,10 +28,10 @@ const api = {
     store.$api = {
       axios: axiosInstance,
       connectEventStream () {
-        console.log({ a: store.getters.accessToken })
+        console.log({ a: store.getters.accessToken });
         let sse = new EventSource(streamEndpoint, { https: { rejectUnauthorized: false }, headers: { "Authorization": `Bearer ${store.getters.accessToken}` } });
 
-        console.log({ sse })
+        console.log({ sse });
         sse.addEventListener("vote", msg => {
           store.dispatch("processVote", msg);
         });

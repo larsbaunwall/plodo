@@ -1,39 +1,45 @@
 <template>
-	<div style="padding: 10px;">
-		<div class="row">
-			<div class="col-12">
-        <h2>Session active {{this.activeSession.id}}</h2>
-			</div>
-		</div>
+  <div style="padding: 10px;">
     <div class="row">
-			<div class="col-12">
-        <smiley-counter v-for="opt in activeSession.options" :key="opt.id" :smiley="opt.id" />
-			</div>
-		</div>
+      <div class="col-12">
+        <h2>Session active {{ activeSession.id }}</h2>
+      </div>
+    </div>
     <div class="row">
-			<div class="col-12">
-				<div class="form-group">
-					<base-button
+      <div class="col-12">
+        <smiley-counter
+          v-for="opt in activeSession.options"
+          :key="opt.id"
+          :smiley="opt.id"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <base-button
+            block
+            style="primary"
             @click="quitSession"
-						block
-						style="primary"
-					>Quit session</base-button>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12">
-				<img
-					src="@/assets/artwork/logo.png"
-					width="100px"
-				/>
-			</div>
-		</div>
-	</div>
+          >
+            Quit session
+          </base-button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <img
+          src="@/assets/artwork/logo.png"
+          width="100px"
+        >
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import SmileyCounter from "@/components/SmileyCounter.vue";
 export default {
   components: { SmileyCounter },
@@ -46,7 +52,7 @@ export default {
       this.$router.push("/");
     }
   }
-}
+};
 </script>
 
 <style>

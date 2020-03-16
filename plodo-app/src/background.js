@@ -13,13 +13,12 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
-let tray;
 
 // Don't show the app in dock
 // app.dock.hide();
 
 const createTray = () => {
-  tray = new Tray(path.join(__static, "icon.png"));
+  let tray = new Tray(path.join(__static, "icon.png"));
   tray.setToolTip("Configure plodo");
   tray.on("right-click", toggleWindow);
   tray.on("double-click", toggleWindow);
@@ -40,6 +39,7 @@ const toggleWindow = () => {
     showWindow();
   }
 };
+
 const showWindow = () => {
   const position = getWindowPosition();
   win.setPosition(position.x, position.y, false);
@@ -134,6 +134,7 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
+  
   createTray();
   createWindow();
 });

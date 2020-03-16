@@ -1,19 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { strictEqual } from "assert";
 import { createPersistedState, createSharedMutations } from "vuex-electron";
 import createPromiseAction from "./promise-action";
 import api from "./api";
 
 Vue.use(Vuex);
 
+const emptySession = {
+  id: "",
+  options: []
+};
+
 export default new Vuex.Store({
   state: {
     accessToken: "",
-    session: {
-      id: "",
-      options: []
-    }
+    session: emptySession
   },
   mutations: {
     setToken (state, { token }) {
@@ -23,10 +24,7 @@ export default new Vuex.Store({
       state.session = { id: sessionId, options: votingOptions };
     },
     destroySession (state) {
-      state.session = {
-        id: "",
-        options: []
-      };
+      state.session = emptySession;
       state.accessToken = "";
     }
   },
@@ -49,6 +47,7 @@ export default new Vuex.Store({
     async removeActiveSession ({ commit, getters }) {
       try {
         await this.$api.axios.delete(`sessions/${getters.activeSession.id}`);
+        this.$sse.close();
 
         commit("destroySession");
       } catch (e) {
