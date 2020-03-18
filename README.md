@@ -1,4 +1,4 @@
-[![Build status](https://dev.azure.com/plodo/plodo.Backend/_apis/build/status/plodo.Backend-Build)](https://dev.azure.com/plodo/plodo.Backend/_build/latest?definitionId=2)
+[![Backend build](https://dev.azure.com/plodo/plodo.Backend/_apis/build/status/plodo.Backend-Build)](https://dev.azure.com/plodo/plodo.Backend/_build/latest?definitionId=2)
 
 ![plodo](/artwork/logo/1x/plodo-logo.png?token=AAYFUMFNWQZKIHIM2KGH7ZS5UMLU4)
 
