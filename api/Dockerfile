@@ -15,7 +15,7 @@ COPY . ./
 RUN dotnet publish ./plodo.Backend.API/plodo.Backend.API.csproj -o /app/out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "plodo.Backend.API.dll"]
