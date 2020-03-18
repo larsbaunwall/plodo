@@ -14,7 +14,7 @@ namespace plodo.Backend.API.Controllers
     [Route("api/v{version:apiVersion}/sessions")] 
     [ApiController]
     [ApiVersion("1")]
-    public class SessionController : Controller
+    public class SessionController : ControllerBase
     {
         private readonly ISecurityTokenService _sts;
         private readonly ISessionService _sessionService;
@@ -37,10 +37,10 @@ namespace plodo.Backend.API.Controllers
         {
             var options = request.VotingOptions.Select(x => new Session.VoteOption {Name = x.ToLower()});
             
-            var session = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
-            var token = _sts.IssueToken(session, Guid.Empty, new []{"Host"});
+            var sessionId = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
+            var token = _sts.IssueToken(sessionId, Guid.Empty, new []{"Host"});
 
-            return new CreateSessionResponse {SessionId = session, Token = new AccessToken(token)};
+            return new CreateSessionResponse {SessionId = sessionId, Token = new AccessToken(token)};
         }
         
         /// <summary>

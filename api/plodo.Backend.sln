@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plodo.Backend.API", "plodo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plodo.Backend.Services", "plodo.Backend.Services\plodo.Backend.Services.csproj", "{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "plodo.Backend.Services.Tests", "plodo.Backend.Services.Tests\plodo.Backend.Services.Tests.csproj", "{5B26F3EE-3A72-463A-82FB-A82F9020DE17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E6AC758-EFF9-4D82-B4F8-E2E6CA80D4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B26F3EE-3A72-463A-82FB-A82F9020DE17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B26F3EE-3A72-463A-82FB-A82F9020DE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B26F3EE-3A72-463A-82FB-A82F9020DE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B26F3EE-3A72-463A-82FB-A82F9020DE17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

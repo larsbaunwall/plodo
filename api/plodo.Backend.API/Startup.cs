@@ -37,6 +37,7 @@ namespace plodo.Backend.API
         public void ConfigureContainer(ServiceRegistry services)
         {
             services.AddOptions();
+            services.AddControllers();
             
             services.AddServerSentEvents(x =>
             {
@@ -56,11 +57,11 @@ namespace plodo.Backend.API
             services.AddAuthenticationConfiguration(_config);
             
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    //options.JsonSerializerOptions.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
 
             
@@ -70,7 +71,7 @@ namespace plodo.Backend.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddApiVersioning(x => x.ReportApiVersions = true);
             services.AddVersionedApiExplorer(options =>
             {
@@ -109,7 +110,11 @@ namespace plodo.Backend.API
             app.UseCors();
             app.UseHttpsRedirection();
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
             
             app.UseSwagger();
             app.UseSwaggerUI(options =>
