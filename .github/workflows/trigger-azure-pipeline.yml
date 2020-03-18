@@ -2,7 +2,7 @@ name: Run Azure Pipeline deployment
 on: 
   push:
     paths:
-      - /api/**
+      - api/**
     branches:
       - master
 
