@@ -4,10 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lamar.Microsoft.DependencyInjection;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -22,7 +21,10 @@ namespace plodo.Backend.API
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+                .WriteTo
+                    .Console(theme: AnsiConsoleTheme.Code)
+                .WriteTo
+                    .ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces)
                 .CreateLogger();
             
             CreateWebHostBuilder(args).Build().Run();
@@ -30,7 +32,7 @@ namespace plodo.Backend.API
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseSerilog()
+                .UseSerilog(Log.Logger)
                 .UseLamar(new ApiRegistry())
                 .UseStartup<Startup>();
     }

@@ -71,6 +71,7 @@ namespace plodo.Backend.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddApiVersioning(x => x.ReportApiVersions = true);
             services.AddVersionedApiExplorer(options =>
