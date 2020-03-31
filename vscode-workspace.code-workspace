@@ -1,13 +1,16 @@
 {
 	"folders": [
 		{
-			"path": "plodo-app"
-		},
-		{
 			"path": "api"
 		},
 		{
 			"path": "artwork"
+		},
+		{
+			"path": "client-app"
+		},
+		{
+			"path": "presenter-app"
 		}
 	],
 	"settings": {}
