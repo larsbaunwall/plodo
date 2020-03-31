@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "plodo-app"
+		},
+		{
+			"path": "api"
+		},
+		{
+			"path": "artwork"
+		}
+	],
+	"settings": {}
+}
