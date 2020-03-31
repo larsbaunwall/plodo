@@ -1,28 +1,28 @@
 <template>
-	<div>
+  <div>
     <div>
-      {{count}}
+      {{ count }}
     </div>
-		<div>
-			<img
-				:src="require(`@/assets/artwork/emojis/svg/${smiley}.svg`)"
-				width="30px"
-				height="30px"
-			>
-		</div>
-	</div>
+    <div>
+      <img
+        :src="require(`@/assets/artwork/emojis/svg/${smiley}.svg`)"
+        width="30px"
+        height="30px"
+      >
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: "SmileyCounter",
+  props: {
+    smiley: String,
+    count: Number
+  },
   data () {
     return {
-    }
-  },
-  props: {
-      smiley: String,
-      count: Number
+    };
   }
 };
 </script>
