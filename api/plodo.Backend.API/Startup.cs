@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 using Lamar;
 using Lib.AspNetCore.ServerSentEvents;
 using Microsoft.AspNetCore.Builder;
@@ -37,7 +38,13 @@ namespace plodo.Backend.API
         public void ConfigureContainer(ServiceRegistry services)
         {
             services.AddOptions();
-            services.AddControllers();
+            services.AddControllers()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                });
             
             services.AddServerSentEvents(x =>
             {
@@ -55,15 +62,6 @@ namespace plodo.Backend.API
                 .AddCheck<ContainerHealthCheck>("ioc");
             
             services.AddAuthenticationConfiguration(_config);
-            
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddJsonOptions(options =>
-                {
-                    //options.JsonSerializerOptions.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    options.JsonSerializerOptions.IgnoreNullValues = true;
-                });
-
             
             services.AddCorsConfiguration();
         }
