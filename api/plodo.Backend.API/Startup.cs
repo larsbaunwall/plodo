@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using plodo.Backend.API.Configurations;
 using plodo.Backend.API.Health;
+using System.Text.Json;
 
 namespace plodo.Backend.API
 {
@@ -44,6 +45,8 @@ namespace plodo.Backend.API
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
             
             services.AddServerSentEvents(x =>
