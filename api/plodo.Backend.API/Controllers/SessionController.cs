@@ -93,7 +93,7 @@ namespace plodo.Backend.API.Controllers
         [Route("{sessionId}/votes")]
         public async Task<ActionResult> Vote(string sessionId, CastVoteRequest request)
         {
-            if (HttpContext.User.HasClaim("session_id", sessionId))
+            if (!HttpContext.User.HasClaim("session_id", sessionId))
                 return Unauthorized("Audience not in the session specified");
             
             var session = _sessionService.GetSession(sessionId);
