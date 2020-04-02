@@ -4,9 +4,9 @@ namespace plodo.Backend.API.Models
 {
         public class AccessToken
         {
-            public string Access_Token { get; set; }
-            public string Token_Type { get; set; }
-            public int Expires_In { get; set; }
+            public string Token { get; set; }
+            public string Type { get; set; }
+            public int Expires { get; set; }
 
             public AccessToken()
             {
@@ -15,9 +15,9 @@ namespace plodo.Backend.API.Models
 
             public AccessToken(SerializedSecurityToken stsToken)
             {
-                Access_Token = stsToken.Token;
-                Token_Type = stsToken.Type;
-                Expires_In = stsToken.Expires;
+                Token = stsToken.Token;
+                Type = stsToken.Type;
+                Expires = stsToken.Expires;
             }
         }
 }
