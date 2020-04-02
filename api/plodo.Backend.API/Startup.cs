@@ -106,13 +106,15 @@ namespace plodo.Backend.API
             
             app.UseHealthChecks("/health");
 
-            app.UseAuthorization();
             app.UseAuthentication();
 
             app.UseStaticFiles();
             app.UseCors();
 
             app.UseRouting();
+            
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
