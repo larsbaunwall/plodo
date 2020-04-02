@@ -4,6 +4,6 @@ namespace plodo.Backend.API.Models
     {
         public string SessionId { get; set; }
         
-        public AccessToken Token { get; set; }
+        public AccessToken AccessToken { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace plodo.Backend.API.Controllers
             var sessionId = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
             var token = _sts.IssueToken(sessionId, Guid.Empty, new []{"Host"});
 
-            return new CreateSessionResponse {SessionId = sessionId, Token = new AccessToken(token)};
+            return new CreateSessionResponse {SessionId = sessionId, AccessToken = new AccessToken(token)};
         }
         
         /// <summary>
@@ -80,7 +80,7 @@ namespace plodo.Backend.API.Controllers
             
             var token = _sts.IssueToken(sessionId, Guid.NewGuid(), new []{"Audience"});
 
-            return new JoinSessionResponse{VotingOptions = votingOptions, Token = new AccessToken(token)};
+            return new JoinSessionResponse{VotingOptions = votingOptions, AccessToken = new AccessToken(token)};
         }
         
         /// <summary>
