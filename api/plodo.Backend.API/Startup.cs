@@ -110,7 +110,6 @@ namespace plodo.Backend.API
 
             app.UseStaticFiles();
             app.UseCors();
-            app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>
