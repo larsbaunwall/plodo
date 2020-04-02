@@ -35,7 +35,7 @@ namespace plodo.Backend.API.Controllers
         [Route("")]
         public async Task<ActionResult<CreateSessionResponse>> Create(CreateSessionRequest request)
         {
-            var options = request.VotingOptions.Select(x => new Session.VoteOption {Name = x.ToLower()});
+            var options = request.VotingOptions.Select(x => new Session.VoteOption(x.ToLower()));
             
             var sessionId = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
             var token = _sts.IssueToken(sessionId, Guid.Empty, new []{"Host"});
@@ -76,7 +76,7 @@ namespace plodo.Backend.API.Controllers
             if (session == null)
                 return BadRequest("Session not found");
 
-            var votingOptions = session.VotingOptions.Select(x => Enum.Parse<Vote>(x.Name, true));
+            var votingOptions = session.VotingOptions.Select(x => x.Name);
             
             var token = _sts.IssueToken(sessionId, Guid.NewGuid(), new []{"Audience"});
 

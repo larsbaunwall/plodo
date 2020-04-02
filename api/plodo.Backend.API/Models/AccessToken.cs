@@ -4,6 +4,9 @@ namespace plodo.Backend.API.Models
 {
         public class AccessToken
         {
+            /// <summary>
+            /// A JWT token for authentication. Must be presented in the Authorization header on all requests in the session
+            /// </summary>
             public string Token { get; set; }
             public string Type { get; set; }
             public int Expires { get; set; }
