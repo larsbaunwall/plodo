@@ -105,7 +105,8 @@ namespace plodo.Backend.API
             });
             
             app.UseHealthChecks("/health");
-            
+
+            app.UseAuthorization();
             app.UseAuthentication();
 
             app.UseStaticFiles();
