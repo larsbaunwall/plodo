@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +26,16 @@ namespace plodo.Backend.Services
             var signingKey = Convert.FromBase64String(_configuration["Jwt:SigningSecret"]);
             var expiryDuration = int.Parse(_configuration["Jwt:ExpiryDuration"]);
 
+            var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x));
+
+            var subject = new ClaimsIdentity(new[]
+            {
+                new Claim("session_id", sessionId.ToString()),
+                new Claim("audience_id", audienceId.ToString()),
+            });
+            
+            subject.AddClaims(roleClaims);
+            
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = null,              // Not required as no third-party is involved
@@ -32,12 +43,7 @@ namespace plodo.Backend.Services
                 IssuedAt = DateTime.UtcNow,
                 NotBefore = DateTime.UtcNow,
                 Expires = DateTime.UtcNow.AddMinutes(expiryDuration),
-                Subject = new ClaimsIdentity(new []
-                {
-                    new Claim("session_id", sessionId.ToString()),
-                    new Claim("audience_id", audienceId.ToString()),
-                    new Claim(ClaimTypes.Role, string.Join(',', roles))
-                }),
+                Subject = subject,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var jwtTokenHandler = new JwtSecurityTokenHandler();

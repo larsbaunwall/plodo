@@ -11,6 +11,8 @@ namespace plodo.Backend.API.Configurations
     {
         public static IServiceCollection AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration rootConfig)
         {
+            var signingKey = Convert.FromBase64String(rootConfig["Jwt:SigningSecret"]);
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme =  JwtBearerDefaults.AuthenticationScheme;
@@ -18,7 +20,7 @@ namespace plodo.Backend.API.Configurations
                 })
                 .AddJwtBearer(options =>
                 {
-                    var signingKey = Convert.FromBase64String(rootConfig["Jwt:SigningSecret"]);
+                    options.SaveToken = true;
                     
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
