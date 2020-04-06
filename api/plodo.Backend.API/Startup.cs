@@ -108,9 +108,8 @@ namespace plodo.Backend.API
                 },
                 OnPrepareAccept = x =>
                 {
-                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "http://localhost:8080");
-                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "https://www.plodo.io");
-                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "https://www-qa.plodo.io");
+                    //TODO: Maybe this should be more limited in the future.
+                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "*");
                     x.Headers.Add(CorsConstants.AccessControlAllowCredentials, "true");
                     
                     _logger.LogInformation("SSE connection prepared, {HttpResponse}", x);
