@@ -1,11 +1,12 @@
+@import "custom/variables";
+
+@import "twemoji-amazing.scss";
+
 body, html {
     font-family: Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    margin: 0px;
-    padding: 0px;
     height: 100%;
-    width: 100%;
-    overflow: hidden;
+    background-color: $gray-100;
 }
 

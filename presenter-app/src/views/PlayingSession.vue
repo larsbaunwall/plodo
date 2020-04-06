@@ -28,14 +28,6 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12">
-        <img
-          src="@/assets/artwork/logo.png"
-          width="100px"
-        >
-      </div>
-    </div>
   </div>
 </template>
 
