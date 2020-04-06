@@ -1,11 +1,7 @@
 <template>
   <div>
     <div>
-      <img
-        :src="require(`@/assets/artwork/emojis/svg/${smiley}.svg`)"
-        width="30px"
-        height="30px"
-      >
+      <i :class="`twa twa-30px ${smiley}`" />
       {{ count }}
       <sparkline>
         <sparklineLine
@@ -53,11 +49,6 @@ export default {
       this.historical.push({count: this.count || 0, timestamp: now, changeRate: this.currentChangeRate});
 
       this.spData = this.historical.filter(x => x.timestamp > now - 10000).map(x => x.changeRate);
-
-      //this.spData.push(this.currentChangeRate);
-
-      // if(this.historical[0].timestamp < now - 10000)
-      //   this.spData = this.spData.filter(x => x.timestamp < now - 10000);
     }, 1000);
   },
 };

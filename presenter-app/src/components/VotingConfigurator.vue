@@ -104,9 +104,6 @@ export default {
       this.maxOptions = this.maxNumberOfOptions;
       this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
     },
-    toSvgPath (option) {
-      return require(`@/assets/artwork/emojis/svg/${option.id}.svg`);
-    }
   }
 };
 </script>
