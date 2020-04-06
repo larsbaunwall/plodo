@@ -6,15 +6,12 @@
     >
       <base-button
         v-if="selectedOptions[idx] !== undefined"
-        outline
         type="primary"
-        style="margin-right: 8px"
+        outline
+        style="margin-right: 8px; height: 50px"
         @click="unselectOption(idx)"
-      ><img
-        :src="toSvgPath(selectedOptions[idx])"
-        width="20px"
-        height="20px"
-      ></base-button>
+      ><i :class="`twa twa-30px ${selectedOptions[idx].id}`" />
+      </base-button>
       <base-dropdown
         v-else
         hide-arrow
@@ -22,9 +19,9 @@
       >
         <base-button
           slot="title"
-          outline
-          icon="fa fa-2x fa-question"
+          style="height: 50px"
           type="secondary"
+          icon="fa fa-2x fa-question"
         />
         <li
           v-for="opt in options.filter(x => selectedOptions.indexOf(x) === -1)"
@@ -35,11 +32,7 @@
             href="#"
             @click="chooseOption(idx, opt)"
           >
-            <img
-              :src="toSvgPath(opt)"
-              width="30px"
-              height="30px"
-            >
+            <i :class="`twa twa-30px ${opt.id}`" />
           </a>
         </li>
       </base-dropdown>
@@ -60,6 +53,7 @@
       v-if="selectedOptions.length > 0"
       v-b-tooltip.hover.bottom
       outline
+      style="height: 50px"
       class="btn-tooltip"
       title="Start over"
       type="secondary"
@@ -80,13 +74,13 @@ export default {
   data () {
     return {
       options: [
-        { id: "smile", name: "coffee" },
-        { id: "angry", name: "coffee" },
-        { id: "heart", name: "coffee" },
-        { id: "dislike", name: "dislike" },
-        { id: "like", name: "like" },
-        { id: "coffee", name: "coffee" },
-        { id: "poh", name: "coffee" },
+        { id: "twa-grinning-face", name: "coffee" },
+        { id: "twa-pouting-face", name: "coffee" },
+        { id: "twa-red-heart", name: "coffee" },
+        { id: "twa-thumbs-up", name: "dislike" },
+        { id: "twa-thumbs-down", name: "like" },
+        { id: "twa-hot-beverage", name: "coffee" },
+        { id: "twa-pile-of-poo", name: "coffee" },
       ],
       selectedOptions: [],
       maxOptions: this.maxNumberOfOptions,
@@ -119,6 +113,6 @@ export default {
 
 <style>
 .emoji-dropdown {
-	min-width: 1rem !important;
+	min-width: 15px !important;
 }
 </style>
