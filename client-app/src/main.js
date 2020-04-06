@@ -4,6 +4,7 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import ApiService from './common/ApiService'
+import "./assets/scss/plodo.scss"
 
 Vue.config.productionTip = false
 

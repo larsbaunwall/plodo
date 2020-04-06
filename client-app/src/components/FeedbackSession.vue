@@ -2,7 +2,7 @@
   <div>
     <div v-for="opt in activeSession.options" :key="opt">
       <button @click="vote(opt)">
-        <img :src="require(`@/assets/artwork/emojis/svg/${opt}.svg`)" width="30px" height="30px" />&nbsp;{{opt}}
+        <i :class="`twa twa-30px ${opt}`" />&nbsp;{{opt}}
       </button>
     </div>
   </div>
@@ -18,7 +18,7 @@ export default {
     votingOptions: []
   },
   mounted() {
-      sse = new EventSource(`https://localhost:5001/session-stream?access_token=${this.$store.getters.accessToken}`, {withCredentials: true});
+      sse = new EventSource(`https://api-qa.plodo.io/session-stream?access_token=${this.$store.getters.accessToken}`, {withCredentials: true});
       sse.addEventListener("vote", msg => {
         console.log("RCV: ", {msg});
       });

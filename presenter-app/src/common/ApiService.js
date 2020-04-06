@@ -67,8 +67,10 @@ const ApiService = {
     sse = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}`, {
       withCredentials: true,
     });
+    console.log("SSE", {sse});
 
     sse.addEventListener("vote", msg => {
+      console.log("RCV", {msg});
       store.dispatch("processVote", msg);
     });
   }
