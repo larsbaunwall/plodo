@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using plodo.Backend.API.Configurations;
 using plodo.Backend.API.Health;
 using System.Text.Json;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace plodo.Backend.API
 {
@@ -28,7 +29,7 @@ namespace plodo.Backend.API
         private readonly ILogger _logger;
 
         public Startup(IHostingEnvironment env, IConfiguration config, ILogger<Startup> logger)
-        {            
+        {
             _env = env;
             _config = config;
             _logger = logger;
@@ -43,32 +44,33 @@ namespace plodo.Backend.API
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                    options.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
-            
+
             services.AddServerSentEvents(x =>
             {
                 x.OnClientConnected += async (service, args) =>
                 {
                     var sessionId = args.Client.User.FindFirstValue("session_id");
                     _logger.LogInformation("SSE client trying to connect to session {SessionId} ", sessionId);
-                    
-                    if(sessionId != null) 
+
+                    if (sessionId != null)
                         await service.AddToGroupAsync(sessionId, args.Client);
                 };
             });
-            
+
             services.AddHealthChecks()
                 .AddCheck<ContainerHealthCheck>("ioc");
-            
-            services.AddAuthenticationConfiguration(_config);
-            
-            services.AddCorsConfiguration();
+
+            services.ConfigureAuthentication(_config);
+
+            services.ConfigureCors();
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -80,7 +82,7 @@ namespace plodo.Backend.API
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
-            services.AddSwaggerConfiguration();
+            services.ConfigureSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,10 +102,21 @@ namespace plodo.Backend.API
 
             app.MapServerSentEvents("/session-stream", new ServerSentEventsOptions
             {
-                Authorization = ServerSentEventsAuthorization.Default, 
-                OnPrepareAccept = x => _logger.LogInformation("", x)
+                Authorization = new ServerSentEventsAuthorization
+                {
+                    AuthenticationSchemes = "Bearer"
+                },
+                OnPrepareAccept = x =>
+                {
+                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "http://localhost:8080");
+                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "https://www.plodo.io");
+                    x.Headers.Add(CorsConstants.AccessControlAllowOrigin, "https://www-qa.plodo.io");
+                    x.Headers.Add(CorsConstants.AccessControlAllowCredentials, "true");
+                    
+                    _logger.LogInformation("SSE connection prepared, {HttpResponse}", x);
+                }
             });
-            
+
             app.UseHealthChecks("/health");
 
             app.UseAuthentication();
@@ -112,23 +125,21 @@ namespace plodo.Backend.API
             app.UseCors();
 
             app.UseRouting();
-            
+
             app.UseAuthorization();
-            
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-            
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                foreach ( var description in provider.ApiVersionDescriptions )
+                foreach (var description in provider.ApiVersionDescriptions)
                 {
                     options.SwaggerEndpoint(
                         $"/swagger/{description.GroupName}/swagger.json",
-                        description.GroupName.ToUpperInvariant() );
+                        description.GroupName.ToUpperInvariant());
                 }
+
                 options.RoutePrefix = "";
                 options.InjectStylesheet("/swagger-ui.css");
             });

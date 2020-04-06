@@ -7,9 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace plodo.Backend.API.Configurations
 {
-    public static class AuthenticationExtensions
+    public static class ConfigureAuthenticationExtension
     {
-        public static IServiceCollection AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration rootConfig)
+        public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfiguration rootConfig)
         {
             var signingKey = Convert.FromBase64String(rootConfig["Jwt:SigningSecret"]);
 
@@ -26,9 +26,9 @@ namespace plodo.Backend.API.Configurations
                         {
                             var accessToken = context.Request.Query["access_token"];
                             
-                            var path = context.HttpContext.Request.Path;
+                            var path = context.HttpContext.Request.PathBase;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/event-stream")))
+                                (path.StartsWithSegments("/session-stream")))
                             {
                                 // Read the token out of the query string instead of HTTP headers
                                 context.Token = accessToken;

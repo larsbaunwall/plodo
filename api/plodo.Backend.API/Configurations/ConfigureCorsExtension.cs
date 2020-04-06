@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace plodo.Backend.API.Configurations
 {
-    public static class CorsExtensions
+    public static class ConfigureCorsExtension
     {
-        public static IServiceCollection AddCorsConfiguration(this IServiceCollection services)
+        public static IServiceCollection ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(x => x.AddDefaultPolicy(builder =>
             {
