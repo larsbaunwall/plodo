@@ -2,69 +2,77 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { createPersistedState, createSharedMutations } from "vuex-electron";
 import createPromiseAction from "./promise-action";
-import api from "./api";
+import ApiService from "./common/ApiService";
+import { remote, ipcRenderer } from "electron";
 
 Vue.use(Vuex);
 
 const emptySession = {
   id: "",
-  options: []
+  options: [],
 };
 
 export default new Vuex.Store({
   state: {
     accessToken: "",
-    session: emptySession
+    session: emptySession,
   },
   mutations: {
-    setToken (state, { token }) {
+    setToken(state, { token }) {
       state.accessToken = token;
     },
-    setSession (state, { sessionId, votingOptions }) {
-      state.session = { id: sessionId, options: votingOptions };
+    setSession(state, { sessionId, votingOptions }) {
+      const transformedOptions = votingOptions.map((x) => {
+        return { id: x.id, name: x.name, count: x.count || 0 };
+      });
+      state.session = { id: sessionId, options: transformedOptions };
     },
-    destroySession (state) {
+    destroySession(state) {
       state.session = emptySession;
       state.accessToken = "";
-    }
+    },
+    recordVote(state, { id }) {
+      let foundIdx = state.session.options.findIndex((x) => x.id === id);
+
+      if (foundIdx != undefined) {
+        let foundItem = state.session.options[foundIdx];
+        foundItem.count = (foundItem.count || 0) + 1;
+        Vue.set(state.session.options, foundIdx, foundItem);
+      }
+    },
   },
   actions: {
-    async createSession ({ commit, getters }, { votingOptions }) {
+    async createSession({ commit, getters }, { votingOptions }) {
       try {
-        const { data } = await this.$api.axios.post("sessions", {
-          votingOptions: votingOptions.map(x => x.id)
-        });
+        const data = await ApiService.joinSession(votingOptions);
 
-        commit("setToken", { token: data.token.access_Token });
+        commit("setToken", { token: data.accessToken.token });
         commit("setSession", { sessionId: data.sessionId, votingOptions: votingOptions });
 
-        this.$sse = this.$api.connectEventStream();
+        ApiService.connectEventStream();
       } catch (e) {
         throw new Error(e);
       } finally {
       }
     },
-    async removeActiveSession ({ commit, getters }) {
+    async removeActiveSession({ commit, getters }) {
       try {
-        await this.$api.axios.delete(`sessions/${getters.activeSession.id}`);
-        this.$sse.close();
+        await ApiService.leaveSession(getters.activeSession.id);
 
         commit("destroySession");
       } catch (e) {
         console.log({ e });
       } finally {
       }
-    }
+    },
+    processVote({ commit }, vote) {
+      commit("recordVote", { id: vote.data });
+    },
   },
   getters: {
-    accessToken: state => state.accessToken,
-    activeSession: state => state.session
+    accessToken: (state) => state.accessToken,
+    activeSession: (state) => state.session,
   },
-  plugins: [
-    createPersistedState(),
-    createSharedMutations(),
-    createPromiseAction(),
-    api.configure
-  ],
-  strict: process.env.NODE_ENV !== "production"
+  plugins: [createPersistedState(), createSharedMutations(), createPromiseAction()],
+  strict: process.env.NODE_ENV !== "production",
 });

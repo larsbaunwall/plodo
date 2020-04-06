@@ -1,14 +1,14 @@
 "use strict";
 /* global __static */
-import { app, protocol, BrowserWindow, screen, Tray } from "electron";
+import { app, protocol, BrowserWindow, screen, Tray, ipcMain } from "electron";
 import path from "path";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
-import "./store.js";
+import store from "./store";
 
-const isDevelopment = process.env.NODE_ENV !== "production";
+let DEBUG = (process.env.NODE_ENV !== "production");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -62,6 +62,7 @@ const getWindowPosition = () => {
 
     return { x: x, y: y };
   } else {
+    //Windows
     return {x:0, y:0};
   }
 
@@ -77,14 +78,14 @@ function createWindow () {
     height: 500,
     icon: path.join(__static, "icon.png"),
     // transparent: true,
-    frame: false,
+    frame: true,
     // focusable: false,
     webPreferences: {
       nodeIntegration: true
     }
   });
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   // win.setIgnoreMouseEvents(true);
 
@@ -98,11 +99,11 @@ function createWindow () {
     win.loadURL("plodo://./index.html");
   }
 
-  win.on("blur", () => {
-    if (!win.webContents.isDevToolsOpened()) {
-      win.hide();
-    }
-  });
+  // win.on("blur", () => {
+  //   if (!win.webContents.isDevToolsOpened()) {
+  //     win.hide();
+  //   }
+  // });
 
   win.on("closed", () => {
     win = null;
@@ -130,7 +131,7 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
+  if (DEBUG && !process.env.IS_TEST) {
     // Install Vue Devtools
     // Devtools extensions are broken in Electron 6.0.0 and greater
     // See https://github.com/nklayman/vue-cli-plugin-electron-builder/issues/378 for more info
@@ -149,7 +150,7 @@ app.on("ready", async () => {
 });
 
 // Exit cleanly on request from parent process in development mode.
-if (isDevelopment) {
+if (DEBUG) {
   if (process.platform === "win32") {
     process.on("message", data => {
       if (data === "graceful-exit") {
