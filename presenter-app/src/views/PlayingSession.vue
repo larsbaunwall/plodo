@@ -11,6 +11,7 @@
           v-for="opt in activeSession.options"
           :key="opt.id"
           :smiley="opt.id"
+          :count="opt.count"
         />
       </div>
     </div>
