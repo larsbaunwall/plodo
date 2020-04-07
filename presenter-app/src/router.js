@@ -7,6 +7,7 @@ import PlayingSession from "./views/PlayingSession.vue";
 Vue.use(Router);
 
 export default new Router({
+  mode: process.env.IS_ELECTRON ? "hash" : "history",
   routes: [
     {
       path: "/",
