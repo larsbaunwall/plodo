@@ -11,6 +11,7 @@
 <script>
 import { mapGetters } from "vuex";
 
+// eslint-disable-next-line no-unused-vars
 let sse = null;
 
 export default {
@@ -19,9 +20,6 @@ export default {
   },
   mounted() {
       sse = new EventSource(`https://api-qa.plodo.io/session-stream?access_token=${this.$store.getters.accessToken}`, {withCredentials: true});
-      sse.addEventListener("vote", msg => {
-        console.log("RCV: ", {msg});
-      });
   },
   methods: {
     vote(vote) {

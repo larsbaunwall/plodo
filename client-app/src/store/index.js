@@ -46,7 +46,7 @@ export default new Vuex.Store({
 
         commit("destroySession");
       } catch (e) {
-        console.log({ e });
+        throw new Error(e);
       } finally {
         /* do nothing */
       }
@@ -54,11 +54,10 @@ export default new Vuex.Store({
     // eslint-disable-next-line no-unused-vars
     async castVote({commit}, {vote}){
       try {
-        console.log(vote)
         await ApiService.submitVote(vote);
 
       } catch (e) {
-        console.log({ e });
+        throw new Error(e);
       } finally {
         /* do nothing */
       }
