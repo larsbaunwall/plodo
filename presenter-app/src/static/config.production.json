@@ -1,5 +1,5 @@
 {
     "apiEndpoint": "https://api-qa.plodo.io",
     "apiVersion": "v1",
-    "streamEndpoint": "https://localhost:5001/session-stream"
+    "streamEndpoint": "https://api-qa.plodo.io/session-stream"
 }
