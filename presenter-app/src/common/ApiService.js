@@ -50,7 +50,9 @@ const ApiService = {
   },
 
   async leaveSession(sessionId) {
-    await axiosInstance.delete(`sessions/${sessionId}`);
+    await axiosInstance.delete(`sessions/${sessionId}`, {headers: {Authorization: `Bearer ${store.getters.accessToken}`}});
+    if(sse) sse.close();
+    console.log("Eventstream disconnected");
   },
 
   connectEventStream() {
@@ -67,11 +69,15 @@ const ApiService = {
     sse = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}`, {
       withCredentials: true,
     });
-    console.log("SSE", {sse});
 
     sse.addEventListener("vote", msg => {
-      console.log("RCV", {msg});
       store.dispatch("processVote", msg);
+    });
+
+    sse.addEventListener("terminate", msg => {
+      console.log("Session terminated on server");
+      if(sse) sse.close();
+      console.log("Eventstream disconnected");
     });
   }
 };
