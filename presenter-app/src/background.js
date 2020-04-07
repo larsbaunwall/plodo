@@ -74,8 +74,8 @@ protocol.registerSchemesAsPrivileged([{ scheme: "plodo", privileges: { secure: t
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 400,
-    height: 500,
+    width: 450,
+    height: 650,
     icon: path.join(__static, "icon.png"),
     // transparent: true,
     frame: true,
@@ -84,6 +84,8 @@ function createWindow () {
       nodeIntegration: true
     }
   });
+
+  win.setMenu(null);
 
   //win.webContents.openDevTools();
 

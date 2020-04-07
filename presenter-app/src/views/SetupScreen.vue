@@ -1,13 +1,6 @@
 <template>
   <div class="col">
-    <div class="row d-flex justify-content-center">
-      <img
-        :src="require(`@/assets/artwork/icons/communication.svg`)"
-        width="200px"
-        height="200px"
-      >
-    </div>
-    <div class="row">
+    <div class="row mt-3">
       <div class="col">
         <div class="card w-100">
           <div class="card-body">
@@ -28,15 +21,18 @@
                   block
                   icon="fa fa-play"
                   style="primary"
+                  :disabled="votingOptions.length === 0"
                   @click="startSession"
-                >
-                  Start
-                </base-button>
+                >Start</base-button>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <img :src="require(`@/assets/artwork/icons/communication.svg`)" width="200px" height="200px" />
     </div>
   </div>
 </template>
@@ -50,7 +46,6 @@ export default {
   data() {
     return {
       votingOptions: [],
-      outHtml: null
     };
   },
   methods: {
