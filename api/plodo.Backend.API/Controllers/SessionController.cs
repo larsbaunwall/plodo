@@ -54,9 +54,9 @@ namespace plodo.Backend.API.Controllers
         public async Task<ActionResult> Delete(string sessionId)
         {
             if (!HttpContext.User.HasClaim("session_id", sessionId))
-                return Unauthorized();
+                return Unauthorized("The host does not own this session");
 
-            await _serverSentEventsService.SendEventAsync(sessionId, new ServerSentEvent {Type = "terminate"});
+            await _serverSentEventsService.SendEventAsync(sessionId, new ServerSentEvent {Type = "terminate", Data = new[]{""}});
             _sessionService.DestroySession(sessionId);
 
             return Ok();
