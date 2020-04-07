@@ -11,7 +11,11 @@
           </div>
           <div class="col-6">
             <p>
-              <span @click="copySessionId()" title="Copy to clipboard" id="sessionId">{{ activeSession.id }}<i class="sessionId-btn fa fa-copy" /></span>
+              <span
+                id="sessionId"
+                title="Copy to clipboard"
+                @click="copySessionId()"
+              >{{ activeSession.id }}<i class="sessionId-btn fa fa-copy" /></span>
             </p>
           </div>
         </div>
@@ -31,14 +35,23 @@
               style="primary"
               icon="fa fa-sign-out"
               @click="quitSession"
-            >Quit session</base-button>
+            >
+              Quit session
+            </base-button>
           </div>
         </div>
       </div>
     </div>
-    <div class="row" v-for="opt in activeSession.options" :key="opt.id">
+    <div
+      v-for="opt in activeSession.options"
+      :key="opt.id"
+      class="row"
+    >
       <div class="col">
-            <smiley-counter :smiley="opt.id" :count="opt.count" />
+        <smiley-counter
+          :smiley="opt.id"
+          :count="opt.count"
+        />
       </div>
     </div>
   </div>

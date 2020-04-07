@@ -32,7 +32,7 @@
             href="#"
             @click="chooseOption(idx, opt)"
           >
-            <i :class="`twa twa-30px twa-${opt.id}`" />&nbsp; {{opt.name}}
+            <i :class="`twa twa-30px twa-${opt.id}`" />&nbsp; {{ opt.name }}
           </a>
         </li>
       </base-dropdown>

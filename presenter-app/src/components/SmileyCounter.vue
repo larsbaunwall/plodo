@@ -8,8 +8,12 @@
               <i :class="`twa twa-30px twa-${smiley}`" />
             </div>
             <div class="p-2 d-flex flex-column">
-              <div class="subtitle font-weight-bold text-uppercase">Rate</div>
-              <div class="text-weight-bold">{{ currentChangeRate }}<span class="text-muted subtitle-unit">/min</span></div>
+              <div class="subtitle font-weight-bold text-uppercase">
+                Rate
+              </div>
+              <div class="text-weight-bold">
+                {{ currentChangeRate }}<span class="text-muted subtitle-unit">/min</span>
+              </div>
             </div>
           </div>
         </div>
