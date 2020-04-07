@@ -10,7 +10,7 @@
         outline
         style="margin-right: 8px; height: 50px"
         @click="unselectOption(idx)"
-      ><i :class="`twa twa-30px ${selectedOptions[idx].id}`" />
+      ><i :class="`twa twa-30px twa-${selectedOptions[idx].id}`" />
       </base-button>
       <base-dropdown
         v-else
@@ -32,7 +32,7 @@
             href="#"
             @click="chooseOption(idx, opt)"
           >
-            <i :class="`twa twa-30px ${opt.id}`" />
+            <i :class="`twa twa-30px twa-${opt.id}`" />&nbsp; {{opt.name}}
           </a>
         </li>
       </base-dropdown>
@@ -57,7 +57,7 @@
       class="btn-tooltip"
       title="Start over"
       type="secondary"
-      icon="fa fa fa-trash"
+      icon="fa fa fa-undo"
       @click="reset"
     />
   </div>
@@ -74,13 +74,15 @@ export default {
   data () {
     return {
       options: [
-        { id: "twa-grinning-face", name: "coffee" },
-        { id: "twa-pouting-face", name: "coffee" },
-        { id: "twa-red-heart", name: "coffee" },
-        { id: "twa-thumbs-up", name: "dislike" },
-        { id: "twa-thumbs-down", name: "like" },
-        { id: "twa-hot-beverage", name: "coffee" },
-        { id: "twa-pile-of-poo", name: "coffee" },
+        { id: "grinning-face", name: "Smile" },
+        { id: "pouting-face", name: "Pouting" },
+        { id: "red-heart", name: "Love" },
+        { id: "thumbs-up", name: "Like" },
+        { id: "thumbs-down", name: "Dislike" },
+        { id: "hot-beverage", name: "Coffee" },
+        { id: "pile-of-poo", name: "Poo" },
+        { id: "eagle", name: "Eagle" },
+        { id: "squid", name: "Squid" }
       ],
       selectedOptions: [],
       maxOptions: this.maxNumberOfOptions,
