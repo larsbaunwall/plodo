@@ -10,7 +10,7 @@
     <section class="section" style="margin-bottom: -10em;">
       <div class="container">
         <div class="columns is-centered">
-          <div class="column is-5"><img :src="require(`@/assets/artwork/communication.svg`)" /></div>
+          <div class="column is-5"><img style="margin-top: -6em;" :src="require(`@/assets/artwork/communication.svg`)" /></div>
         </div>
       </div>
     </section>
@@ -22,7 +22,7 @@
               <p class="title">Wanna play?</p>
               <p>Enter the session code, you got from the presenter here:</p>
             </div>
-            <SessionConnect :sessionId="id" />
+            <SessionConnect :id="id" />
             <hr style="margin-top: 3em;" />
             <p class="has-text-grey-lighter">
               Curious on how to use plodo? Learn more

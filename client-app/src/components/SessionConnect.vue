@@ -2,7 +2,7 @@
   <div>
     <div style="margin-top: 1em;">
       <input
-        class="input is-large is-primary is-uppercase has-text-centered"
+        class="input is-large is-primary is-size-1 is-uppercase has-text-centered has-text-weight-bold"
         maxlength="4"
         autocorrect="off"
         autocapitalize="off"
@@ -27,13 +27,19 @@
 <script>
 export default {
   name: "SessionConnect",
-  props: ["sessionId"],
+  props: {id: String},
+  data() {
+    return {
+      sessionId: this.id
+    }
+  },
   methods: {
     joinSession() {
+      const sId = this.sessionId.toUpperCase();
       this.$store
-        .dispatch("joinSession", { sessionId: this.sessionId })
+        .dispatch("joinSession", { sessionId: sId })
         .then(() => {
-          this.$router.push({ name: "Session" });
+          this.$router.push({ name: "Session", params: {id: sId } });
         });
     }
   }
@@ -43,6 +49,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 input {
-  width: 100px;
+  width: 200px;
+  font-family: monospace;
+
 }
 </style>

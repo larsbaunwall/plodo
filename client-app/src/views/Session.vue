@@ -1,9 +1,12 @@
 <template>
-  <section class="section" style="margin-bottom: -10em;">
+  <section class="section">
     <div class="container">
       <div class="columns is-centered">
-        <div class="column is-5">Session {{id}}</div>
-        <FeedbackSession />
+        <div class="column is-5 has-text-centered">
+          <p class="title">Got feedback?</p>
+          <p>Submit your feedback via the options below:</p>
+          <FeedbackSession :sessionId="id" style="margin-top: 3em" />
+        </div>
       </div>
     </div>
   </section>
@@ -18,7 +21,9 @@ export default {
   components: {
     FeedbackSession
   },
-  props: ["id"],
+  props: {
+    id: String
+  },
   computed: {
     ...mapGetters(["activeSession"])
   }
