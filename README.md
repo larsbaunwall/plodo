@@ -9,10 +9,23 @@ plodo is a nice little utility you can use to get immediate feedback from your a
 # So how does it look?
 In the presenter's app, you can set up a new session and follow live feedback as your audience submits it via a mobile website:
 
-Start session | Playing session | Mobile - join session | Mobile - play in a session
---- | --- | --- | ---
-<img src="/artwork/screenshots/start-session.png" height="400" /> | <img src="/artwork/screenshots/playing-session.png" height="400" /> | <img src="/artwork/screenshots/mobile-join-session.png" height="400" /> | <img src="/artwork/screenshots/mobile-playing-session.png" height="400" />
+## Presenter's app
+Source code available in [/presenter-app](https://github.com/larsbaunwall/plodo/tree/master/presenter-app)
 
+Download the latest build from the [Releases tab](https://github.com/larsbaunwall/plodo/releases)
+
+Start session | Playing session
+--- | --- |
+<img src="/artwork/screenshots/start-session.png" /> | <img src="/artwork/screenshots/playing-session.png" />
+
+## Mobile client
+Source code available in [/client-app](https://github.com/larsbaunwall/plodo/tree/master/client-app)
+
+Access the web app from desktop and mobile at https://www-qa.plodo.io
+
+Join session | Give feedback
+--- | --- |
+<img src="/artwork/screenshots/mobile-join-session.png" height="400" /> | <img src="/artwork/screenshots/mobile-playing-session.png" height="400" />
 
 # How do I install it?
 
