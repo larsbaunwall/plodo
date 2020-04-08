@@ -4,26 +4,19 @@ import ApiService from '../common/ApiService'
 
 Vue.use(Vuex)
 
-const emptySession = {
-  id: "",
-  options: []
-};
-
 export default new Vuex.Store({
   state: {
-    accessToken: "",
-    session: emptySession
+    accessToken: null,
+    session: null
   },
   mutations: {
-    setToken (state, { token }) {
+    setSession (state, { sessionId, votingOptions, token }) {
       state.accessToken = token;
-    },
-    setSession (state, { sessionId, votingOptions }) {
       state.session = { id: sessionId, options: votingOptions };
     },
     destroySession (state) {
-      state.session = emptySession;
-      state.accessToken = "";
+      state.session = null;
+      state.accessToken = null;
     }
   },
   actions: {
@@ -31,8 +24,7 @@ export default new Vuex.Store({
       try {
         const session = await ApiService.joinSession(sessionId);
 
-        commit("setToken", { token: session.accessToken.token });
-        commit("setSession", { sessionId: sessionId, votingOptions: session.votingOptions });
+        commit("setSession", { sessionId: sessionId, votingOptions: session.votingOptions, token: session.accessToken.token });
 
       } catch (e) {
         throw new Error(e);
@@ -66,6 +58,7 @@ export default new Vuex.Store({
   getters: {
     activeSession: state => state.session,
     accessToken: state => state.accessToken,
+    isAuthenticated: state => state.accessToken != undefined && state.session != undefined
   },
   modules: {
   }

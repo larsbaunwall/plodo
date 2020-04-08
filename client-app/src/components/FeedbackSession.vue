@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-for="opt in activeSession.options" :key="opt">
-      <button @click="vote(opt)">
-        <i :class="`twa twa-30px ${opt}`" />&nbsp;{{opt}}
+      <button class="button is-large " @click="vote(opt)">
+        <i :class="`twa twa-30px twa-${opt}`" />&nbsp;{{opt}}
       </button>
     </div>
   </div>
@@ -17,9 +17,6 @@ let sse = null;
 export default {
   props: {
     votingOptions: []
-  },
-  mounted() {
-      sse = new EventSource(`https://api-qa.plodo.io/session-stream?access_token=${this.$store.getters.accessToken}`, {withCredentials: true});
   },
   methods: {
     vote(vote) {
