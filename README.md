@@ -9,15 +9,20 @@ plodo is a nice little utility you can use to get immediate feedback from your a
 # So how does it look?
 In the presenter's app, you can set up a new session and follow live feedback as your audience submits it via a mobile website:
 
-Start session | Playing session | Mobile
---- | --- | ---
-![Start session](/artwork/screenshots/start-session.png) | ![Playing session](/artwork/screenshots/playing-session.png) | Working on it :muscle:
+Start session | Playing session | Mobile - join session | Mobile - play in a session
+--- | --- | --- | ---
+<img src="/artwork/screenshots/start-session.png" height="400" /> | <img src="/artwork/screenshots/playing-session.png" height="400" /> | <img src="/artwork/screenshots/mobile-join-session.png" height="400" /> | <img src="/artwork/screenshots/mobile-playing-session.png" height="400" />
+
 
 # How do I install it?
 
 plodo will be available from the Mac App Store, Windows Store and on the Office 365 Marketplace once it is released.
 
-You can find beta releases on the [Releases tab](https://github.com/larsbaunwall/plodo/releases)
+You can find beta releases on the [Releases tab](https://github.com/larsbaunwall/plodo/releases) :star:
+
+The feedback client is available at https://www-qa.plodo.io :muscle:
+
+Please try it out - and follow our repo for more updates!
 
 # Can I contribute?
 
