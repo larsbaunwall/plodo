@@ -25,7 +25,7 @@ Access the web app from desktop and mobile at https://www-qa.plodo.io
 
 Join session | Give feedback
 --- | --- |
-<img src="/artwork/screenshots/mobile-join-session.png" height="400" /> | <img src="/artwork/screenshots/mobile-playing-session.png" height="400" />
+<img src="/artwork/screenshots/mobile-join-session.png" /> | <img src="/artwork/screenshots/mobile-playing-session.png" />
 
 # How do I install it?
 
