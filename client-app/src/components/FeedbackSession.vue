@@ -58,4 +58,7 @@ export default {
 </script>
 
 <style scoped>
+.button {
+  touch-action: manipulation;
+}
 </style>
