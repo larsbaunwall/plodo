@@ -1,6 +1,12 @@
 {
   "name": "plodo",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "author": "Lars Baunwall <larslb@plodo.io> (https://www.plodo.io/)",
+  "homepage": "https://www.plodo.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/larsbaunwall/plodo.git"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
