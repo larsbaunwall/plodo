@@ -23,8 +23,13 @@
           <div class="col-6">
             <p>Celebration</p>
           </div>
-          <div class="col-6">
-            None&nbsp;<i class="fa fa-gear" />
+          <div
+            class="col-6"
+          >
+            <a
+              href="#"
+              @click="celebrate()"
+            >Toggle celebration</a>
           </div>
         </div>
         <div class="row">
@@ -60,7 +65,7 @@
 <script>
 import { mapGetters } from "vuex";
 import SmileyCounter from "@/components/SmileyCounter.vue";
-import { clipboard } from "electron";
+import { clipboard, ipcRenderer } from "electron";
 export default {
   components: { SmileyCounter },
   computed: {
@@ -71,8 +76,11 @@ export default {
       await this.$store.dispatch("removeActiveSession");
       this.$router.push("/");
     },
-    copySessionId(){
+    copySessionId() {
       clipboard.writeText(this.activeSession.id);
+    },
+    celebrate() {
+      ipcRenderer.send("toggleCelebration");
     }
   },
 };

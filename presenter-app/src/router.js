@@ -1,8 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
+import MainLayout from "./views/MainLayout.vue";
 import MainWindow from "./views/MainWindow.vue";
 import SetupScreen from "./views/SetupScreen.vue";
 import PlayingSession from "./views/PlayingSession.vue";
+import CelebrationScreen from "./views/CelebrationScreen.vue";
 
 Vue.use(Router);
 
@@ -12,12 +14,25 @@ export default new Router({
     {
       path: "/",
       name: "main",
-      component: SetupScreen
+      component: MainLayout,
+      children: [{
+        path: "",
+        component: SetupScreen
+      }]
     },
     {
       path: "/session",
       name: "PlayingSession",
-      component: PlayingSession
+      component: MainLayout,
+      children: [{
+        path: "",
+        component: PlayingSession
+      }]
+    },
+    {
+      path: "/celebrate",
+      name: "CelebrationScreen",
+      component: CelebrationScreen
     },
     {
       path: "/about",
