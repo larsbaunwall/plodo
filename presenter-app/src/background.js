@@ -13,7 +13,14 @@ let DEBUG = (process.env.NODE_ENV !== "production");
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win = null;
+let celebrationWin = null;
+
 let tray = null;
+
+ipcMain.on("toggleCelebration", (evt, args) => {
+
+  toggleCelebrationWindow();
+});
 
 // Don't show the app in dock
 // app.dock.hide();
@@ -33,7 +40,7 @@ const createTray = () => {
   });
 };
 
-const toggleWindow = () => {
+const toggleWindow = (                              ) => {
   if (win.isVisible()) {
     win.hide();
   } else {
@@ -63,7 +70,7 @@ const getWindowPosition = () => {
     return { x: x, y: y };
   } else {
     //Windows
-    return {x:0, y:0};
+    return { x: screen.width / 2, y: screen.height / 2 };
   }
 
 };
@@ -112,6 +119,52 @@ function createWindow () {
   });
 }
 
+
+function toggleCelebrationWindow () {
+  // Create the browser window.
+
+  if(celebrationWin) {
+    celebrationWin.close();
+  } else {
+
+    celebrationWin = new BrowserWindow({
+      x: 0,
+      y: 0,
+      minWidth: screen.width,
+      minHeight: screen.height,
+      width: screen.width,
+      height: screen.height,
+      simpleFullscreen: true,
+      useContentSize: true,
+      alwaysOnTop: true,
+      transparent: true,
+      frame: false,
+      focusable: false,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    });
+
+    celebrationWin.setMenu(null);
+    celebrationWin.maximize();
+
+    celebrationWin.setIgnoreMouseEvents(true);
+
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+      celebrationWin.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/celebrate`);
+    } else {
+      createProtocol("plodo");
+      // Load the index.html when not in development
+      celebrationWin.loadURL("plodo://./index.html/#/celebrate");
+    }
+
+    celebrationWin.on("closed", () => {
+      celebrationWin = null;
+    });
+  }
+}
+
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
@@ -146,7 +199,7 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
-  
+
   createTray();
   createWindow();
 });
