@@ -1,7 +1,7 @@
 <template>
   <div>
     <button
-      class="button is-large is-primary is-outlined is-fullwidth"
+      class="button is-medium is-primary is-outlined is-fullwidth"
       style="margin-bottom: 1em; height: 5em"
       v-for="opt in activeSession.options"
       :key="opt"
@@ -9,7 +9,7 @@
       @click="vote(opt)"
     >
       <span class>
-        <i :class="`twa twa-3x twa-${opt}`" />
+        <twemoji :emojis="opt" />
       </span>
     </button>
     <hr />
@@ -29,8 +29,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Twemoji from "./Twemoji"
 
 export default {
+  components: {
+    Twemoji,
+  },
   props: {
     sessionId: String
   },
