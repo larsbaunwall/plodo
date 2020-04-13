@@ -5,7 +5,7 @@
         <div class="col-6">
           <div class="d-flex flex-row align-items-center">
             <div class="">
-              <i :class="`twa twa-30px twa-${smiley}`" />
+              <twemoji :emojis="smiley" />
             </div>
             <div class="p-2 d-flex flex-column">
               <div class="subtitle font-weight-bold text-uppercase">
@@ -34,9 +34,12 @@
 </template>
 
 <script>
+import Twemoji from "./Twemoji";
 export default {
   name: "SmileyCounter",
-  components: {},
+  components: {
+    Twemoji
+  },
   props: {
     smiley: String,
     count: Number,

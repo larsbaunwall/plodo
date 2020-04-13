@@ -10,7 +10,7 @@
         outline
         style="margin-right: 8px; height: 50px"
         @click="unselectOption(idx)"
-      ><i :class="`twa twa-30px twa-${selectedOptions[idx].id}`" />
+      ><twemoji :emojis="selectedOptions[idx].id" />
       </base-button>
       <base-dropdown
         v-else
@@ -32,7 +32,7 @@
             href="#"
             @click="chooseOption(idx, opt)"
           >
-            <i :class="`twa twa-30px twa-${opt.id}`" />&nbsp; {{ opt.name }}
+            <twemoji :emojis="opt.id" />
           </a>
         </li>
       </base-dropdown>
@@ -64,9 +64,12 @@
 </template>
 
 <script>
+import Twemoji from "./Twemoji";
 export default {
   name: "VotingConfigurator",
-  components: {},
+  components: {
+    Twemoji
+  },
   props: {
     maxNumberOfOptions: Number,
     addingAllowed: Boolean
@@ -74,15 +77,14 @@ export default {
   data () {
     return {
       options: [
-        { id: "grinning-face", name: "Smile" },
-        { id: "pouting-face", name: "Pouting" },
-        { id: "red-heart", name: "Love" },
-        { id: "thumbs-up", name: "Like" },
-        { id: "thumbs-down", name: "Dislike" },
-        { id: "hot-beverage", name: "Coffee" },
-        { id: "pile-of-poo", name: "Poo" },
-        { id: "eagle", name: "Eagle" },
-        { id: "squid", name: "Squid" }
+        { id: "😀", name: "Smile" },
+        { id: "😡", name: "Pouting" },
+        { id: "❤️", name: "Love" },
+        { id: "👍", name: "Like" },
+        { id: "👎", name: "Dislike" },
+        { id: "☕️", name: "Coffee" },
+        { id: "💩", name: "Poo" },
+        { id: "🦅", name: "Eagle" },
       ],
       selectedOptions: [],
       maxOptions: this.maxNumberOfOptions,
