@@ -9,7 +9,7 @@ namespace plodo.Backend.API.Validation
     {
         public override bool IsValid(object value)
         {
-            return value is IEnumerable<string> list && list.All(x => Regex.IsMatch(x, @"^[a-zA-Z-]+$"));
+            return value is IEnumerable<string> list && list.All(x => Regex.IsMatch(x, @"^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]){1}$"));
         }
     }
     
@@ -17,7 +17,7 @@ namespace plodo.Backend.API.Validation
     {
         public override bool IsValid(object value)
         {
-            return value is string str && Regex.IsMatch(str, @"^[a-zA-Z-]+$");
+            return value is string str && Regex.IsMatch(str, @"^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]){1}$");
         }
     }
 }
