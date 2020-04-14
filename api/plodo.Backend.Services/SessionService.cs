@@ -2,71 +2,85 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using plodo.Backend.Repositories;
+using plodo.Backend.Services.Exceptions;
 using plodo.Backend.Services.Models;
 
 namespace plodo.Backend.Services
 {
-    public interface ISessionService
-    {
-        string CreateSession(Session session, int maxRetries = 5);
-        void DestroySession(string sessionId);
-        Session GetSession(string sessionId);
-    }
-
     public class SessionService : ISessionService
     {
-        private readonly object _sessionsLock = new object();
-        private static ConcurrentDictionary<string, Session> _sessions;
-        
-        public SessionService()
-        {
-            var allCombinations = GetCombinations("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray(), 4);
-            _sessions = new ConcurrentDictionary<string, Session>(allCombinations.Select(x => new KeyValuePair<string, Session>(string.Concat(x), null)));
-        }
-        
-        private IEnumerable<IEnumerable<T>> GetCombinations<T>(IList<T> list, int length)
-        {
-            if (length == 1) return list.Select(t => new T[] { t });
+        private readonly ISessionRepository _sessionRepo;
+        private readonly ISecurityTokenService _sts;
+        private readonly string _idAlphabet = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-            return GetCombinations(list, length - 1)
-                .SelectMany(t => list, (t1, t2) => t1.Concat(new T[] { t2 }));
+        public SessionService(ISessionRepository sessionRepo, ISecurityTokenService sts)
+        {
+            _sessionRepo = sessionRepo;
+            _sts = sts;
         }
 
-        public string CreateSession(Session session, int maxRetries = 5)
+        public async Task<(string SessionId, SerializedSecurityToken Token)> CreateSession(Guid hostId, IEnumerable<Session.VoteOption> voteOptions)
         {
-            var count = 0;
-            while (count < maxRetries)
-            {
-                count += 1;
-                
-                lock (_sessionsLock)
+            var id = await GenerateId();
+            var success = await _sessionRepo.StoreSession(
+                new Repositories.Model.Session
                 {
-                    var rnd = new Random();
-                    var (candidateKey, _) = _sessions.ToArray().Where(x => x.Value == null).ElementAtOrDefault(rnd.Next(0, _sessions.Count - 1));
+                    Id = id, 
+                    HostId = hostId, 
+                    VotingOptions = voteOptions.Select(x => x.Icon)
+                });
+            
+            if(!success)
+                throw new Exception("Could not create a new session. Please try again.");
 
-                    _sessions[candidateKey] = session;
-
-                    return candidateKey;
-                }
-            }
-
-            throw new Exception("Could not create a new session ID in the specified number of attempts. Please try again.");
+            return (SessionId: id, Token: _sts.IssueToken(id, hostId, new[] {"Host"}));
         }
 
-        public void DestroySession(string sessionId)
+        public async Task DestroySession(string sessionId)
         {
-            lock (_sessionsLock)
-            {
-                _sessions[sessionId] = null;
-            }
+            await _sessionRepo.DestroySession(sessionId);
         }
 
-        public Session GetSession(string sessionId)
+        public async Task<Session> GetSession(string sessionId)
         {
-            lock (_sessionsLock)
-            {
-                return _sessions[sessionId];
-            }
+            var session = await _sessionRepo.FetchSession(sessionId);
+            
+            return new Session(session.Id, session.HostId, session.VotingOptions.Select(x => new Session.VoteOption(x)));
+        }
+
+        public async Task<(Session Session, SerializedSecurityToken Token)> JoinSession(string sessionId, Guid audienceId)
+        {
+            var session = await GetSession(sessionId);
+            
+            if(session == null)
+                throw new SessionNotFoundException();
+
+            await _sessionRepo.AddAudience(sessionId, audienceId);
+            
+            return (Session: session, Token: _sts.IssueToken(sessionId, audienceId, new []{"Audience"}));
+        }
+
+        public async Task RecordVote(string sessionId, Guid audienceId, string vote)
+        {
+            var session = await GetSession(sessionId);
+            
+            if(session == null)
+                throw new SessionNotFoundException();
+
+            var inSession = await _sessionRepo.IsInSession(sessionId, audienceId);
+            
+            if(!inSession)
+                throw new AudienceNotInSessionException();
+
+            await _sessionRepo.AddVote(sessionId, audienceId, vote);
+        }
+
+        private async Task<string> GenerateId()
+        {
+            var id = await Nanoid.Nanoid.GenerateAsync(_idAlphabet, 6);
+            return $"{id.Substring(0, 3)}-{id.Substring(3, 3)}";
         }
     }
 }

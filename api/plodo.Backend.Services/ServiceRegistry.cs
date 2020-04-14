@@ -1,4 +1,5 @@
 using Lamar;
+using plodo.Backend.Repositories;
 
 namespace plodo.Backend.Services
 {
@@ -6,7 +7,9 @@ namespace plodo.Backend.Services
     {
         public ServiceRegistry()
         {
-            For<ISessionService>().Use<SessionService>().Singleton();
+            IncludeRegistry<RepositoryRegistry>();
+            
+            For<ISessionService>().Use<SessionService>();
             For<ISecurityTokenService>().Use<SecurityTokenService>();
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -93,14 +94,29 @@ namespace plodo.Backend.API.Configurations
 
             options.OperationFilter<SwaggerDefaultValues>();
 
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
                 Description =
                     "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+            
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    }, new List<string>()
+                }
             });
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using plodo.Backend.API.Models;
 using plodo.Backend.Services;
+using plodo.Backend.Services.Exceptions;
 using plodo.Backend.Services.Models;
 
 namespace plodo.Backend.API.Controllers
@@ -16,13 +17,11 @@ namespace plodo.Backend.API.Controllers
     [ApiVersion("1")]
     public class SessionController : ControllerBase
     {
-        private readonly ISecurityTokenService _sts;
         private readonly ISessionService _sessionService;
         private readonly IServerSentEventsService _serverSentEventsService;
 
-        public SessionController(ISecurityTokenService sts, ISessionService sessionService, IServerSentEventsService serverSentEventsService)
+        public SessionController(ISessionService sessionService, IServerSentEventsService serverSentEventsService)
         {
-            _sts = sts;
             _sessionService = sessionService;
             _serverSentEventsService = serverSentEventsService;
         }
@@ -36,9 +35,9 @@ namespace plodo.Backend.API.Controllers
         public async Task<ActionResult<CreateSessionResponse>> Create(CreateSessionRequest request)
         {
             var options = request.VotingOptions.Select(x => new Session.VoteOption(x.ToLower()));
+            var hostId = Guid.NewGuid();
             
-            var sessionId = _sessionService.CreateSession(new Session {VotingOptions = options.ToList()});
-            var token = _sts.IssueToken(sessionId, Guid.Empty, new []{"Host"});
+            var (sessionId, token) = await _sessionService.CreateSession(hostId, options.ToList());
 
             return new CreateSessionResponse {SessionId = sessionId, AccessToken = new AccessToken(token)};
         }
@@ -57,7 +56,7 @@ namespace plodo.Backend.API.Controllers
                 return Unauthorized("The host does not own this session");
 
             await _serverSentEventsService.SendEventAsync(sessionId, new ServerSentEvent {Type = "terminate", Data = new[]{""}});
-            _sessionService.DestroySession(sessionId);
+            await _sessionService.DestroySession(sessionId);
 
             return Ok();
         }
@@ -71,22 +70,25 @@ namespace plodo.Backend.API.Controllers
         [Route("{sessionId}/audience")]
         public async Task<ActionResult<JoinSessionResponse>> Join(string sessionId)
         {
-            var session = _sessionService.GetSession(sessionId);
-
-            if (session == null)
+            try
+            {
+                var audienceId = Guid.NewGuid();
+                var (session, token) = await _sessionService.JoinSession(sessionId, audienceId);
+                
+                var votingOptions = session.VotingOptions.Select(x => x.Icon);
+                return new JoinSessionResponse{VotingOptions = votingOptions, AccessToken = new AccessToken(token)};
+            }
+            catch (SessionNotFoundException)
+            {
                 return BadRequest("Session not found");
-
-            var votingOptions = session.VotingOptions.Select(x => x.Name);
-            
-            var token = _sts.IssueToken(sessionId, Guid.NewGuid(), new []{"Audience"});
-
-            return new JoinSessionResponse{VotingOptions = votingOptions, AccessToken = new AccessToken(token)};
+            }
         }
-        
+
         /// <summary>
         /// Cast a vote in the feedback session
         /// </summary>
         /// <param name="sessionId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Audience")]
@@ -96,15 +98,24 @@ namespace plodo.Backend.API.Controllers
             if (!HttpContext.User.HasClaim("session_id", sessionId))
                 return Unauthorized("Audience not in the session specified");
             
-            var session = _sessionService.GetSession(sessionId);
+            try
+            {
+                var audienceId = Guid.Parse(HttpContext.User.FindFirst("audience_id").Value);
+                
+                await _sessionService.RecordVote(sessionId, audienceId, request.Vote);
+                await _serverSentEventsService.SendEventAsync(sessionId,
+                    new ServerSentEvent {Type = "vote", Data = new[] {request.Vote.ToString().ToLower()}});
 
-            if (session == null)
+                return Ok();
+            }
+            catch (SessionNotFoundException)
+            {
                 return BadRequest("Session not found");
-
-            await _serverSentEventsService.SendEventAsync(sessionId,
-                new ServerSentEvent {Type = "vote", Data = new[] {request.Vote.ToString().ToLower()}});
-
-            return Ok();
+            }
+            catch (AudienceNotInSessionException)
+            {
+                return Unauthorized("Audience not in the session specified");
+            }
         }
     }
 }

@@ -6,15 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CassandraCSharpDriver" Version="3.14.0" />
       <PackageReference Include="Lamar" Version="4.2.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.2" />
-      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.6.0" />
-      <PackageReference Include="Nanoid" Version="2.1.0" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\plodo.Backend.Repositories\plodo.Backend.Repositories.csproj" />
     </ItemGroup>
 
 </Project>

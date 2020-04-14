@@ -1,25 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace plodo.Backend.Services.Models
 {
     public class Session
     {
-        public List<VoteOption> VotingOptions { get; set; }
+        public string SessionId { get; }
+        public Guid OwnerId { get; }
+        
+        public List<VoteOption> VotingOptions { get; }
+
+        public Session(string sessionId, Guid ownerId, IEnumerable<VoteOption> votingOptions)
+        {
+            SessionId = sessionId;
+            OwnerId = ownerId;
+            VotingOptions = votingOptions.ToList();
+        }
         
         public class VoteOption
         {
             public string Name { get; }
             public string Icon { get; }
 
-            public VoteOption(string name, string icon = null)
+            public VoteOption(string icon, string name = null)
             {
-                if(!Regex.IsMatch(name, @"^[^\u0000-\u007F]+$"))
-                    throw new ArgumentException("name contains invalid characters", nameof(name));
+                if(!Regex.IsMatch(icon, @"^[^\u0000-\u007F]+$"))
+                    throw new ArgumentException("name contains invalid characters", nameof(icon));
 
-                Name = name;
                 Icon = icon;
+                Name = name;
             }
         }
     }
