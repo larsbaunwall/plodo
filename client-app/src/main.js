@@ -20,3 +20,6 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+// eslint-disable-next-line no-console
+console.log(`Welcome to plodo ❤\nThis is version ${store.getters.appVersion} of plodo\nHave a look at the source at https://www.github.com/larsbaunwall/plodo`)

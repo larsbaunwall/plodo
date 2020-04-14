@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    packageVersion: process.env.PACKAGE_VERSION || '0',
     accessToken: null,
     session: null
   },
@@ -58,7 +59,8 @@ export default new Vuex.Store({
   getters: {
     activeSession: state => state.session,
     accessToken: state => state.accessToken,
-    isAuthenticated: state => state.accessToken != undefined && state.session != undefined
+    isAuthenticated: state => state.accessToken != undefined && state.session != undefined,
+    appVersion: state => state.packageVersion,
   },
   modules: {
   }
