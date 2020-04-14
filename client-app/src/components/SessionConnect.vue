@@ -4,6 +4,7 @@
       <cleave
         class="input is-large is-primary is-size-1 is-uppercase has-text-centered has-text-weight-bold"
         :options="options"
+        :raw="false"
         maxlength="7"
         autocorrect="off"
         autocapitalize="off"
