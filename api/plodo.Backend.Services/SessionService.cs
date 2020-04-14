@@ -13,7 +13,7 @@ namespace plodo.Backend.Services
     {
         private readonly ISessionRepository _sessionRepo;
         private readonly ISecurityTokenService _sts;
-        private readonly string _idAlphabet = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private readonly string _idAlphabet = "123456789ABCDEFGHIJKLMNPQRSTUVWXYZ";
 
         public SessionService(ISessionRepository sessionRepo, ISecurityTokenService sts)
         {
@@ -46,6 +46,9 @@ namespace plodo.Backend.Services
         public async Task<Session> GetSession(string sessionId)
         {
             var session = await _sessionRepo.FetchSession(sessionId);
+            
+            if(session == null)
+                throw new SessionNotFoundException();
             
             return new Session(session.Id, session.HostId, session.VotingOptions.Select(x => new Session.VoteOption(x)));
         }
