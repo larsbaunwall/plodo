@@ -1,9 +1,10 @@
 <template>
   <div>
     <div style="margin-top: 1em;">
-      <input
+      <cleave
         class="input is-large is-primary is-size-1 is-uppercase has-text-centered has-text-weight-bold"
-        maxlength="4"
+        :options="options"
+        maxlength="7"
         autocorrect="off"
         autocapitalize="off"
         autocomplete="off"
@@ -25,12 +26,21 @@
 </template>
 
 <script>
+import Cleave from "vue-cleave-component";
 export default {
   name: "SessionConnect",
+  components: {
+    Cleave,
+  },
   props: {id: String},
   data() {
     return {
-      sessionId: this.id
+      sessionId: this.id,
+      options: {
+        blocks: [3, 3],
+        uppercase: true,
+        delimiter: '-',
+      }
     }
   },
   methods: {
@@ -49,7 +59,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 input {
-  width: 200px;
+  width: 300px;
   font-family: monospace;
 
 }

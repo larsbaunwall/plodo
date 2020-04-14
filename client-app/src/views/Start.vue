@@ -17,7 +17,7 @@
     <section class="section">
       <div class="container">
         <div class="columns is-mobile is-centered">
-          <div class="column is-8 has-text-centered">
+          <div class="column has-text-centered">
             <div>
               <p class="title">Wanna play?</p>
               <p>Enter the session code, you got from the presenter here:</p>
