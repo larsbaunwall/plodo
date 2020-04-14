@@ -129,13 +129,14 @@ function toggleCelebrationWindow () {
     celebrationWin.close();
   } else {
 
+    const { width, height } = screen.getPrimaryDisplay().size;
     celebrationWin = new BrowserWindow({
       x: 0,
       y: 0,
-      minWidth: screen.width,
-      minHeight: screen.height,
-      width: screen.width,
-      height: screen.height,
+      minWidth: width,
+      minHeight: height,
+      width: width,
+      height: height,
       simpleFullscreen: true,
       useContentSize: true,
       alwaysOnTop: true,
@@ -148,7 +149,7 @@ function toggleCelebrationWindow () {
     });
 
     celebrationWin.setMenu(null);
-    celebrationWin.maximize();
+    celebrationWin.setAlwaysOnTop(true, "screen-saver", 1);
 
     celebrationWin.setIgnoreMouseEvents(true);
 
