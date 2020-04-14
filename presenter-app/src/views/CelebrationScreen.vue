@@ -47,7 +47,7 @@ export default {
 
             emoji.velocity.addSelf(self.gravity);
 
-            emoji.scale = emoji.scale * 0.98;
+            emoji.scale = emoji.scale * 0.99;
           }
         }
       });
@@ -66,15 +66,15 @@ export default {
       }
 
       let m = this.two.width * 0.1; //margin
-      let w = this.two.width - (2 * m);
+      let w = this.two.width - (8 * m);
 
-      let x = (Math.random() * w) + m;
-      let y = this.two.height * 1.1;
+      let x = (Math.random() * w) + (7*m);
+      let y = this.two.height * 1.0;
 
       let shape = this.two.makeSprite(emojiPng, 72, 72);
       shape.velocity = new Two.Vector();
       shape.velocity.x = 4 * (Math.random() - 0.7);
-      shape.velocity.y = - (Math.random() * 10);
+      shape.velocity.y = -(Math.random() * 1);
 
       shape.scale = 1;
 

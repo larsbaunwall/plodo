@@ -13,6 +13,7 @@
             <p>
               <span
                 id="sessionId"
+                style="font-family:monospace;font-size:1.2em; font-weight:bold"
                 title="Copy to clipboard"
                 @click="copySessionId()"
               >{{ activeSession.id }}<i class="sessionId-btn fa fa-copy" /></span>
@@ -29,7 +30,7 @@
             <a
               href="#"
               @click="celebrate()"
-            >Toggle celebration</a>
+            >Toggle</a>
           </div>
         </div>
         <div class="row">

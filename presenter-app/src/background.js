@@ -40,7 +40,7 @@ const createTray = () => {
   });
 };
 
-const toggleWindow = (                              ) => {
+const toggleWindow = () => {
   if (win.isVisible()) {
     win.hide();
   } else {
@@ -69,6 +69,7 @@ const getWindowPosition = () => {
 
     return { x: x, y: y };
   } else {
+    
     //Windows
     return { x: screen.width / 2, y: screen.height / 2 };
   }
@@ -96,8 +97,6 @@ function createWindow () {
 
   //win.webContents.openDevTools();
 
-  // win.setIgnoreMouseEvents(true);
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -114,8 +113,11 @@ function createWindow () {
   //   }
   // });
 
-  win.on("closed", () => {
-    win = null;
+  win.on("close", (event) => {
+    //Do not close window on x
+    event.preventDefault();
+    win.hide();
+
   });
 }
 
@@ -202,6 +204,9 @@ app.on("ready", async () => {
 
   createTray();
   createWindow();
+
+  //Start with celebration on by default
+  toggleCelebrationWindow();
 });
 
 // Exit cleanly on request from parent process in development mode.
