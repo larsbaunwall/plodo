@@ -10,6 +10,7 @@ let DEBUG = (process.env.NODE_ENV !== "production");
 // be closed automatically when the JavaScript object is garbage collected.
 let win = null;
 let celebrationWin = null;
+let tray = null;
 
 ipcMain.on("toggleCelebration", (evt, args) => {
   (celebrationWin && celebrationWin.isVisible())
@@ -59,8 +60,14 @@ app.on("ready", async () => {
   }
 
   win = manager.createAppWindow(450, 650, "", false, true);
-  manager.createTray(win);
+  tray = manager.createTray(win);
   celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+});
+
+app.on("before-quit", async () => {
+  win.destroy();
+  celebrationWin.destroy();
+  tray.destroy();
 });
 
 // Exit cleanly on request from parent process in development mode.

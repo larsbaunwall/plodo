@@ -1,19 +1,31 @@
 "use strict";
 /* global __static */
-import { BrowserWindow, screen, Tray } from "electron";
+import { app, BrowserWindow, screen, Tray, Menu } from "electron";
 import path from "path";
-import {
-  createProtocol,
-  installVueDevtools
-} from "vue-cli-plugin-electron-builder/lib";
+import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
 
-const DEBUG = (process.env.NODE_ENV !== "production");
+const DEBUG = process.env.NODE_ENV !== "production";
 let tray;
 
-const createTray = (mainWindow) => {
+const createTray = mainWindow => {
+  const menu = Menu.buildFromTemplate([
+    {
+      label: "Open plodo",
+      click() {
+        toggleWindow(mainWindow);
+      },
+    },
+    { type: "separator" },
+    {
+      role: "quit" // "role": system prepared action menu
+    }, 
+  ]);
+
   tray = new Tray(path.join(__static, "icon.png"));
   tray.setToolTip("plodo");
-  tray.on("right-click", () => toggleWindow(mainWindow));
+  tray.setContextMenu(menu);
+
+  tray.on("right-click", tray.popUpContextMenu);
   tray.on("double-click", () => toggleWindow(mainWindow));
   tray.on("click", event => {
     toggleWindow(mainWindow);
@@ -22,9 +34,11 @@ const createTray = (mainWindow) => {
       mainWindow.openDevTools({ mode: "detach" });
     }
   });
+
+  return tray;
 };
 
-const toggleWindow = (win) => {
+const toggleWindow = win => {
   if (win.isVisible()) {
     win.hide();
   } else {
@@ -32,31 +46,32 @@ const toggleWindow = (win) => {
   }
 };
 
-const showWindow = (win) => {
+const showWindow = win => {
   const position = getWindowPosition(win);
   win.setPosition(position.x, position.y, false);
   win.show();
   win.focus();
 };
 
-const getWindowPosition = (win) => {
+const getWindowPosition = win => {
   const windowBounds = win.getBounds();
   const trayBounds = tray.getBounds();
 
-  if (process.platform === "darwin")
-  {
+  if (process.platform === "darwin") {
     // Center window horizontally below the tray icon
-    const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
+    const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2);
 
     // Position window 4 pixels vertically below the tray icon
     const y = Math.round(trayBounds.y + trayBounds.height + 4);
 
     return { x: x, y: y };
   } else {
-    
     //Windows - center on screen
     const display = screen.getPrimaryDisplay().workAreaSize;
-    return { x: display.width / 2 - (windowBounds.width / 2), y: display.height / 2 - (windowBounds.height / 2) };
+    return {
+      x: display.width / 2 - windowBounds.width / 2,
+      y: display.height / 2 - windowBounds.height / 2,
+    };
   }
 };
 
@@ -68,8 +83,8 @@ const createAppWindow = (width, height, urlPath, hideOnBlur = false, hideOnClose
     icon: path.join(__static, "icon.png"),
     frame: true,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   win.setMenu(null);
@@ -89,8 +104,8 @@ const createAppWindow = (width, height, urlPath, hideOnBlur = false, hideOnClose
     }
   });
 
-  win.on("close", (event) => {
-    if(hideOnClose) {
+  win.on("close", event => {
+    if (hideOnClose) {
       //Do not close window on x
       event.preventDefault();
       win.hide();
@@ -100,7 +115,7 @@ const createAppWindow = (width, height, urlPath, hideOnBlur = false, hideOnClose
   return win;
 };
 
-const createCelebrationWindow = (display = screen.getPrimaryDisplay()) => {    
+const createCelebrationWindow = (display = screen.getPrimaryDisplay()) => {
   const { width, height } = display.size;
 
   const win = new BrowserWindow({
@@ -117,8 +132,8 @@ const createCelebrationWindow = (display = screen.getPrimaryDisplay()) => {
     frame: false,
     focusable: false,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   win.setMenu(null);
@@ -138,4 +153,4 @@ const createCelebrationWindow = (display = screen.getPrimaryDisplay()) => {
   return win;
 };
 
-export default {createAppWindow, createCelebrationWindow, createTray};
+export default { createAppWindow, createCelebrationWindow, createTray };
