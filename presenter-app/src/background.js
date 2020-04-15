@@ -1,11 +1,7 @@
 "use strict";
 /* global __static */
-import { app, protocol, BrowserWindow, screen, Tray, ipcMain } from "electron";
-import path from "path";
-import {
-  createProtocol,
-  installVueDevtools
-} from "vue-cli-plugin-electron-builder/lib";
+import { app, protocol, screen, ipcMain } from "electron";
+import manager from "./common/WindowManager";
 import store from "./store";
 
 let DEBUG = (process.env.NODE_ENV !== "production");
@@ -15,158 +11,17 @@ let DEBUG = (process.env.NODE_ENV !== "production");
 let win = null;
 let celebrationWin = null;
 
-let tray = null;
-
 ipcMain.on("toggleCelebration", (evt, args) => {
-
-  toggleCelebrationWindow();
+  (celebrationWin && celebrationWin.isVisible())
+    ? celebrationWin.hide() 
+    : celebrationWin.show();
 });
 
 // Don't show the app in dock
 // app.dock.hide();
 
-const createTray = () => {
-  tray = new Tray(path.join(__static, "icon.png"));
-  tray.setToolTip("Configure plodo");
-  tray.on("right-click", toggleWindow);
-  tray.on("double-click", toggleWindow);
-  tray.on("click", function (event) {
-    toggleWindow();
-
-    // Show devtools when command clicked
-    if (win.isVisible() && process.defaultApp && event.metaKey) {
-      win.openDevTools({ mode: "detach" });
-    }
-  });
-};
-
-const toggleWindow = () => {
-  if (win.isVisible()) {
-    win.hide();
-  } else {
-    showWindow();
-  }
-};
-
-const showWindow = () => {
-  const position = getWindowPosition();
-  win.setPosition(position.x, position.y, false);
-  win.show();
-  win.focus();
-};
-
-const getWindowPosition = () => {
-  const windowBounds = win.getBounds();
-  const trayBounds = tray.getBounds();
-
-  if (process.platform === "darwin")
-  {
-    // Center window horizontally below the tray icon
-    const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2));
-
-    // Position window 4 pixels vertically below the tray icon
-    const y = Math.round(trayBounds.y + trayBounds.height + 4);
-
-    return { x: x, y: y };
-  } else {
-    
-    //Windows
-    return { x: screen.width / 2, y: screen.height / 2 };
-  }
-
-};
-
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: "plodo", privileges: { secure: true, standard: true } }]);
-
-function createWindow () {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 450,
-    height: 650,
-    icon: path.join(__static, "icon.png"),
-    // transparent: true,
-    frame: true,
-    // focusable: false,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  win.setMenu(null);
-
-  //win.webContents.openDevTools();
-
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    // if (!process.env.IS_TEST) win.webContents.openDevTools()
-  } else {
-    createProtocol("plodo");
-    // Load the index.html when not in development
-    win.loadURL("plodo://./index.html");
-  }
-
-  // win.on("blur", () => {
-  //   if (!win.webContents.isDevToolsOpened()) {
-  //     win.hide();
-  //   }
-  // });
-
-  win.on("close", (event) => {
-    //Do not close window on x
-    event.preventDefault();
-    win.hide();
-
-  });
-}
-
-
-function toggleCelebrationWindow () {
-  // Create the browser window.
-
-  if(celebrationWin) {
-    celebrationWin.close();
-  } else {
-
-    const { width, height } = screen.getPrimaryDisplay().size;
-    celebrationWin = new BrowserWindow({
-      x: 0,
-      y: 0,
-      minWidth: width,
-      minHeight: height,
-      width: width,
-      height: height,
-      simpleFullscreen: true,
-      useContentSize: true,
-      alwaysOnTop: true,
-      transparent: true,
-      frame: false,
-      focusable: false,
-      webPreferences: {
-        nodeIntegration: true
-      }
-    });
-
-    celebrationWin.setMenu(null);
-    celebrationWin.setAlwaysOnTop(true, "screen-saver", 1);
-
-    celebrationWin.setIgnoreMouseEvents(true);
-
-    if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-      celebrationWin.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/celebrate`);
-    } else {
-      createProtocol("plodo");
-      // Load the index.html when not in development
-      celebrationWin.loadURL("plodo://./index.html/#/celebrate");
-    }
-
-    celebrationWin.on("closed", () => {
-      celebrationWin = null;
-    });
-  }
-}
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -181,7 +36,7 @@ app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow();
+    win = createAppWindow(450, 650, "");
   }
 });
 
@@ -203,11 +58,9 @@ app.on("ready", async () => {
     }
   }
 
-  createTray();
-  createWindow();
-
-  //Start with celebration on by default
-  toggleCelebrationWindow();
+  win = manager.createAppWindow(450, 650, "", false, true);
+  manager.createTray(win);
+  celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
 });
 
 // Exit cleanly on request from parent process in development mode.
