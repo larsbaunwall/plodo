@@ -14,6 +14,7 @@ const emptySession = {
 
 export default new Vuex.Store({
   state: {
+    celebrate: true,
     accessToken: "",
     session: emptySession,
   },
@@ -40,6 +41,9 @@ export default new Vuex.Store({
         Vue.set(state.session.options, foundIdx, foundItem);
       }
     },
+    toggleCelebration(state) {
+      state.celebrate = !state.celebrate;
+    }
   },
   actions: {
     async createSession({ commit, getters }, { votingOptions }) {
@@ -68,10 +72,14 @@ export default new Vuex.Store({
     processVote({ commit }, vote) {
       commit("recordVote", { id: vote.data });
     },
+    toggleCelebration(){
+      this.commit("toggleCelebration");
+    }
   },
   getters: {
     accessToken: (state) => state.accessToken,
     activeSession: (state) => state.session,
+    celebrate: (state) => state.celebrate,
   },
   plugins: [createPersistedState(), createSharedMutations(), createPromiseAction()],
   strict: process.env.NODE_ENV !== "production",

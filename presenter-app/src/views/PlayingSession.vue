@@ -16,7 +16,10 @@
                 style="font-family:monospace;font-size:1.2em; font-weight:bold"
                 title="Copy to clipboard"
                 @click="copySessionId()"
-              >{{ activeSession.id }}<i class="sessionId-btn fa fa-copy" /></span>
+              >
+                {{ activeSession.id }}
+                <i class="sessionId-btn fa fa-copy" />
+              </span>
             </p>
           </div>
         </div>
@@ -24,13 +27,10 @@
           <div class="col-6">
             <p>Celebration</p>
           </div>
-          <div
-            class="col-6"
-          >
-            <a
-              href="#"
-              @click="celebrate()"
-            >Toggle</a>
+          <div class="col-6">
+            <span title="Toggle celebration on screen">
+              <base-switch :value="celebrate" @change="toggleCelebration()" />
+            </span>
           </div>
         </div>
         <div class="row">
@@ -41,23 +41,14 @@
               style="primary"
               icon="fa fa-sign-out"
               @click="quitSession"
-            >
-              Quit session
-            </base-button>
+            >Quit session</base-button>
           </div>
         </div>
       </div>
     </div>
-    <div
-      v-for="opt in activeSession.options"
-      :key="opt.id"
-      class="row"
-    >
+    <div v-for="opt in activeSession.options" :key="opt.id" class="row">
       <div class="col">
-        <smiley-counter
-          :smiley="opt.id"
-          :count="opt.count"
-        />
+        <smiley-counter :smiley="opt.id" :count="opt.count" />
       </div>
     </div>
   </div>
@@ -69,8 +60,13 @@ import SmileyCounter from "@/components/SmileyCounter.vue";
 import { clipboard, ipcRenderer } from "electron";
 export default {
   components: { SmileyCounter },
+  data() {
+    return {
+      shouldCelebrate: this.celebrate,
+    };
+  },
   computed: {
-    ...mapGetters(["activeSession"]),
+    ...mapGetters(["activeSession", "celebrate"]),
   },
   methods: {
     async quitSession() {
@@ -80,9 +76,9 @@ export default {
     copySessionId() {
       clipboard.writeText(this.activeSession.id);
     },
-    celebrate() {
-      ipcRenderer.send("toggleCelebration");
-    }
+    toggleCelebration(val) {
+      this.$store.dispatch("toggleCelebration");
+    },
   },
 };
 </script>

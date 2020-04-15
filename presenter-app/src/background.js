@@ -4,7 +4,7 @@ import { app, protocol, screen, ipcMain } from "electron";
 import manager from "./common/WindowManager";
 import store from "./store";
 
-let DEBUG = (process.env.NODE_ENV !== "production");
+let DEBUG = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -12,17 +12,27 @@ let win = null;
 let celebrationWin = null;
 let tray = null;
 
-ipcMain.on("toggleCelebration", (evt, args) => {
-  (celebrationWin && celebrationWin.isVisible())
-    ? celebrationWin.hide() 
-    : celebrationWin.show();
+const celebrationSub = store.subscribeAction({
+  after: (action, state) => {
+    if (action.type === "toggleCelebration") {
+      if (celebrationWin) {
+        if (state.celebrate) {
+          celebrationWin.show();
+        } else {
+          celebrationWin.hide();
+        }
+      }
+    }
+  },
 });
 
 // Don't show the app in dock
 // app.dock.hide();
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: "plodo", privileges: { secure: true, standard: true } }]);
+protocol.registerSchemesAsPrivileged([
+  { scheme: "plodo", privileges: { secure: true, standard: true } },
+]);
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -65,6 +75,7 @@ app.on("ready", async () => {
 });
 
 app.on("before-quit", async () => {
+  celebrationSub();
   win.destroy();
   celebrationWin.destroy();
   tray.destroy();
