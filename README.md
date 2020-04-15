@@ -1,10 +1,12 @@
 [![Backend build](https://dev.azure.com/plodo/plodo.Backend/_apis/build/status/plodo.Backend-Build)](https://dev.azure.com/plodo/plodo.Backend/_build/latest?definitionId=2)
 
-![plodo](/artwork/logo/1x/plodo-logo.png?token=AAYFUMFNWQZKIHIM2KGH7ZS5UMLU4)
+<img src="/artwork/logo/1x/plodo-logo.png?token=AAYFUMFNWQZKIHIM2KGH7ZS5UMLU4" width="200px" />
 
 # Get instant audience feedback
 
 plodo is a nice little utility you can use to get immediate feedback from your audience while you present.
+
+<img src="/artwork/screenshots/demo-recording-2.gif" />
 
 # So how does it look?
 In the presenter's app, you can set up a new session and follow live feedback as your audience submits it via a mobile website:
