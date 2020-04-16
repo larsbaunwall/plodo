@@ -14,7 +14,10 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      customFileProtocol: "plodo://./" // Make sure to add "./" to the end of the protocol
+      customFileProtocol: "plodo://./", // Make sure to add "./" to the end of the protocol
+      builderOptions: {
+        publish: ["github"]
+      }
     }
   },
   configureWebpack: {

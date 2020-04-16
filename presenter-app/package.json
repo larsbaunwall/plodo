@@ -1,9 +1,13 @@
 {
   "name": "plodo",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Use plodo to get immediate feedback from your audience while you present",
   "author": "Lars Baunwall <larslb@plodo.io> (https://www.plodo.io/)",
   "homepage": "https://www.plodo.io",
+  "os": [
+    "win32",
+    "darwin"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/larsbaunwall/plodo.git"
@@ -24,7 +28,9 @@
     "axios": "^0.19.0",
     "bootstrap-vue": "^2.10.1",
     "core-js": "^3.6.4",
+    "electron-log": "^4.1.1",
     "electron-promise-ipc": "^2.1.0",
+    "electron-updater": "^4.2.5",
     "eventsource": "^1.0.7",
     "flatpickr": "^4.5.1",
     "nouislider": "^14.2.0",

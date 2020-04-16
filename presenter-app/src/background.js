@@ -3,8 +3,15 @@
 import { app, protocol, screen, ipcMain } from "electron";
 import manager from "./common/WindowManager";
 import store from "./store";
+import logging from "./common/Logging";
+import { autoUpdater } from "electron-updater";
 
-let DEBUG = process.env.NODE_ENV !== "production";
+const DEBUG = process.env.NODE_ENV !== "production";
+
+logging.init();
+
+autoUpdater.logger = logging.log;
+autoUpdater.logger.transports.file.level = "info";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -72,6 +79,8 @@ app.on("ready", async () => {
   win = manager.createAppWindow(450, 650, "", false, true);
   tray = manager.createTray(win);
   celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on("before-quit", async () => {

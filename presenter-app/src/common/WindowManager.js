@@ -1,18 +1,54 @@
 "use strict";
 /* global __static */
-import { app, BrowserWindow, screen, Tray, Menu } from "electron";
+import { app, BrowserWindow, dialog, screen, Tray, Menu } from "electron";
 import path from "path";
 import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater";
+import log from "electron-log";
+autoUpdater.logger = log;
 
 const DEBUG = process.env.NODE_ENV !== "production";
+let createdAppProtocol = false;
 let tray;
+
+const showUpdateDialog = async (mainWindow) => {
+
+  try {
+    const result = await autoUpdater.checkForUpdates();
+
+    const message = `${result.updateInfo.version} is the latest version.\nYour version is ${app.getVersion()}.\n\nDo you want to update?`;
+  
+    const clicked = await dialog.showMessageBox(mainWindow, {
+      type: "info",
+      title: "Update plodo",
+      buttons: ["Yes, quit and update now", "Later"],
+      cancelId: 1,
+      message : message
+    });  
+
+    if(clicked === 0)
+      await autoUpdater.quitAndInstall();
+  } catch (err) {
+    await dialog.showMessageBox(mainWindow, {
+      type: "error",
+      title: "Error looking for update",
+      message : err.message
+    });
+  }
+};
 
 const createTray = mainWindow => {
   const menu = Menu.buildFromTemplate([
     {
       label: "Open plodo",
-      click() {
+      click: () => {
         toggleWindow(mainWindow);
+      },
+    },
+    {
+      label: "Check for updates",
+      click: async () => {
+        await showUpdateDialog(mainWindow);
       },
     },
     { type: "separator" },
@@ -93,7 +129,7 @@ const createAppWindow = (width, height, urlPath, hideOnBlur = false, hideOnClose
     // Load the url of the dev server if in development mode
     win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${urlPath}`);
   } else {
-    createProtocol("plodo");
+    ensurePlodoProtocol();
     // Load the index.html when not in development
     win.loadURL(`plodo://./index.html${urlPath}`);
   }
@@ -137,7 +173,7 @@ const createCelebrationWindow = (display = screen.getPrimaryDisplay()) => {
   });
 
   win.setMenu(null);
-  win.setAlwaysOnTop(true, "screen-saver", 1);
+  win.setAlwaysOnTop(true, "screen-saver");
 
   win.setIgnoreMouseEvents(true);
 
@@ -145,12 +181,20 @@ const createCelebrationWindow = (display = screen.getPrimaryDisplay()) => {
     // Load the url of the dev server if in development mode
     win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/celebrate`);
   } else {
-    createProtocol("plodo");
+    ensurePlodoProtocol();
     // Load the index.html when not in development
     win.loadURL("plodo://./index.html/#/celebrate");
   }
 
   return win;
+};
+
+const ensurePlodoProtocol = () => {
+  if(!createdAppProtocol)
+  {
+    createProtocol("plodo");
+    createdAppProtocol = true;
+  }
 };
 
 export default { createAppWindow, createCelebrationWindow, createTray };
