@@ -46,3 +46,7 @@ Certainly! Just open a new issue for the stuff you want to see in plodo.
 Got questions or comments? Open an issue and let us know!
 
 We will publish a list of stuff we would much appreciate some help with. UI enhancements will definately be on that list! :smile:
+
+# Sponsors
+
+<img src="/artwork/logo/thinkability-logo.png" width="200px" />
