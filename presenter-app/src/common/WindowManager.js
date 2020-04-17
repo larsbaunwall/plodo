@@ -51,6 +51,10 @@ const createTray = mainWindow => {
         await showUpdateDialog(mainWindow);
       },
     },
+    {
+      label: `plodo v${app.getVersion()}`,
+      enabled: false
+    },
     { type: "separator" },
     {
       role: "quit" // "role": system prepared action menu
