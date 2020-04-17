@@ -6,7 +6,7 @@ exports.default = async function(configuration) {
   const keyname = process.env.KV_KEYNAME;
 
   require("child_process").execSync(
-    `AzureSignTool.exe sign -kvu ${url} -kvi ${login} -kvs ${password} -kvc ${keyname} -tr http://timestamp.digicert.com -v ${configuration.path}`,
+    `AzureSignTool.exe sign -kvu ${url} -kvi ${login} -kvs ${password} -kvc ${keyname} -tr http://timestamp.digicert.com -v "${configuration.path}"`,
     {
       stdio: "inherit"
     }
