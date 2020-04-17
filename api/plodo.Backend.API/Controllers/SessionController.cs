@@ -12,7 +12,7 @@ using plodo.Backend.Services.Models;
 
 namespace plodo.Backend.API.Controllers
 {
-    [Route("api/v{version:apiVersion}/sessions")] 
+    [Route("v{version:apiVersion}/sessions")] 
     [ApiController]
     [ApiVersion("1")]
     public class SessionController : ControllerBase

@@ -1,5 +1,5 @@
 {
-    "apiEndpoint": "https://api-qa.plodo.io",
+    "apiEndpoint": "https://api.plodo.io",
     "apiVersion": "v1",
-    "streamEndpoint": "https://qa-plodo.azurewebsites.net/session-stream"
+    "streamEndpoint": "https://prod-plodo-eus2.azurewebsites.net/session-stream"
 }

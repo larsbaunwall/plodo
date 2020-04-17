@@ -16,7 +16,7 @@ const {
 let sse = null;
 
 const axiosInstance = axios.create({
-  baseURL: `${apiEndpoint}/api/${apiVersion}`,
+  baseURL: `${apiEndpoint}/${apiVersion}`,
   httpsAgent: new https.Agent({ rejectUnauthorized: process.env.NODE_ENV !== "development" }),
 });
 
