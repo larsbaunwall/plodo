@@ -1,16 +1,25 @@
 import axios from "axios";
 import store from "../store";
-import config from "./config.json"
 
-const axiosInstance = axios.create({
-  baseURL: config.baseURL
-});
+let cfg;
+
+const axiosInstance = axios.create();
+
+const fetchConfig = async () => {
+  const {data} = await axios.get("/cfg.json");
+  return data;
+}
 
 const ApiService = {
 
   init() {
     axiosInstance.interceptors.request.use(
-      config => {
+      async config => {
+        if(cfg == null)
+          cfg = await fetchConfig();
+
+        config.baseURL = cfg.baseURL;
+
         if (store.getters.accessToken) {
           config.headers.Authorization = `Bearer ${store.getters.accessToken}`;
         }
