@@ -5,11 +5,11 @@ import router from './router'
 import store from './store'
 import ApiService from './common/ApiService'
 
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+//import Buefy from 'buefy'
+//import 'buefy/dist/buefy.css'
 import "./assets/scss/plodo.scss"
 
-Vue.use(Buefy)
+//Vue.use(Buefy)
 
 Vue.config.productionTip = false
 
