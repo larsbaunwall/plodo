@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <top-bar />
     <div class="main">
       <router-view />
     </div>
@@ -10,7 +11,14 @@
     </footer>
   </div>
 </template>
-
+<script>
+import TopBar from "./components/TopBar"
+export default {
+  components: {
+    TopBar
+  }
+}
+</script>
 <style lang="scss" scoped>
 #app {
     display: flex;
