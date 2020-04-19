@@ -3,7 +3,7 @@
     <i
       v-for="(img, i) in emojiImgs"
       :key="i"
-      class="twa twa-30px"
+      :class="`twa ${sizeClass}`"
       :style="img"
     />
   </span>
@@ -18,6 +18,10 @@ export default {
     emojis: {
       type: String,
       default: ""
+    },
+    sizeClass: {
+      type: String,
+      default: "twa-30px"
     }
   },
   computed: {
