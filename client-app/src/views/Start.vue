@@ -50,7 +50,7 @@
 								/>
 								<feature-tile
 									title="Connect with your audience"
-									bodyText="Connect with your audience on the spot. Wether it's in-person or virtual."
+									bodyText="Connect with your audience on the spot. Whether it's in-person or virtual."
 									icon="🙌"
 								/>
 								<feature-tile
