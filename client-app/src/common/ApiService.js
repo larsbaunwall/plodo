@@ -64,6 +64,16 @@ const ApiService = {
       /* do nothing */
     }
   },
+
+  async getLatestAppVersion() {
+    try {
+      const {data} = await axiosInstance.post(`app/latest`, {});
+
+      return data;
+    } catch {
+      /* do nothing */
+    }
+  }
 };
 
 export default ApiService;

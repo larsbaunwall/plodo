@@ -16,18 +16,7 @@
 							</h1>
 							<p>Get immediate feedback from your audience while you present.</p>
 							<p>Download the Presenter's app here. It's 100% free (and <a href="https://www.github.com/larsbaunwall/plodo">open source</a>, actually).</p>
-							<div class="buttons is-centered">
-								<a
-									href="https://github.com/larsbaunwall/plodo/releases/latest/download/plodo-win.exe"
-									class="button is-primary is-medium"
-								>
-									<span class="icon"><i class="fab fa-windows" /></span><span>Windows</span></a>
-								<a
-									href="https://github.com/larsbaunwall/plodo/releases/latest/download/plodo-mac.zip"
-									class="button is-primary is-medium"
-								>
-									<span class="icon"><i class="fab fa-apple" /></span><span>MacOS</span></a>
-							</div>
+							<download-buttons />
 						</div>
 						<div class="content is-hidden-tablet has-text-centered">
 							<h1 class="title has-text-primary is-1">Submit live feedback
@@ -192,6 +181,7 @@ import SessionConnect from "@/components/SessionConnect.vue";
 import FeatureTile from "@/components/FeatureTile.vue";
 import Faq from "@/components/Faq.vue";
 import Twemoji from "@/components/Twemoji.vue";
+import DownloadButtons from "@/components/DownloadButtons.vue";
 
 export default {
 	name: "Start",
@@ -200,7 +190,8 @@ export default {
 		SessionConnect,
 		FeatureTile,
 		Faq,
-		Twemoji
+		Twemoji,
+		DownloadButtons,
 	}
 };
 </script>
