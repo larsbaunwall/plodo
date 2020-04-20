@@ -2,7 +2,7 @@
   <div>
     <div style="margin-top: 1em;">
       <cleave
-        class="input is-large is-primary is-size-1 is-uppercase has-text-centered has-text-weight-bold"
+        class="input is-large has-background-lightblue is-primary is-size-2 has-text-primary is-uppercase has-text-centered has-text-weight-bold"
         :options="options"
         :raw="false"
         maxlength="7"
@@ -16,7 +16,7 @@
       />
     </div>
     <div style="margin-top: 3em;">
-      <button class="button is-medium is-success is-rounded" @click="joinSession">
+      <button class="button is-large is-success is-rounded" @click="joinSession">
         <span class="icon">
           <i class="fas fa-play"></i>
         </span>
@@ -62,6 +62,5 @@ export default {
 input {
   width: 300px;
   font-family: monospace;
-
 }
 </style>

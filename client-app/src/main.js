@@ -1,15 +1,16 @@
 import Vue from 'vue'
+import Buefy from 'buefy'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import ApiService from './common/ApiService'
 
-//import Buefy from 'buefy'
-//import 'buefy/dist/buefy.css'
 import "./assets/scss/plodo.scss"
 
-//Vue.use(Buefy)
+Vue.use(Buefy, {
+  defaultIconPack: "fas"
+})
 
 Vue.config.productionTip = false
 
