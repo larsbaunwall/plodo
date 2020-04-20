@@ -18,12 +18,12 @@
 							<p>Download the Presenter's app here. It's 100% free (and <a href="https://www.github.com/larsbaunwall/plodo">open source</a>, actually).</p>
 							<div class="buttons is-centered">
 								<a
-									href="https://github.com/larsbaunwall/plodo/releases/download/latest/plodo-windows.exe"
+									href="https://github.com/larsbaunwall/plodo/releases/latest/download/plodo-win.exe"
 									class="button is-primary is-medium"
 								>
 									<span class="icon"><i class="fab fa-windows" /></span><span>Windows</span></a>
 								<a
-									href="https://github.com/larsbaunwall/plodo/releases/download/latest/plodo-mac.zip"
+									href="https://github.com/larsbaunwall/plodo/releases/latest/download/plodo-mac.zip"
 									class="button is-primary is-medium"
 								>
 									<span class="icon"><i class="fab fa-apple" /></span><span>MacOS</span></a>
