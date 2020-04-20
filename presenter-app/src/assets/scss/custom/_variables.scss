@@ -41,10 +41,10 @@ $blue:    #5e72e4 !default;
 $indigo:  #5603ad !default;
 $purple:  #8965e0 !default;
 $pink:    #f3a4b5 !default;
-$red:     #f5365c !default;
+$red:     #F02B5C !default;
 $orange:  #fb6340 !default;
 $yellow:  #ffd600 !default;
-$green:   #2dce89 !default;
+$green:   #22D56D !default;
 $teal:    #11cdef !default;
 $cyan:    #2bffc6 !default;
 
@@ -68,8 +68,8 @@ $colors: map-merge((
 ), $colors);
 
 $default:       #172b4d !default;
-$primary:       #5e72e4 !default;
-$secondary:     #f4f5f7 !default;
+$primary:       #1B1464 !default;
+$secondary:     #2E3192 !default;
 $success:       $green !default;
 $info:          $teal !default;
 $warning:       $orange !default;

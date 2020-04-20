@@ -33,11 +33,13 @@
       </div>
     </div>
 
-    <div class="row d-flex justify-content-center">
+    <div
+      class="row d-flex justify-content-center"
+      style="margin-top: 10px;"
+    >
       <img
         :src="require(`@/assets/artwork/icons/communication.svg`)"
-        width="200px"
-        height="200px"
+        width="80%"
       >
     </div>
   </div>

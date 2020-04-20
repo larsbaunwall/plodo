@@ -20,11 +20,15 @@ module.exports = {
         publish: ["github"],
         win: {
           appId: "think.plodo.presenter",
+          artifactName: "plodo-{os}.${ext}",
           certificateSubjectName: "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
           sign: "./sign.js",
           signDlls: true,
+        },
+        mac: {
+          artifactName: "plodo-${os}.${ext}"
         }
-      }, 
+      },
     }
   },
   configureWebpack: {
