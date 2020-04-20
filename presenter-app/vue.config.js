@@ -20,7 +20,6 @@ module.exports = {
         publish: ["github"],
         win: {
           appId: "think.plodo.presenter",
-          artifactName: "plodo-${os}-${target}.${ext}",
           certificateSubjectName: "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
           sign: "./sign.js",
           signDlls: true,
@@ -31,11 +30,9 @@ module.exports = {
             {
               target: "portable"
             }
-          ],
-          portable: "plodo-${os}-portable.${ext}"
+          ]
         },
         mac: {
-          artifactName: "plodo-${os}.${ext}"
         }
       },
     }
