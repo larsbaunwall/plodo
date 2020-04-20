@@ -26,12 +26,10 @@ module.exports = {
           signDlls: true,
           target: [
             {
-              target: "nsis",
-              artifactName: "plodo-setup-${os}.${ext}"
+              target: "nsis"
             },
             {
-              target: "portable",
-              artifactName: "plodo-portable-${os}.${ext}"
+              target: "portable"
             }
           ]
         },
