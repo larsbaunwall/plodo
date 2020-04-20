@@ -49,7 +49,7 @@ export default {
 				},
 				{
 					title: "I am missing a feature. How do I report that?",
-					text: "Ideas for new features? That's just awesome! Submit your idea on <a href='https://github.com/larsbaunwall/plodo/issues'>GitHub</a>, or send us a PR with your idea!"
+					text: "Ideas for new features? That's just awesome! Submit your idea on <a href='https://github.com/larsbaunwall/plodo/issues'>GitHub</a>, or send us a PR!"
 				},
 				{
 					title: "Who made this?",
