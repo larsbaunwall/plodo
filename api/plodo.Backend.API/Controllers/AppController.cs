@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using plodo.Backend.API.Models;
 
 namespace plodo.Backend.API.Controllers
@@ -19,6 +20,7 @@ namespace plodo.Backend.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{appVersion}")]
+        [ResponseCache(Duration = 60)]
         public async Task<ActionResult<GetAppVersionResponse>> GetVersion(string appVersion = "latest")
         {
             try
