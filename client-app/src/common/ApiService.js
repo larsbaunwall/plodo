@@ -67,7 +67,7 @@ const ApiService = {
 
   async getLatestAppVersion() {
     try {
-      const {data} = await axiosInstance.post(`app/latest`, {});
+      const {data} = await axiosInstance.get(`app/latest`);
 
       return data;
     } catch {
