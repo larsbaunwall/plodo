@@ -17,7 +17,7 @@ namespace plodo.Backend.API.Controllers
         /// </summary>
         /// <param name="appVersion">The app version, defaults to latest</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("{appVersion}")]
         public async Task<ActionResult<GetAppVersionResponse>> GetVersion(string appVersion = "latest")
         {
