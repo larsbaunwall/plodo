@@ -1,22 +1,22 @@
 <template>
   <div>
-    <div class="buttons is-centered" v-if="latest != null">
-      <a :href="latest.windows.path" class="button is-primary is-medium">
+    <div class="buttons is-centered" v-if="latestDownload != null">
+      <a :href="latestDownload.windows.path" class="button is-primary is-medium">
         <span class="icon">
           <i class="fab fa-windows" />
         </span>
         <span>
           Windows
-          <span class="is-size-7">(v{{latest.version}})</span>
+          <span class="is-size-7">(v{{latestDownload.version}})</span>
         </span>
       </a>
-      <a :href="latest.macOS.path" class="button is-primary is-medium">
+      <a :href="latestDownload.macOS.path" class="button is-primary is-medium">
         <span class="icon">
           <i class="fab fa-apple" />
         </span>
         <span>
           MacOS
-          <span class="is-size-7">(v{{latest.version}})</span>
+          <span class="is-size-7">(v{{latestDownload.version}})</span>
         </span>
       </a>
     </div>
@@ -27,17 +27,14 @@
 </template>
 
 <script>
-import ApiService from "@/common/ApiService";
+import { mapGetters } from "vuex";
 export default {
-  data() {
-    return {
-      latest: null
-    };
-  },
-  async created() {
-    const version = await ApiService.getLatestAppVersion();
-    this.latest = version;
-  }
+    computed: {
+        ...mapGetters(["latestDownload"])
+    },
+    mounted() {
+        this.$store.dispatch("fetchLatestAppDownload");
+    },
 };
 </script>
 

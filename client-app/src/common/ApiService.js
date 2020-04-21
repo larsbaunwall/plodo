@@ -46,8 +46,8 @@ const ApiService = {
           expires: data.accessToken.expires
         }
       };
-    } catch {
-      /* do nothing */
+    } catch (e) {
+      throw new Error(e);
     }
   },
 
@@ -60,18 +60,18 @@ const ApiService = {
         `sessions/${store.getters["activeSession"].id}/votes`,
         { vote: vote }
       );
-    } catch {
-      /* do nothing */
+    } catch (e) {
+      throw new Error(e);
     }
   },
 
-  async getLatestAppVersion() {
+  async getLatestAppDownload() {
     try {
       const {data} = await axiosInstance.get(`app/latest`);
 
       return data;
-    } catch {
-      /* do nothing */
+    } catch (e) {
+      throw new Error(e);
     }
   }
 };

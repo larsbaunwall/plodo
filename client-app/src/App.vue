@@ -19,7 +19,10 @@ export default {
   components: {
     TopBar,
     GithubRibbon
-  }
+  },
+  mounted() {
+    this.$appInsights.trackEvent({name: 'App started', properties: { version: this.$store.getters.appVersion }});
+  },
 };
 </script>
 <style lang="scss" scoped>

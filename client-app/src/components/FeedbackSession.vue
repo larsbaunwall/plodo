@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div 
+      v-if="activeSession != null">
     <button
       class="button is-medium is-primary is-outlined is-fullwidth"
       style="margin-bottom: 1em; height: 5em"
