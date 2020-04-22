@@ -1,6 +1,7 @@
 const fs = require('fs')
 var path = require('path')
 const webpack = require('webpack')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const packageJson = fs.readFileSync('./package.json')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const version = JSON.parse(packageJson).version || 0
@@ -19,7 +20,9 @@ module.exports = {
             new PrerenderSPAPlugin({
                 staticDir: path.join(__dirname, 'dist'),
                 routes: [ '/', '/start', '/session' ]
-              })
+              }),
+            //new BundleAnalyzerPlugin(),
         ]
     },
+    productionSourceMap: false
 }
