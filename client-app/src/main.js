@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueAppInsights from 'vue-application-insights'
-import {Collapse} from 'buefy'
+import Buefy from 'buefy'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -15,7 +15,7 @@ Vue.use(VueAppInsights, {
   router
 })
 
-Vue.use(Collapse, {
+Vue.use(Buefy, {
   defaultIconPack: "fas"
 })
 

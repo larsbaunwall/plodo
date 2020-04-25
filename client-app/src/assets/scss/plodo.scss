@@ -1,6 +1,6 @@
 // Import Bulma's core
 @charset "utf-8";
-@import "~bulma/sass/utilities/_all.sass";
+@import "~bulma/sass/utilities/_all";
 
 @import "twemoji-amazing.scss";
 
@@ -31,6 +31,8 @@ $lightblue-invert: findColorInvert($lightblue);
 $lightblue-darker: lighten($primary, 65%);
 $lightblue-darker-invert: findColorInvert($lightblue-darker);
 
+$white: #FFF;
+$black: #000;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
@@ -58,4 +60,5 @@ $link-focus-border: $secondary;
     justify-content: center;
 }
 
-@import "~bulma/bulma";
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
