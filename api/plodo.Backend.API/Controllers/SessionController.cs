@@ -41,7 +41,7 @@ namespace plodo.Backend.API.Controllers
             
             var (sessionId, token) = await _sessionService.CreateSession(hostId, options.ToList());
 
-            return new CreateSessionResponse {SessionId = sessionId, AccessToken = new AccessToken(token)};
+            return new CreateSessionResponse {SessionId = sessionId, UserId = hostId, AccessToken = new AccessToken(token)};
         }
         
         /// <summary>
@@ -78,7 +78,7 @@ namespace plodo.Backend.API.Controllers
                 var (session, token) = await _sessionService.JoinSession(sessionId, audienceId);
                 
                 var votingOptions = session.VotingOptions.Select(x => x.Icon);
-                return new JoinSessionResponse{VotingOptions = votingOptions, AccessToken = new AccessToken(token)};
+                return new JoinSessionResponse{VotingOptions = votingOptions, UserId = audienceId, AccessToken = new AccessToken(token)};
             }
             catch (SessionNotFoundException)
             {

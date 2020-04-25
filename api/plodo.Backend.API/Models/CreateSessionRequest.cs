@@ -6,7 +6,7 @@ namespace plodo.Backend.API.Models
     public class CreateSessionRequest
     {
         /// <summary>
-        /// A list of valid votes. Votes must be in the format of a-z, A-Z and hyphens
+        /// A list of valid votes. Votes must be valid Unicode emojis
         /// </summary>
         [MultiVoteOptionValidator]
         public IEnumerable<string> VotingOptions { get; set; }
