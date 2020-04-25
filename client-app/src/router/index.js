@@ -27,13 +27,13 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'Start' && !store.getters.isAuthenticated)
-  {
-    let dest = { name: 'Start', params: { id: to.params?.id } };
-    next(dest)
-  }
-  else next()
+router.beforeEach(async (to, from, next) => {
+    if (to.name !== 'Start' && !store.getters.isAuthenticated)
+    {
+      let dest = { name: 'Start', params: { id: to.params?.id } };
+      next(dest)
+    }
+    else next()
 })
 
 export default router

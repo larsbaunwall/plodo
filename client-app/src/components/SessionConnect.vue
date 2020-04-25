@@ -45,19 +45,16 @@ export default {
     }
   },
   methods: {
-    joinSession() {
+    async joinSession() {
       const sId = this.sessionId.toUpperCase();
-      this.$store
-        .dispatch("joinSession", { sessionId: sId })
-        .then(() => {
-          this.$router.push({ name: "Session", params: {id: sId } });
-        });
+
+      await this.$store.dispatch("joinSession", { sessionId: sId })        
+      this.$router.push({ name: "Session", params: {id: sId } });
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 input {
   width: 300px;

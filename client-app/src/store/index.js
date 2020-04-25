@@ -1,8 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import ApiService from "../common/ApiService";
+import { SnackbarProgrammatic as Snackbar } from 'buefy'
 
 Vue.use(Vuex);
+
+const notifyError = (code, message) => {
+  Snackbar.open({type: "is-danger", message: message, position: "is-bottom"})
+};
 
 export default new Vuex.Store({
   state: {
@@ -10,6 +15,7 @@ export default new Vuex.Store({
     latestDownload: null,
     accessToken: null,
     session: null,
+    applicationErrors: [],
   },
   mutations: {
     setSession(state, { sessionId, votingOptions, token }) {
@@ -22,6 +28,9 @@ export default new Vuex.Store({
     },
     setLatestAppDownload(state, latest) {
       state.latestDownload = latest;
+    },
+    setApplicationError(state, {code, message}){
+      state.applicationErrors.push({code, message});
     }
   },
   actions: {
@@ -36,8 +45,9 @@ export default new Vuex.Store({
           votingOptions: session.votingOptions,
           token: session.accessToken.token,
         });
-      } catch (e) {
-        throw new Error(e);
+      } catch (error) {
+        commit("setApplicationError", {code: 0, message: error.response.data});
+        notifyError(0, error.response.data);
       } finally {
         /* do nothing */
       }
@@ -48,8 +58,9 @@ export default new Vuex.Store({
         await ApiService.leaveSession(getters.activeSession);
 
         commit("destroySession");
-      } catch (e) {
-        throw new Error(e);
+      } catch ({response}) {
+        commit("setApplicationError", {code: 0, message: response.data});
+        notifyError(0, response.data);
       } finally {
         /* do nothing */
       }
@@ -59,8 +70,9 @@ export default new Vuex.Store({
       try {
         Vue.appInsights.trackEvent({name: "Cast vote", properties: {session: getters.activeSession, vote: vote}});
         await ApiService.submitVote(vote);
-      } catch (e) {
-        throw new Error(e);
+      } catch ({response}) {
+        commit("setApplicationError", {code: 0, message: response.data});
+        notifyError(0, response.data);
       } finally {
         /* do nothing */
       }
@@ -70,8 +82,8 @@ export default new Vuex.Store({
         const app = await ApiService.getLatestAppDownload();
 
         commit("setLatestAppDownload", app)
-      } catch (e) {
-        throw new Error(e);
+      } catch ({response}) {
+        commit("setApplicationError", {code: 0, message: response.data});
       } finally {
         /* do nothing */
       }
@@ -84,6 +96,7 @@ export default new Vuex.Store({
       state.accessToken != undefined && state.session != undefined,
     appVersion: (state) => state.packageVersion,
     latestDownload: (state) => state.latestDownload,
+    activeErrors: (state) => state.applicationErrors
   },
   modules: {},
 });
