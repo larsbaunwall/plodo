@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using plodo.Backend.API.Models;
+using plodo.Backend.API.Validation;
 
 namespace plodo.Backend.API.Controllers
 {
@@ -61,7 +62,7 @@ namespace plodo.Backend.API.Controllers
             }
             catch (HttpRequestException e)
             {
-                return new NotFoundObjectResult($"App version '{appVersion}' not found: {e.Message}");
+                throw new NotFoundException($"App version '{appVersion}' not found.", e.InnerException);
             }
         }
     }

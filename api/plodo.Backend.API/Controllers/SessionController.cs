@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using plodo.Backend.API.Models;
+using plodo.Backend.API.Validation;
 using plodo.Backend.Services;
 using plodo.Backend.Services.Exceptions;
 using plodo.Backend.Services.Models;
+using SessionNotFoundException = plodo.Backend.Services.Exceptions.SessionNotFoundException;
 
 namespace plodo.Backend.API.Controllers
 {
@@ -53,7 +55,7 @@ namespace plodo.Backend.API.Controllers
         public async Task<ActionResult> Delete(string sessionId)
         {
             if (!HttpContext.User.HasClaim("session_id", sessionId))
-                return Unauthorized("The host does not own this session");
+                throw new NotAuthorizedForSessionException($"You are not the host of session '{sessionId}'.");
 
             await _serverSentEventsService.SendEventAsync(sessionId, new ServerSentEvent {Type = "terminate", Data = new[]{""}});
             await _sessionService.DestroySession(sessionId);
@@ -80,7 +82,7 @@ namespace plodo.Backend.API.Controllers
             }
             catch (SessionNotFoundException)
             {
-                return BadRequest("Session not found");
+                throw new Validation.SessionNotFoundException($"The session '{sessionId}' does not exist.");
             }
         }
 
@@ -96,7 +98,7 @@ namespace plodo.Backend.API.Controllers
         public async Task<ActionResult> Vote(string sessionId, CastVoteRequest request)
         {
             if (!HttpContext.User.HasClaim("session_id", sessionId))
-                return Unauthorized("Audience not in the session specified");
+                throw new NotAuthorizedForSessionException($"You cannot vote in session '{sessionId}'. Sign up as audience first.");
             
             try
             {
@@ -110,11 +112,11 @@ namespace plodo.Backend.API.Controllers
             }
             catch (SessionNotFoundException)
             {
-                return BadRequest("Session not found");
+                throw new Validation.SessionNotFoundException($"The session '{sessionId}' does not exist.");
             }
             catch (AudienceNotInSessionException)
             {
-                return Unauthorized("Audience not in the session specified");
+                throw new NotAuthorizedForSessionException($"You cannot vote in session '{sessionId}'. Sign up as audience first.");
             }
         }
     }
