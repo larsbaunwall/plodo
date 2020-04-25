@@ -6,7 +6,10 @@ import { SnackbarProgrammatic as Snackbar } from 'buefy'
 Vue.use(Vuex);
 
 const notifyError = (code, message) => {
-  Snackbar.open({type: "is-danger", message: message, position: "is-bottom"})
+  if(message && message !== "")
+    Snackbar.open({type: "is-danger", message: message, position: "is-bottom"});
+  else
+    Snackbar.open({type: "is-danger", message: "An error occured processing your request. Please try again.", position: "is-bottom"});
 };
 
 export default new Vuex.Store({
@@ -15,12 +18,11 @@ export default new Vuex.Store({
     latestDownload: null,
     accessToken: null,
     session: null,
-    applicationErrors: [],
   },
   mutations: {
-    setSession(state, { sessionId, votingOptions, token }) {
+    setSession(state, { sessionId, votingOptions, token, userId }) {
       state.accessToken = token;
-      state.session = { id: sessionId, options: votingOptions };
+      state.session = { id: sessionId, options: votingOptions, userId: userId };
     },
     destroySession(state) {
       state.session = null;
@@ -28,26 +30,24 @@ export default new Vuex.Store({
     },
     setLatestAppDownload(state, latest) {
       state.latestDownload = latest;
-    },
-    setApplicationError(state, {code, message}){
-      state.applicationErrors.push({code, message});
     }
   },
   actions: {
     async joinSession({ commit }, { sessionId }) {
       try {
-        Vue.appInsights.trackEvent({name: "Join session", properties: {sessionId: sessionId}});
+        Vue.appInsights.trackEvent({name: "JoinSession", properties: {sessionId: sessionId}});
 
         const session = await ApiService.joinSession(sessionId);
 
         commit("setSession", {
+          userId: session.userId,
           sessionId: sessionId,
           votingOptions: session.votingOptions,
           token: session.accessToken.token,
         });
+        Vue.appInsights.setAuthenticatedUserContext(session.userId);
       } catch (error) {
-        commit("setApplicationError", {code: 0, message: error.response.data});
-        notifyError(0, error.response.data);
+        notifyError(error.response?.data?.status, error.response?.data?.title);
       } finally {
         /* do nothing */
       }
@@ -58,9 +58,8 @@ export default new Vuex.Store({
         await ApiService.leaveSession(getters.activeSession);
 
         commit("destroySession");
-      } catch ({response}) {
-        commit("setApplicationError", {code: 0, message: response.data});
-        notifyError(0, response.data);
+      } catch (error) {
+        notifyError(error.response?.data?.status, error.response?.data?.title);
       } finally {
         /* do nothing */
       }
@@ -68,25 +67,17 @@ export default new Vuex.Store({
     // eslint-disable-next-line no-unused-vars
     async castVote({ commit, getters }, { vote }) {
       try {
-        Vue.appInsights.trackEvent({name: "Cast vote", properties: {session: getters.activeSession, vote: vote}});
+        Vue.appInsights.trackEvent({name: "CastVote", properties: {session: getters.activeSession, vote: vote}});
         await ApiService.submitVote(vote);
-      } catch ({response}) {
-        commit("setApplicationError", {code: 0, message: response.data});
-        notifyError(0, response.data);
+      } catch (error) {
+        notifyError(error.response?.data?.status, error.response?.data?.title);
       } finally {
         /* do nothing */
       }
     },
     async fetchLatestAppDownload({ commit }) {
-      try {
         const app = await ApiService.getLatestAppDownload();
-
         commit("setLatestAppDownload", app)
-      } catch ({response}) {
-        commit("setApplicationError", {code: 0, message: response.data});
-      } finally {
-        /* do nothing */
-      }
     },
   },
   getters: {
@@ -95,8 +86,7 @@ export default new Vuex.Store({
     isAuthenticated: (state) =>
       state.accessToken != undefined && state.session != undefined,
     appVersion: (state) => state.packageVersion,
-    latestDownload: (state) => state.latestDownload,
-    activeErrors: (state) => state.applicationErrors
+    latestDownload: (state) => state.latestDownload
   },
   modules: {},
 });
