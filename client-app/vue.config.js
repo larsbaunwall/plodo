@@ -1,7 +1,9 @@
 const fs = require('fs')
 var path = require('path')
 const webpack = require('webpack')
+// eslint-disable-next-line no-unused-vars
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
 const packageJson = fs.readFileSync('./package.json')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const version = JSON.parse(packageJson).version || 0
