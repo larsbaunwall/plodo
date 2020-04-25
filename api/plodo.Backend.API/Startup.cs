@@ -19,6 +19,10 @@ using plodo.Backend.API.Configurations;
 using plodo.Backend.API.Health;
 using System.Text.Json;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Serilog;
+using Serilog.Core.Enrichers;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
+using Serilog.Enrichers.AspNetCore.HttpContext;
 
 namespace plodo.Backend.API
 {
@@ -117,6 +121,17 @@ namespace plodo.Backend.API
                     _logger.LogInformation("SSE connection prepared, {HttpResponse}", x);
                 }
             });
+            
+            app.UseSerilogLogContext(options =>
+            {
+                options.EnrichersForContextFactory = context => new[]
+                {
+                    new PropertyEnricher("TraceIdentifier", context.TraceIdentifier),
+                    new PropertyEnricher("RequestHeaders", context.Request?.Headers),
+                };
+            });
+            
+            app.UseSerilogRequestLogging();
 
             app.UseHealthChecks("/health");
 

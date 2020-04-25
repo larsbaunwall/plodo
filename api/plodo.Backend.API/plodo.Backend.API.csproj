@@ -26,7 +26,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="4.0.0" />
         <PackageReference Include="Microsoft.OpenApi" Version="1.1.4" />
+        <PackageReference Include="Serilog" Version="2.8.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+        <PackageReference Include="Serilog.Enrichers.AspNetCore.HttpContext" Version="1.0.1" />
         <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.0.2" />
