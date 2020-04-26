@@ -29,26 +29,35 @@
           </div>
           <div class="col-6">
             <span title="Toggle celebration on screen">
-              <base-switch :value="celebrate" @change="toggleCelebration()" />
+              <!-- <base-switch :value="celebrate" @change="toggleCelebration()" /> -->
             </span>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <base-button
+            <button
               block
               outline
               style="primary"
               icon="fa fa-sign-out"
               @click="quitSession"
-            >Quit session</base-button>
+            >
+              Quit session
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <div v-for="opt in activeSession.options" :key="opt.id" class="row">
+    <div
+      v-for="opt in activeSession.options"
+      :key="opt.id"
+      class="row"
+    >
       <div class="col">
-        <smiley-counter :smiley="opt.id" :count="opt.count" />
+        <smiley-counter
+          :smiley="opt.id"
+          :count="opt.count"
+        />
       </div>
     </div>
   </div>
@@ -83,16 +92,14 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-@import "@/assets/scss/custom/_variables.scss";
-
-#sessionId {
+<style scoped>
+/* #sessionId {
   padding: 5px;
   margin-left: -5px;
   cursor: pointer;
 }
 
-#sessionId:hover {
+#sessionId:hover {c
   border: solid 1px $primary;
   border-radius: 0.2em;
   padding: 5px;
@@ -106,5 +113,5 @@ export default {
 .sessionId-btn {
   color: $light;
   margin-left: 0.5em;
-}
+} */
 </style>

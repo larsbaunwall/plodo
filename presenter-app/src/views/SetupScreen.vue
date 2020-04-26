@@ -17,7 +17,7 @@
             </div>
             <div class="row d-flex justify-content-center">
               <div class>
-                <base-button
+                <button
                   block
                   icon="fa fa-play"
                   style="primary"
@@ -25,7 +25,7 @@
                   @click="startSession"
                 >
                   Start
-                </base-button>
+                </button>
               </div>
             </div>
           </div>

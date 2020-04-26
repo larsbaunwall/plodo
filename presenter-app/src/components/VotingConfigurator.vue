@@ -4,15 +4,15 @@
       v-for="(n, idx) in maxOptions"
       :key="idx"
     >
-      <base-button
+      <button
         v-if="selectedOptions[idx] !== undefined"
         type="primary"
         outline
         style="margin-right: 8px; height: 50px"
         @click="unselectOption(idx)"
       ><twemoji :emojis="selectedOptions[idx].id" />
-      </base-button>
-      <base-dropdown
+      </button>
+      <!-- <base-dropdown
         v-else
         hide-arrow
         menu-classes="emoji-dropdown"
@@ -35,10 +35,10 @@
             <twemoji :emojis="opt.id" />
           </a>
         </li>
-      </base-dropdown>
+      </base-dropdown> -->
     </span>
 
-    <base-button
+    <button
       v-if="addingAllowed"
       v-b-tooltip.hover.bottom
       style="margin-right: 8px"
@@ -49,7 +49,7 @@
       icon="fa fa-plus"
       @click="addOption"
     />
-    <base-button
+    <button
       v-if="selectedOptions.length > 0"
       v-b-tooltip.hover.bottom
       outline
