@@ -14,7 +14,8 @@ const emptySession = {
 
 export default new Vuex.Store({
   state: {
-    celebrate: true,
+    celebrate: false,
+    audience: 0,
     accessToken: "",
     session: emptySession,
   },
@@ -41,8 +42,14 @@ export default new Vuex.Store({
         Vue.set(state.session.options, foundIdx, foundItem);
       }
     },
-    toggleCelebration(state) {
-      state.celebrate = !state.celebrate;
+    incrementAudience(state){
+      state.audience =+ 1;
+    },
+    decrementAudience(state){
+      state.audience =- 1;
+    },
+    toggleCelebration(state, {shouldCelebrate}) {
+      state.celebrate = shouldCelebrate;
     }
   },
   actions: {
@@ -72,14 +79,21 @@ export default new Vuex.Store({
     processVote({ commit }, vote) {
       commit("recordVote", { id: vote.data });
     },
-    toggleCelebration(){
-      this.commit("toggleCelebration");
+    audienceJoined({commit}){
+      commit("incrementAudience");
+    },
+    audienceLeft({commit}){
+      commit("decrementAudience");
+    },
+    toggleCelebration({shouldCelebrate}){
+      commit("toggleCelebration", {shouldCelebrate});
     }
   },
   getters: {
     accessToken: (state) => state.accessToken,
     activeSession: (state) => state.session,
     celebrate: (state) => state.celebrate,
+    audience: (state) => state.audience,
   },
   plugins: [createPersistedState(), createSharedMutations(), createPromiseAction()],
   strict: process.env.NODE_ENV !== "production",

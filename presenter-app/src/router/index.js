@@ -4,6 +4,8 @@ import MainLayout from "../views/MainLayout.vue";
 import SetupScreen from "../views/SetupScreen.vue";
 import PlayingSession from "../views/PlayingSession.vue";
 import CelebrationScreen from "../views/CelebrationScreen.vue";
+import SettingsScreen from "../views/SettingsScreen.vue";
+import store from "../store";
 
 Vue.use(Router);
 
@@ -12,20 +14,41 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "main",
-      component: MainLayout,
-      children: [{
-        path: "",
-        component: SetupScreen
-      }]
+      redirect: {
+        name: "Start"
+      }
     },
     {
       path: "/session",
-      name: "PlayingSession",
       component: MainLayout,
       children: [{
         path: "",
+        name: "Start",
+        redirect: to => {
+          if(store.getters.activeSession && store.getters.activeSession.id !== "")
+            return {name: "PlayingSession"};
+
+          return {name: "Setup"};
+        },
+      },
+      {
+        path: "new",
+        name: "Setup",
+        component: SetupScreen
+      },
+      {
+        path: "active",
+        name: "PlayingSession",
         component: PlayingSession
+      }]
+    },
+    {
+      path: "/settings",
+      component: MainLayout,
+      children: [{
+        path: "",
+        name: "Settings",
+        component: SettingsScreen
       }]
     },
     {

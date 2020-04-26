@@ -1,46 +1,35 @@
 <template>
-  <div class="col">
-    <div class="row mt-3">
-      <div class="col">
-        <div class="card w-100">
-          <div class="card-body">
-            <div class="card-title">
-              <h5>Start a session</h5>
-            </div>
-            <div class="row">
-              <div class="col d-flex justify-content-center">
-                <voting-configurator
-                  :max-number-of-options="3"
-                  @optionsChanged="handleOptionsChanged"
-                />
-              </div>
-            </div>
-            <div class="row d-flex justify-content-center">
-              <div class>
-                <button
-                  block
-                  icon="fa fa-play"
-                  style="primary"
-                  :disabled="votingOptions.length === 0"
-                  @click="startSession"
-                >
-                  Start
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="row d-flex justify-content-center"
-      style="margin-top: 10px;"
+  <div
+    class="container has-text-centered is-mobile"
+    style="padding: -3rem;"
+  >
+    <img
+      :src="require(`@/assets/artwork/icons/communication.svg`)"
+      width="80%"
     >
-      <img
-        :src="require(`@/assets/artwork/icons/communication.svg`)"
-        width="80%"
-      >
+    <div class="card">
+      <div class="card-content">
+        <h1 class="title has-text-secondary is-3">
+          Start a session
+        </h1>
+        <h2 class="subtitle">
+          Select voting options:
+        </h2>
+        <voting-configurator
+          :max-number-of-options="3"
+          @optionsChanged="handleOptionsChanged"
+        />
+        <button
+          class="button is-success is-rounded"
+          :disabled="votingOptions.length === 0"
+          @click="startSession"
+        >
+          <b-icon
+            icon="play"
+            size="is-small"
+          /><span>Start</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -61,14 +50,10 @@ export default {
       this.votingOptions = args.selected;
     },
     async startSession() {
-      try {
-        await this.$store.dispatchPromise("createSession", {
-          votingOptions: this.votingOptions,
-        });
-        this.$router.push("/session");
-      } catch (error) {
-        console.log({ error });
-      }
+      await this.$store.dispatchPromise("createSession", {
+        votingOptions: this.votingOptions,
+      });
+      this.$router.push({ name: "PlayingSession" });
     },
   },
 };

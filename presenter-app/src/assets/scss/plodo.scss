@@ -56,6 +56,9 @@ $link: $secondary;
 $link-invert: $secondary-invert;
 $link-focus-border: $secondary;
 
+$card-shadow: 0 0.5em 1em -0.125em rgba($primary, 0.1), 0 0px 0 1px rgba($primary, 0.02);
+
+
 .justify-content-center {
     justify-content: center;
 }

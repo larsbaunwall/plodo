@@ -1,48 +1,41 @@
 <template>
-  <div class="form-group">
-    <span
-      v-for="(n, idx) in maxOptions"
-      :key="idx"
-    >
+  <div class="buttons is-centered">
+    <template v-for="(n, idx) in maxOptions">
       <button
         v-if="selectedOptions[idx] !== undefined"
-        type="primary"
-        outline
-        style="margin-right: 8px; height: 50px"
+        :key="idx"
+        class="button is-outline is-large"
         @click="unselectOption(idx)"
-      ><twemoji :emojis="selectedOptions[idx].id" />
-      </button>
-      <!-- <base-dropdown
-        v-else
-        hide-arrow
-        menu-classes="emoji-dropdown"
       >
-        <base-button
-          slot="title"
-          style="height: 50px"
-          type="secondary"
-          icon="fa fa-2x fa-question"
-        />
-        <li
+        <twemoji :emojis="selectedOptions[idx].id" />
+      </button>
+      <b-dropdown
+        v-else
+        :key="idx"
+        aria-role="list"
+      >
+        <button
+          slot="trigger"
+          class="button is-outline is-large"
+        >
+          <b-icon
+            icon="question"
+            class="has-text-lightblue-darker"
+          />
+        </button>
+        <b-dropdown-item
           v-for="opt in options.filter(x => selectedOptions.indexOf(x) === -1)"
           :key="opt.id"
+          aria-role="listitem"
+          @click="chooseOption(idx, opt)"
         >
-          <a
-            class="dropdown-item"
-            href="#"
-            @click="chooseOption(idx, opt)"
-          >
-            <twemoji :emojis="opt.id" />
-          </a>
-        </li>
-      </base-dropdown> -->
-    </span>
-
+          <twemoji :emojis="opt.id" />
+        </b-dropdown-item>
+      </b-dropdown>
+    </template>
     <button
       v-if="addingAllowed"
-      v-b-tooltip.hover.bottom
-      style="margin-right: 8px"
-      class="btn-tooltip"
+      class="button is-large is-outline"
       title="Add one more"
       outline
       type="secondary"
@@ -51,15 +44,16 @@
     />
     <button
       v-if="selectedOptions.length > 0"
-      v-b-tooltip.hover.bottom
-      outline
-      style="height: 50px"
-      class="btn-tooltip"
+      class="button is-large is-outline"
       title="Start over"
       type="secondary"
-      icon="fa fa fa-undo"
       @click="reset"
-    />
+    >
+      <b-icon
+        icon="undo"
+        class="has-text-secondary"
+      />
+    </button>
   </div>
 </template>
 
@@ -68,13 +62,13 @@ import Twemoji from "./Twemoji";
 export default {
   name: "VotingConfigurator",
   components: {
-    Twemoji
+    Twemoji,
   },
   props: {
     maxNumberOfOptions: Number,
-    addingAllowed: Boolean
+    addingAllowed: Boolean,
   },
-  data () {
+  data() {
     return {
       options: [
         { id: "😀", name: "Smile" },
@@ -92,28 +86,31 @@ export default {
   },
   computed: {},
   methods: {
-    chooseOption (idx, option) {
+    chooseOption(idx, option) {
       this.$set(this.selectedOptions, idx, option);
-      this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
+      this.$emit("optionsChanged", {
+        selected: this.selectedOptions.filter(Boolean),
+      });
     },
-    unselectOption (idx) {
+    unselectOption(idx) {
       this.$set(this.selectedOptions, idx, undefined); // TODO: use an object as dictionary instead (instead of array, as change detection in Vue is not great with arrays)
-      this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
+      this.$emit("optionsChanged", {
+        selected: this.selectedOptions.filter(Boolean),
+      });
     },
-    addOption () {
+    addOption() {
       this.maxOptions += 1;
     },
-    reset () {
+    reset() {
       this.selectedOptions = [];
       this.maxOptions = this.maxNumberOfOptions;
-      this.$emit("optionsChanged", { selected: this.selectedOptions.filter(Boolean) });
+      this.$emit("optionsChanged", {
+        selected: this.selectedOptions.filter(Boolean),
+      });
     },
-  }
+  },
 };
 </script>
 
 <style>
-.emoji-dropdown {
-	min-width: 15px !important;
-}
 </style>

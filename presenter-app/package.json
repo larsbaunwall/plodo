@@ -25,6 +25,9 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
     "axios": "^0.19.0",
     "buefy": "^0.8.17",
     "core-js": "^3.6.4",
@@ -37,6 +40,7 @@
     "two.js": "^0.7.0-stable.1",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
+    "vue-trend-chart": "^0.15.1",
     "vue2-transitions": "^0.3.0",
     "vuetrend": "^0.3.4",
     "vuex": "^3.1.3",

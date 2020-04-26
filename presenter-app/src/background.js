@@ -22,12 +22,11 @@ let tray = null;
 const celebrationSub = store.subscribeAction({
   after: (action, state) => {
     if (action.type === "toggleCelebration") {
-      if (celebrationWin) {
-        if (state.celebrate) {
-          celebrationWin.show();
-        } else {
-          celebrationWin.hide();
-        }
+      if (state.celebrate) {
+        if (!celebrationWin) manager.createCelebrationWindow(screen.getPrimaryDisplay());
+        celebrationWin.show();
+      } else {
+        if (celebrationWin) celebrationWin.hide();
       }
     }
   },
@@ -78,7 +77,8 @@ app.on("ready", async () => {
 
   win = manager.createAppWindow(450, 650, "", false, true);
   tray = manager.createTray(win);
-  celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+  if (store.getters.celebrate)
+    celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
 
   autoUpdater.checkForUpdatesAndNotify();
 });
@@ -86,7 +86,7 @@ app.on("ready", async () => {
 app.on("before-quit", async () => {
   celebrationSub();
   win.destroy();
-  celebrationWin.destroy();
+  if (celebrationWin) celebrationWin.destroy();
   tray.destroy();
 });
 

@@ -1,65 +1,53 @@
 <template>
-  <div class="col">
-    <div class="card w-100 mt-3">
-      <div class="card-body">
-        <div class="card-title">
-          <h5>Session</h5>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <p>In session</p>
+  <div>
+    <div class="card is-primary">
+      <header class="card-header">
+        <div class="level is-mobile card-header-title">
+          <div class="level-left">
+            <div class="level-item">
+              Session
+            </div>
           </div>
-          <div class="col-6">
-            <p>
-              <span
-                id="sessionId"
-                style="font-family:monospace;font-size:1.2em; font-weight:bold"
+          <div class="level-right">
+            <div class="level-item">
+              <button
+                class="button is-outline is-family-monospace has-text-secondary"
                 title="Copy to clipboard"
                 @click="copySessionId()"
               >
-                {{ activeSession.id }}
-                <i class="sessionId-btn fa fa-copy" />
-              </span>
-            </p>
+                <span>{{ activeSession.id }}</span><b-icon
+                  icon="copy"
+                  size="is-small"
+                />
+              </button>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-6">
-            <p>Celebration</p>
-          </div>
-          <div class="col-6">
-            <span title="Toggle celebration on screen">
-              <!-- <base-switch :value="celebrate" @change="toggleCelebration()" /> -->
-            </span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button
-              block
-              outline
-              style="primary"
-              icon="fa fa-sign-out"
-              @click="quitSession"
-            >
-              Quit session
-            </button>
-          </div>
+      </header>
+      <div class="card-content">
+        <p>Celebration</p>
+        <span title="Toggle celebration on screen">
+          <b-switch
+            v-model="shouldCelebrate"
+            @input="toggleCelebration"
+          />
+        </span>
+        <div class="buttons is-centered">
+          <button
+            class="button is-primary"
+            @click="quitSession"
+          >
+            Quit session
+          </button>
         </div>
       </div>
     </div>
-    <div
+    <smiley-counter
       v-for="opt in activeSession.options"
       :key="opt.id"
-      class="row"
-    >
-      <div class="col">
-        <smiley-counter
-          :smiley="opt.id"
-          :count="opt.count"
-        />
-      </div>
-    </div>
+      :smiley="opt.id"
+      :count="opt.count"
+    />
   </div>
 </template>
 
@@ -80,33 +68,36 @@ export default {
   methods: {
     async quitSession() {
       await this.$store.dispatch("removeActiveSession");
-      this.$router.push("/");
+      this.$router.push({ name: "Setup" });
     },
     copySessionId() {
       clipboard.writeText(this.activeSession.id);
     },
     toggleCelebration(val) {
-      this.$store.dispatch("toggleCelebration");
+      this.$store.dispatch("toggleCelebration", {shouldCelebrate: val});
     },
   },
 };
 </script>
 
 <style scoped>
-/* #sessionId {
-  padding: 5px;
-  margin-left: -5px;
-  cursor: pointer;
+.card {
+	margin-bottom: 0.8rem;
+}
+#sessionId {
+	padding: 5px;
+	margin-left: -5px;
+	cursor: pointer;
 }
 
-#sessionId:hover {c
+/* #sessionId:hover {c
   border: solid 1px $primary;
   border-radius: 0.2em;
   padding: 5px;
   margin-left: -6px;
-}
+} */
 
-#sessionId:hover .sessionId-btn {
+/* #sessionId:hover .sessionId-btn {
   color: $primary;
 }
 

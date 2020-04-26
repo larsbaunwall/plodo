@@ -74,6 +74,10 @@ const ApiService = {
       store.dispatch("processVote", msg);
     });
 
+    sse.addEventListener("audienceJoined", msg => {
+      store.dispatch("audienceJoined", msg);
+    });
+
     sse.addEventListener("terminate", msg => {
       console.log("Session terminated on server");
       if(sse) sse.close();
