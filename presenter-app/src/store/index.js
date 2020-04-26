@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { createPersistedState, createSharedMutations } from "vuex-electron";
 import createPromiseAction from "./promise-action";
-import ApiService from "./common/ApiService";
+import ApiService from "../common/ApiService";
 import { remote, ipcRenderer } from "electron";
 
 Vue.use(Vuex);

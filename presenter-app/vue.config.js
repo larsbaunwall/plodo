@@ -16,7 +16,7 @@ module.exports = {
         win: {
           appId: "think.plodo.presenter",
           certificateSubjectName: "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
-          sign: "./sign.js",
+          sign: "./build/sign.js",
           signDlls: true,
           target: [
             {
