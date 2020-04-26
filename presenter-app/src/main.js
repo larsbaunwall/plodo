@@ -5,7 +5,7 @@ import store from "./store";
 import Trend from "vuetrend";
 import ApiService from "./common/ApiService";
 
-import "@/assets/scss/plodo2.scss";
+import "@/assets/scss/plodo.scss";
 
 Vue.config.productionTip = false;
 
