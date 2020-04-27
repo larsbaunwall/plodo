@@ -4,10 +4,12 @@ import { app, protocol, screen, ipcMain } from "electron";
 import manager from "./common/WindowManager";
 import store from "./store";
 import logging from "./common/Logging";
+import ApiService from "./common/ApiService";
 import { autoUpdater } from "electron-updater";
 
 const DEBUG = process.env.NODE_ENV !== "production";
 
+ApiService.init();
 logging.init();
 
 autoUpdater.logger = logging.log;

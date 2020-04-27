@@ -4,6 +4,7 @@ import { createPersistedState, createSharedMutations } from "vuex-electron";
 import createPromiseAction from "./promise-action";
 import ApiService from "../common/ApiService";
 import { remote, ipcRenderer } from "electron";
+import { stat } from "fs";
 
 Vue.use(Vuex);
 
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     audience: 0,
     accessToken: "",
     session: emptySession,
+    stream: {
+      connected: false,
+    }
   },
   mutations: {
     setToken(state, { token }) {
@@ -50,10 +54,13 @@ export default new Vuex.Store({
     },
     toggleCelebration(state, shouldCelebrate) {
       state.celebrate = shouldCelebrate;
+    },
+    setSessionStream(state, isConnected) {
+      state.stream.connected = isConnected;
     }
   },
   actions: {
-    async createSession({ commit, getters }, { votingOptions }) {
+    async createSession({ commit, dispatch, getters }, { votingOptions }) {
       try {
         const data = await ApiService.joinSession(votingOptions);
 
@@ -76,6 +83,9 @@ export default new Vuex.Store({
       } finally {
       }
     },
+    connectSessionStream(){
+      ApiService.connectEventStream();
+    },
     processVote({ commit }, vote) {
       commit("recordVote", { id: vote.data });
     },
@@ -87,6 +97,9 @@ export default new Vuex.Store({
     },
     toggleCelebration({commit}, shouldCelebrate){
       commit("toggleCelebration", shouldCelebrate);
+    },
+    updateSessionStreamState({commit}, isConnected){
+      commit("setSessionStream", isConnected);
     }
   },
   getters: {
@@ -94,6 +107,7 @@ export default new Vuex.Store({
     activeSession: (state) => state.session,
     celebrate: (state) => state.celebrate,
     audience: (state) => state.audience,
+    sessionStream: (state) => state.stream,
   },
   plugins: [createPersistedState(), createSharedMutations(), createPromiseAction()],
   strict: process.env.NODE_ENV !== "production",
