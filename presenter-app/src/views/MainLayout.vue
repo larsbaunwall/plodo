@@ -1,9 +1,10 @@
 <template>
   <div
     id="app"
+    class="is-clipped"
   >
     <tab-menu />
-    <section class="main-section section">
+    <section class="main-section section is-fullheight">
       <router-view />
     </section>
     <footer class="footer has-background-primary">
@@ -11,7 +12,7 @@
         <img
           id="footer-logo"
           src="@/assets/artwork/logo.png"
-          width="100px"
+          width="75px"
         >
       </div>
     </footer>
@@ -33,15 +34,18 @@ export default {
 }
 
 .main-section {
-  padding-top: 0rem;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: 0px;
+    padding: 1rem 1.5rem;
 }
 
 footer {
-  flex: 1;
+  padding: 0.5rem 1.5rem 0.5rem;
 }
 
 #footer-logo {
   filter: saturate(0%) contrast(0%) brightness(200%);
-  opacity: 0.1;
+  opacity: 0.5;
 }
 </style>

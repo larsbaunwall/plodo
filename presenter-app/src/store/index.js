@@ -48,7 +48,7 @@ export default new Vuex.Store({
     decrementAudience(state){
       state.audience =- 1;
     },
-    toggleCelebration(state, {shouldCelebrate}) {
+    toggleCelebration(state, shouldCelebrate) {
       state.celebrate = shouldCelebrate;
     }
   },
@@ -85,8 +85,8 @@ export default new Vuex.Store({
     audienceLeft({commit}){
       commit("decrementAudience");
     },
-    toggleCelebration({shouldCelebrate}){
-      commit("toggleCelebration", {shouldCelebrate});
+    toggleCelebration({commit}, shouldCelebrate){
+      commit("toggleCelebration", shouldCelebrate);
     }
   },
   getters: {

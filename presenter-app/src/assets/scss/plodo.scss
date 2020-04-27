@@ -58,6 +58,8 @@ $link-focus-border: $secondary;
 
 $card-shadow: 0 0.5em 1em -0.125em rgba($primary, 0.1), 0 0px 0 1px rgba($primary, 0.02);
 
+$body-overflow-y: auto;
+$body-background-color: $white-bis;
 
 .justify-content-center {
     justify-content: center;

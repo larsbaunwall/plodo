@@ -13,7 +13,13 @@
                 icon="bullhorn"
                 size="is-small"
                 aria-hidden="true"
-              /><span>Session</span></a>
+              />
+              <span>Session</span>
+              <span
+                v-if="$store.getters.activeSession.id !== ''"
+                class="tag is-family-monospace session-tag"
+              >{{ $store.getters.activeSession.id }}</span>
+            </a>
           </router-link>
           <router-link
             tag="li"
@@ -26,7 +32,9 @@
                 icon="cog"
                 size="is-small"
                 aria-hidden="true"
-              /><span>Settings</span></a>
+              />
+              <span>Settings</span>
+            </a>
           </router-link>
         </ul>
       </div>
@@ -42,5 +50,10 @@ export default {};
 .nav-section {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.session-tag {
+  margin-left: 0.5em;
+  font-size: 0.7rem;
 }
 </style>

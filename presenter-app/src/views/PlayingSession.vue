@@ -1,46 +1,54 @@
 <template>
   <div>
-    <div class="card is-primary">
-      <header class="card-header">
-        <div class="level is-mobile card-header-title">
-          <div class="level-left">
-            <div class="level-item">
-              Session
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <button
-                class="button is-outline is-family-monospace has-text-secondary"
-                title="Copy to clipboard"
-                @click="copySessionId()"
-              >
-                <span>{{ activeSession.id }}</span><b-icon
-                  icon="copy"
-                  size="is-small"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-      <div class="card-content">
-        <p>Celebration</p>
-        <span title="Toggle celebration on screen">
-          <b-switch
-            v-model="shouldCelebrate"
-            @input="toggleCelebration"
-          />
-        </span>
-        <div class="buttons is-centered">
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item"><b-icon icon="asterisk" size="is-small" /></div>
+        <div class="level-item">Session</div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
           <button
-            class="button is-primary"
-            @click="quitSession"
+            class="button is-outline is-family-monospace has-text-secondary"
+            title="Copy to clipboard"
+            @click="copySessionId()"
           >
-            Quit session
+            <span>{{ activeSession.id }}</span>
+            <b-icon icon="copy" size="is-small" />
           </button>
         </div>
       </div>
+    </div>
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item"><b-icon icon="tv" size="is-small" /></div>
+        <div class="level-item">Celebration</div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <b-switch
+            title="Toggle celebration on screen"
+            v-model="shouldCelebrate"
+            @input="toggleCelebration"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item"><b-icon icon="info-circle" size="is-small" /></div>
+        <div class="level-item">Status</div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <session-health />
+        </div>
+      </div>
+    </div>
+    <div class="buttons is-centered">
+      <button class="button is-primary" @click="quitSession">
+        <b-icon icon="sign-out-alt" size="is-small" />
+        <span>End session</span>
+      </button>
     </div>
     <smiley-counter
       v-for="opt in activeSession.options"
@@ -54,9 +62,10 @@
 <script>
 import { mapGetters } from "vuex";
 import SmileyCounter from "@/components/SmileyCounter.vue";
+import SessionHealth from "@/components/SessionHealth.vue";
 import { clipboard, ipcRenderer } from "electron";
 export default {
-  components: { SmileyCounter },
+  components: { SmileyCounter, SessionHealth },
   data() {
     return {
       shouldCelebrate: this.celebrate,
@@ -74,7 +83,7 @@ export default {
       clipboard.writeText(this.activeSession.id);
     },
     toggleCelebration(val) {
-      this.$store.dispatch("toggleCelebration", {shouldCelebrate: val});
+      this.$store.dispatch("toggleCelebration", val);
     },
   },
 };
@@ -82,12 +91,12 @@ export default {
 
 <style scoped>
 .card {
-	margin-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
 }
 #sessionId {
-	padding: 5px;
-	margin-left: -5px;
-	cursor: pointer;
+  padding: 5px;
+  margin-left: -5px;
+  cursor: pointer;
 }
 
 /* #sessionId:hover {c

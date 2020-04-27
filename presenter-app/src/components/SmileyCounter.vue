@@ -43,7 +43,7 @@
               gradient-direction="right"
               :smooth="true"
               :radius="100"
-              :width="200"
+              :width="150"
               stroke-width="2"
             />
           </div>

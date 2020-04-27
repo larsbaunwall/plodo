@@ -18,7 +18,17 @@ import {
   faQuestion,
   faUndo,
   faCopy,
+  faSignOutAlt,
+  faTv,
+  faAsterisk,
+  faInfoCircle,
+  faSpinner,
+
 } from "@fortawesome/free-solid-svg-icons";
+
+import {
+  
+} from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faPlay,
@@ -29,6 +39,11 @@ library.add(
   faQuestion,
   faUndo,
   faCopy,
+  faSignOutAlt,
+  faTv,
+  faAsterisk,
+  faInfoCircle,
+  faSpinner,
 );
 
 import "@/assets/scss/plodo.scss";

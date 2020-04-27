@@ -53,7 +53,7 @@ app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    win = createAppWindow(450, 650, "");
+    win = createAppWindow(425, 800, "");
   }
 });
 
@@ -75,7 +75,7 @@ app.on("ready", async () => {
     }
   }
 
-  win = manager.createAppWindow(450, 650, "", false, true);
+  win = manager.createAppWindow(425, 800, "", false, true);
   tray = manager.createTray(win);
   if (store.getters.celebrate)
     celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
