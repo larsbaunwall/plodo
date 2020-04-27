@@ -21,7 +21,7 @@
               >{{ $store.getters.activeSession.id }}</span>
             </a>
           </router-link>
-          <router-link
+          <!-- <router-link
             tag="li"
             active-class="is-active"
             :to="{name: 'Settings'}"
@@ -35,7 +35,7 @@
               />
               <span>Settings</span>
             </a>
-          </router-link>
+          </router-link> -->
         </ul>
       </div>
     </div>
