@@ -1,25 +1,66 @@
 import Vue from "vue";
 import App from "./App.vue";
+import Buefy from "buefy";
 import router from "./router";
 import store from "./store";
-import Argon from "./plugins/argon-kit";
-import Sparkline from "vue-sparklines";
 import Trend from "vuetrend";
-import "@/assets/scss/plodo.scss";
-import { VBTooltipPlugin } from "bootstrap-vue";
+import TrendChart from "vue-trend-chart";
 import ApiService from "./common/ApiService";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+// internal icons
+import {
+  faPlay,
+  faCog,
+  faBullhorn,
+  faAngleUp,
+  faAngleDown,
+  faQuestion,
+  faUndo,
+  faCopy,
+  faSignOutAlt,
+  faTv,
+  faAsterisk,
+  faInfoCircle,
+  faSpinner,
+
+} from "@fortawesome/free-solid-svg-icons";
+
+import {
+
+} from "@fortawesome/free-regular-svg-icons";
+
+library.add(
+  faPlay,
+  faCog,
+  faBullhorn,
+  faAngleUp,
+  faAngleDown,
+  faQuestion,
+  faUndo,
+  faCopy,
+  faSignOutAlt,
+  faTv,
+  faAsterisk,
+  faInfoCircle,
+  faSpinner,
+);
+
+import "@/assets/scss/plodo.scss";
 
 Vue.config.productionTip = false;
 
-Vue.use(Argon);
-Vue.use(VBTooltipPlugin);
-Vue.use(Sparkline);
-Vue.use(Trend);
+Vue.component("vue-fontawesome", FontAwesomeIcon);
 
-ApiService.init();
+Vue.use(TrendChart);
+Vue.use(Trend);
+Vue.use(Buefy, {
+  defaultIconComponent: "vue-fontawesome",
+  defaultIconPack: "fas",
+});
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount("#app");

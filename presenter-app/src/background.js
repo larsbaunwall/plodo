@@ -4,10 +4,12 @@ import { app, protocol, screen, ipcMain } from "electron";
 import manager from "./common/WindowManager";
 import store from "./store";
 import logging from "./common/Logging";
+import ApiService from "./common/ApiService";
 import { autoUpdater } from "electron-updater";
 
 const DEBUG = process.env.NODE_ENV !== "production";
 
+ApiService.init();
 logging.init();
 
 autoUpdater.logger = logging.log;
@@ -22,12 +24,11 @@ let tray = null;
 const celebrationSub = store.subscribeAction({
   after: (action, state) => {
     if (action.type === "toggleCelebration") {
-      if (celebrationWin) {
-        if (state.celebrate) {
-          celebrationWin.show();
-        } else {
-          celebrationWin.hide();
-        }
+      if (state.celebrate) {
+        if (!celebrationWin) manager.createCelebrationWindow(screen.getPrimaryDisplay());
+        celebrationWin.show();
+      } else {
+        if (celebrationWin) celebrationWin.hide();
       }
     }
   },
@@ -54,7 +55,7 @@ app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    win = createAppWindow(450, 650, "");
+    win = createAppWindow(425, 800, "");
   }
 });
 
@@ -76,9 +77,10 @@ app.on("ready", async () => {
     }
   }
 
-  win = manager.createAppWindow(450, 650, "", false, true);
+  win = manager.createAppWindow(425, 800, "", false, true);
   tray = manager.createTray(win);
-  celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+  if (store.getters.celebrate)
+    celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
 
   autoUpdater.checkForUpdatesAndNotify();
 });
@@ -86,7 +88,7 @@ app.on("ready", async () => {
 app.on("before-quit", async () => {
   celebrationSub();
   win.destroy();
-  celebrationWin.destroy();
+  if (celebrationWin) celebrationWin.destroy();
   tray.destroy();
 });
 

@@ -32,6 +32,7 @@ export default {
     this.unsubscribe();
   },
   mounted() {
+    document.documentElement.style.background = "none";
     document.body.style.background = "none";
 
     this.two.appendTo(document.body);

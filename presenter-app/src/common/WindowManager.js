@@ -69,6 +69,7 @@ const createTray = mainWindow => {
   tray.on("double-click", () => toggleWindow(mainWindow));
   tray.on("click", event => {
     toggleWindow(mainWindow);
+    mainWindow.openDevTools({ mode: "detach" });
     // Show devtools when command clicked
     if (mainWindow.isVisible() && process.defaultApp && event.metaKey) {
       mainWindow.openDevTools({ mode: "detach" });
@@ -88,7 +89,7 @@ const toggleWindow = win => {
 
 const showWindow = win => {
   const position = getWindowPosition(win);
-  win.setPosition(position.x, position.y, false);
+  win.setPosition(Math.round(position.x), Math.round(position.y), false);
   win.show();
   win.focus();
 };
@@ -109,8 +110,8 @@ const getWindowPosition = win => {
     //Windows - center on screen
     const display = screen.getPrimaryDisplay().workAreaSize;
     return {
-      x: display.width / 2 - windowBounds.width / 2,
-      y: display.height / 2 - windowBounds.height / 2,
+      x: Math.round(display.width / 2 - windowBounds.width / 2),
+      y: Math.round(display.height / 2 - windowBounds.height / 2),
     };
   }
 };

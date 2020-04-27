@@ -13,7 +13,8 @@ const {
   streamEndpoint,
 } = require(`../static/config.${process.env.NODE_ENV}.json`);
 
-let sse = null;
+let evtSource = null;
+let sseReconnectFrequencySeconds = 1;
 
 const axiosInstance = axios.create({
   baseURL: `${apiEndpoint}/${apiVersion}`,
@@ -36,9 +37,15 @@ const ApiService = {
       }
     );
 
-    if(process.type === "main"){
+    if (process.type === "main") {
       ipcMain.on("CONNECT_EVENT_STREAM", (evt, args) => this.onConnectEventStream());
+      ipcMain.on("CLOSE_EVENT_STREAM", (evt, args) => {
+        if (evtSource) evtSource.close();
+      });
     }
+
+    if(store.getters.activeSession.id !== "")
+      this.connectEventStream();
   },
 
   async joinSession(votingOptions) {
@@ -50,13 +57,14 @@ const ApiService = {
   },
 
   async leaveSession(sessionId) {
-    await axiosInstance.delete(`sessions/${sessionId}`, {headers: {Authorization: `Bearer ${store.getters.accessToken}`}});
-    if(sse) sse.close();
-    console.log("Eventstream disconnected");
+    await axiosInstance.delete(`sessions/${sessionId}`, {
+      headers: { Authorization: `Bearer ${store.getters.accessToken}` },
+    });
+    this.closeEventStream();
   },
 
   connectEventStream() {
-    if(process.type === "renderer"){
+    if (process.type === "renderer") {
       ipcRenderer.send("CONNECT_EVENT_STREAM");
       return;
     }
@@ -64,22 +72,61 @@ const ApiService = {
     this.onConnectEventStream();
   },
 
+  closeEventStream() {
+    if (process.type === "renderer") {
+      ipcRenderer.send("CLOSE_EVENT_STREAM");
+      return;
+    }
+
+    if (evtSource) evtSource.close();
+  },
+
   onConnectEventStream() {
     console.log("Connecting eventstream");
-    sse = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}`, {
-      withCredentials: true,
-    });
+    const waitFunc = () => sseReconnectFrequencySeconds * 1000;
+    const tryToSetupFunc = () => {
+      setupEventSource();
+      sseReconnectFrequencySeconds *= 2;
+      if (sseReconnectFrequencySeconds >= 64) {
+        sseReconnectFrequencySeconds = 64;
+      }
+    };
 
-    sse.addEventListener("vote", msg => {
-      store.dispatch("processVote", msg);
-    });
+    const setupEventSource = () => {
+      if(evtSource) evtSource.close();
 
-    sse.addEventListener("terminate", msg => {
-      console.log("Session terminated on server");
-      if(sse) sse.close();
-      console.log("Eventstream disconnected");
-    });
-  }
+      evtSource = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}`, {
+        withCredentials: true,
+      });
+
+      store.dispatch("updateSessionStreamState", true);
+
+      evtSource.addEventListener("vote", msg => {
+        store.dispatch("processVote", msg);
+      });
+
+      evtSource.addEventListener("audienceJoined", msg => {
+        store.dispatch("audienceJoined", msg);
+      });
+
+      evtSource.addEventListener("terminate", msg => {
+        this.closeEventStream();
+      });
+
+      evtSource.onopen = function(e) {
+        sseReconnectFrequencySeconds = 1;
+        console.log("Eventstream opened");
+      };
+      evtSource.onerror = function(e) {
+        console.log("Eventstream error");
+        evtSource.close();
+        store.dispatch("updateSessionStreamState", false);
+        setTimeout(tryToSetupFunc, waitFunc());
+      };
+    };
+
+    setupEventSource();
+  },
 };
 
 export default ApiService;
