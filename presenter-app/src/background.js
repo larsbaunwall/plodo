@@ -76,11 +76,15 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
+  
+  //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
 
-  win = manager.createAppWindow(425, 800, "", false, true);
   tray = manager.createTray(win);
 
-  //Wait some time before opening transparent window on launch, re https://github.com/electron/electron/issues/2170
+  setTimeout(() => {
+    win = manager.createAppWindow(425, 800, "", false, true);
+  }, 500);
+  
   if (store.getters.celebrate)
     setTimeout(() => {
       celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
