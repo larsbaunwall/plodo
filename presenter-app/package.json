@@ -1,6 +1,6 @@
 {
   "name": "plodo",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Use plodo to get immediate feedback from your audience while you present",
   "author": "Lars Baunwall <larslb@plodo.io> (https://www.plodo.io/)",
   "homepage": "https://www.plodo.io",
@@ -55,6 +55,7 @@
     "babel-eslint": "^10.1.0",
     "electron": "^8.2.1",
     "electron-icon-builder": "^1.0.1",
+    "electron-notarize": "^0.3.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-loader": "^4.0.0",
