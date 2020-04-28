@@ -3,7 +3,7 @@
     <div class="card-content">
       <div class="level is-mobile">
         <div class="level-left">
-          <div class="level-item">
+          <div class="smiley level-item">
             <twemoji
               :emojis="smiley"
               css-class="twa twa-3x"
@@ -19,7 +19,7 @@
                   v-if="trend !== 0"
                   :icon="trend > 0 ? 'angle-up' : 'angle-down'"
                   size="is-small"
-                  :class="trend > 0 ? 'has-text-success' : 'has-text-danger'"
+                  :class="trend > 0 ? 'trend has-text-success' : 'trend has-text-danger'"
                 />{{ currentRate }}<span class="subtitle-unit">/m</span>
               </p>
             </div>
@@ -137,5 +137,14 @@ export default {
 
 .card + .card {
   margin-top: 0.8rem;
+}
+
+.trend {
+  margin-left: -1.5rem;
+}
+
+.smiley {
+  margin-left: -1rem;
+  padding-right: 1rem;
 }
 </style>

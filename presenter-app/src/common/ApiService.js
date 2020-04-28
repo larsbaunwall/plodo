@@ -113,12 +113,12 @@ const ApiService = {
         this.closeEventStream();
       });
 
-      evtSource.onopen = function(e) {
+      evtSource.onopen = (e) => {
         sseReconnectFrequencySeconds = 1;
-        console.log("Eventstream opened");
+        console.log("Eventstream opened", {e});
       };
-      evtSource.onerror = function(e) {
-        console.log("Eventstream error");
+      evtSource.onerror = (e) => {
+        console.log("Eventstream error", {e});
         evtSource.close();
         store.dispatch("updateSessionStreamState", false);
         setTimeout(tryToSetupFunc, waitFunc());
