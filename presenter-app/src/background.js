@@ -79,8 +79,12 @@ app.on("ready", async () => {
 
   win = manager.createAppWindow(425, 800, "", false, true);
   tray = manager.createTray(win);
+
+  //Wait some time before opening transparent window on launch, re https://github.com/electron/electron/issues/2170
   if (store.getters.celebrate)
-    celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+    setTimeout(() => {
+      celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+    }, 3000);
 
   autoUpdater.checkForUpdatesAndNotify();
 });
