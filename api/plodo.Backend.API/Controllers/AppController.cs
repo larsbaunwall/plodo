@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +46,11 @@ namespace plodo.Backend.API.Controllers
                 var win = yamlSerializer.Deserialize<Dictionary<string, object>>(winRelease);
                 var mac = yamlSerializer.Deserialize<Dictionary<string, object>>(macRelease);
 
+                var macDmg = ((List<object>) mac["files"])
+                    .Cast<Dictionary<object, object>>()
+                    .Select(x => x["url"].ToString())
+                    .FirstOrDefault(url => url?.EndsWith("dmg") ?? false);
+
                 return new GetAppVersionResponse
                 {
                     Version = win["version"].ToString(),
@@ -54,7 +61,7 @@ namespace plodo.Backend.API.Controllers
                     },
                     MacOS = new GetAppVersionResponse.Asset
                     {
-                        Path = $"{ghRelease}/{mac["path"]}",
+                        Path = $"{ghRelease}/{macDmg}",
                         ReleaseDate = DateTimeOffset.Parse(mac["releaseDate"].ToString())
                     }
                 };
