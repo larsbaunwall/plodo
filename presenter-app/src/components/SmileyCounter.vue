@@ -140,7 +140,8 @@ export default {
 }
 
 .trend {
-  margin-left: -1.5rem;
+  position:relative;
+  margin-left: -1rem;
 }
 
 .smiley {

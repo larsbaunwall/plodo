@@ -27,10 +27,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~bulma/sass/utilities/_all";
 #app {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  background-color: $white-bis;
 }
 
 .main-section {
