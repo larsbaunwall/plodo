@@ -25,10 +25,9 @@ const celebrationSub = store.subscribeAction({
   after: (action, state) => {
     if (action.type === "toggleCelebration") {
       if (state.celebrate) {
-        if (!celebrationWin) manager.createCelebrationWindow(screen.getPrimaryDisplay());
-        celebrationWin.show();
+        celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
       } else {
-        if (celebrationWin) celebrationWin.hide();
+        if (celebrationWin) celebrationWin.destroy();
       }
     }
   },
@@ -78,11 +77,9 @@ app.on("ready", async () => {
   }
   
   //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
-
-  tray = manager.createTray(win);
-
   setTimeout(() => {
     win = manager.createAppWindow(425, 800, "", false, true);
+    tray = manager.createTray(win);
   }, 500);
   
   if (store.getters.celebrate)

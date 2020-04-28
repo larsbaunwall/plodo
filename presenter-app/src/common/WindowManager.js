@@ -16,12 +16,12 @@ const showUpdateDialog = async (mainWindow) => {
   try {
     const result = await autoUpdater.checkForUpdates();
 
-    const message = `${result.updateInfo.version} is the latest version.\nYour version is ${app.getVersion()}.\n\nDo you want to update?`;
+    const message = `A new version of plodo is available 🎉!\n\nVersion ${result.updateInfo.version} is available.\nYour version is ${app.getVersion()}.\n\nDo you want to update?`;
   
     const clicked = await dialog.showMessageBox(mainWindow, {
       type: "info",
       title: "Update plodo",
-      buttons: ["Yes, quit and update now", "Later"],
+      buttons: ["Yes, update when I close plodo", "Later"],
       cancelId: 1,
       message : message
     });  

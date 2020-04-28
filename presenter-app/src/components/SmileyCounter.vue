@@ -124,7 +124,7 @@ export default {
         .filter((x, idx) => (idx % 2) == 0)
         .map(x => x.changeRate);
 
-      window.requestAnimationFrame(t => self.updateData(t, self));
+      self.animationFrame = window.requestAnimationFrame(t => self.updateData(t, self));
     },
   },
 };
