@@ -1,27 +1,17 @@
 <template>
-  <section class="nav-section section">
-    <div class="container">
-      <div class="tabs is-centered">
-        <ul>
-          <router-link
-            tag="li"
-            active-class="is-active"
-            :to="{name: 'Start'}"
-          >
-            <a>
-              <b-icon
-                icon="bullhorn"
-                size="is-small"
-                aria-hidden="true"
-              />
-              <span>Session</span>
-              <span
-                v-if="$store.getters.activeSession.id !== ''"
-                class="tag is-family-monospace session-tag"
-              >{{ $store.getters.activeSession.id }}</span>
-            </a>
-          </router-link>
-          <!-- <router-link
+  <div class="tabs is-centered">
+    <ul>
+      <router-link tag="li" active-class="is-active" :to="{name: 'Start'}">
+        <a>
+          <b-icon icon="bullhorn" size="is-small" aria-hidden="true" />
+          <span>Session</span>
+          <span
+            v-if="$store.getters.activeSession.id !== ''"
+            class="tag is-family-monospace session-tag"
+          >{{ $store.getters.activeSession.id }}</span>
+        </a>
+      </router-link>
+      <!-- <router-link
             tag="li"
             active-class="is-active"
             :to="{name: 'Settings'}"
@@ -35,11 +25,9 @@
               />
               <span>Settings</span>
             </a>
-          </router-link> -->
-        </ul>
-      </div>
-    </div>
-  </section>
+      </router-link>-->
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -55,5 +43,9 @@ export default {};
 .session-tag {
   margin-left: 0.5em;
   font-size: 0.7rem;
+}
+
+.tabs {
+  margin-top: 1rem;
 }
 </style>

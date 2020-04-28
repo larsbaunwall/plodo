@@ -3,64 +3,30 @@
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <b-icon
-            icon="asterisk"
-            size="is-small"
-          />
+          <b-icon class="has-text-secondary" icon="asterisk" size="is-small" />
         </div>
-        <div class="level-item">
-          Session ID
-        </div>
+        <div class="level-item has-text-secondary has-text-weight-bold">Session ID</div>
       </div>
       <div class="level-right">
         <div class="level-item">
           <button
-            class="button is-outline is-family-monospace has-text-secondary"
+            class="button is-outline is-family-monospace has-text-secondary has-text-weight-bold"
             title="Copy to clipboard"
             @click="copySessionId()"
           >
             <span>{{ activeSession.id }}</span>
-            <b-icon
-              icon="copy"
-              size="is-small"
-            />
+            <b-icon icon="copy" size="is-small" />
           </button>
         </div>
       </div>
     </div>
+    <hr />
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <b-icon
-            icon="tv"
-            size="is-small"
-          />
+          <b-icon icon="info-circle" size="is-small" />
         </div>
-        <div class="level-item">
-          Celebration
-        </div>
-      </div>
-      <div class="level-right">
-        <div class="level-item">
-          <b-switch
-            v-model="celebrate"
-            title="Toggle celebration on screen"
-            @input="toggleCelebration"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="level is-mobile">
-      <div class="level-left">
-        <div class="level-item">
-          <b-icon
-            icon="info-circle"
-            size="is-small"
-          />
-        </div>
-        <div class="level-item">
-          Status
-        </div>
+        <div class="level-item">Status</div>
       </div>
       <div class="level-right">
         <div class="level-item">
@@ -68,15 +34,27 @@
         </div>
       </div>
     </div>
+    <div class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          <b-icon icon="tv" size="is-small" />
+        </div>
+        <div class="level-item">Celebration</div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <b-switch
+            v-model="celebrate"
+            size="is-small"
+            title="Toggle celebration on screen"
+            @input="toggleCelebration"
+          />
+        </div>
+      </div>
+    </div>
     <div class="buttons is-centered">
-      <button
-        class="button is-primary"
-        @click="quitSession"
-      >
-        <b-icon
-          icon="sign-out-alt"
-          size="is-small"
-        />
+      <button class="button is-secondary is-rounded" @click="quitSession">
+        <b-icon icon="sign-out-alt" size="is-small" />
         <span>End session</span>
       </button>
     </div>

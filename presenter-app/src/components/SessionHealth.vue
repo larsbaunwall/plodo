@@ -1,14 +1,13 @@
 <template>
   <div>
-    <span :class="sessionStream.connected ? 'has-text-success' : 'has-text-danger'">{{ sessionStream.connected ? 'Connected' : 'Connecting...' }}</span>&nbsp;<button
-      class="button is-small is-outline"
-      @click="connectEventStream()"
-    >
-      <b-icon
-        icon="undo"
-        size="is-small"
-      /><span>Reconnect</span>
-    </button>
+    <div class="tags has-addons">
+      <span
+        :class="sessionStream.connected ? 'tag is-success' : 'tag is-danger'"
+      >{{ sessionStream.connected ? 'Connected' : 'Connecting...' }}</span>
+      <span class="tag connectBtn" @click="connectEventStream()" title="Reconnect">
+        <b-icon icon="undo" size="is-small" />
+      </span>
+    </div>
   </div>
 </template>
 
@@ -27,4 +26,7 @@ export default {
 </script>
 
 <style>
+.connectBtn {
+  cursor: pointer;
+}
 </style>
