@@ -3,30 +3,52 @@
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <b-icon class="has-text-secondary" icon="asterisk" size="is-small" />
+          <b-icon
+            class="has-text-secondary"
+            icon="asterisk"
+            size="is-small"
+          />
         </div>
-        <div class="level-item has-text-secondary has-text-weight-bold">Session ID</div>
+        <div class="level-item has-text-secondary has-text-weight-bold">
+          Session ID
+        </div>
       </div>
       <div class="level-right">
         <div class="level-item">
-          <button
-            class="button is-outline is-family-monospace has-text-secondary has-text-weight-bold"
-            title="Copy to clipboard"
-            @click="copySessionId()"
-          >
-            <span>{{ activeSession.id }}</span>
-            <b-icon icon="copy" size="is-small" />
-          </button>
+          <div class="buttons has-addons">
+            <button
+              class="button is-family-monospace has-text-secondary has-text-weight-bold"
+              title="Copy to clipboard"
+              @click="copySessionId()"
+            >
+              {{ activeSession.id }}
+            </button>
+            <button
+              class="button has-text-secondary"
+              title="Copy to clipboard"
+              @click="copySessionId()"
+            >
+              <b-icon
+                icon="copy"
+                size="is-small"
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    <hr />
+    <hr>
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <b-icon icon="info-circle" size="is-small" />
+          <b-icon
+            icon="info-circle"
+            size="is-small"
+          />
         </div>
-        <div class="level-item">Status</div>
+        <div class="level-item">
+          Status
+        </div>
       </div>
       <div class="level-right">
         <div class="level-item">
@@ -37,9 +59,14 @@
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <b-icon icon="tv" size="is-small" />
+          <b-icon
+            icon="tv"
+            size="is-small"
+          />
         </div>
-        <div class="level-item">Celebration</div>
+        <div class="level-item">
+          Celebration
+        </div>
       </div>
       <div class="level-right">
         <div class="level-item">
@@ -53,8 +80,14 @@
       </div>
     </div>
     <div class="buttons is-centered">
-      <button class="button is-secondary is-rounded" @click="quitSession">
-        <b-icon icon="sign-out-alt" size="is-small" />
+      <button
+        class="button is-secondary is-rounded"
+        @click="quitSession"
+      >
+        <b-icon
+          icon="sign-out-alt"
+          size="is-small"
+        />
         <span>End session</span>
       </button>
     </div>
