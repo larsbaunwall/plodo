@@ -44,7 +44,7 @@ module.exports = {
           type: "distribution",
           category: "public.app-category.productivity",
           entitlements: "./build/entitlements.mas.plist",
-        }
+        },
         afterSign: "./build/notarize.js",
       },
     },
