@@ -145,7 +145,6 @@ export default {
 }
 
 .smiley {
-  margin-left: -1rem;
   padding-right: 1rem;
 }
 </style>

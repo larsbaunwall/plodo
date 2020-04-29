@@ -131,9 +131,6 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  margin-bottom: 0.8rem;
-}
 #sessionId {
   padding: 5px;
   margin-left: -5px;

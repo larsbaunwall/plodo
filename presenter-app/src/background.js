@@ -34,7 +34,8 @@ const celebrationSub = store.subscribeAction({
 });
 
 // Don't show the app in dock
-// app.dock.hide();
+if (process.platform !== "darwin")
+  app.dock.hide();
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -54,7 +55,7 @@ app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    win = createAppWindow(425, 800, "");
+    win = createAppWindow("");
   }
 });
 
@@ -78,7 +79,7 @@ app.on("ready", async () => {
   
   //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
   setTimeout(() => {
-    win = manager.createAppWindow(425, 800, "", false, true);
+    win = manager.createAppWindow("", false, true);
     tray = manager.createTray(win);
   }, 500);
   

@@ -39,7 +39,6 @@ export default {
     flex: 1 1 auto;
     overflow-y: auto;
     height: 0px;
-    padding: 1rem 1.5rem;
 }
 
 footer {

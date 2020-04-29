@@ -1,9 +1,7 @@
 // Import Bulma's core
 @charset "utf-8";
 @import "~bulma/sass/utilities/_all";
-
 @import "twemoji-amazing.scss";
-
 @import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
 
 $family-sans-serif: "Quicksand", sans-serif;
@@ -51,21 +49,28 @@ $colors: (
     "lightblue-darker": ($lightblue-darker, $lightblue-darker-invert)
 );
 
-// Links
-$link: $secondary;
-$link-invert: $secondary-invert;
-$link-focus-border: $secondary;
-
-$card-shadow: 0 0.5em 1em -0.125em rgba($primary, 0.1), 0 0px 0 1px rgba($primary, 0.02);
-
-$body-overflow-y: auto;
-
 // Make sure that window transparency is maintained
 $body-background-color: none!important;
 
 html {
     background-color: none!important;
 }
+
+// Links
+$link: $secondary;
+$link-invert: $secondary-invert;
+$link-focus-border: $secondary;
+
+// Spacing
+$block-spacing: 1rem;
+$section-padding: 1rem 1rem;
+$card-content-padding: 1rem;
+$hr-margin: 1rem 0;
+
+$card-shadow: 0 0.5em 1em -0.125em rgba($primary, 0.1), 0 0px 0 1px rgba($primary, 0.02);
+
+$body-overflow-y: auto;
+$body-size: 11pt;
 
 .justify-content-center {
     justify-content: center;

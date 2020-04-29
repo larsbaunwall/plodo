@@ -75,7 +75,7 @@ const createTray = mainWindow => {
 
     // Show devtools when command clicked
     if (mainWindow.isVisible() && process.defaultApp && event.metaKey) {
-      mainWindow.openDevTools({ mode: "detach" });
+      //mainWindow.openDevTools({ mode: "detach" });
     }
   });
 
@@ -119,13 +119,18 @@ const getWindowPosition = win => {
   }
 };
 
-const createAppWindow = (width, height, urlPath, hideOnBlur = false, hideOnClose = false) => {
+const createAppWindow = (urlPath, hideOnBlur = false, hideOnClose = false) => {
+
+  const height = 685;
+  const width = 360;
+  const isMac = process.platform === "darwin";
+
   // Create the browser window.
   const win = new BrowserWindow({
     width: width,
     height: height,
     icon: path.join(__static, "icon.png"),
-    frame: true,
+    frame: !isMac,
     webPreferences: {
       nodeIntegration: true,
     },
