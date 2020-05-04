@@ -1,40 +1,26 @@
 "use strict";
 /* global __static */
-import { app, protocol, screen, ipcMain } from "electron";
-import manager from "./common/WindowManager";
+import { app, protocol, screen } from "electron";
 import store from "./store";
 import logging from "./common/Logging";
 import ApiService from "./common/ApiService";
 import { autoUpdater } from "electron-updater";
 
+import tray from "./windows/Tray";
+import mainWindow from "./windows/MainAppWindow";
+import celebrationWindow from "./windows/CelebrationWindow";
+
 const DEBUG = process.env.NODE_ENV !== "production";
 
 ApiService.init();
 logging.init();
+celebrationWindow.subscribeToCelebration();
 
 autoUpdater.logger = logging.log;
 autoUpdater.logger.transports.file.level = "info";
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win = null;
-let celebrationWin = null;
-let tray = null;
-
-const celebrationSub = store.subscribeAction({
-  after: (action, state) => {
-    if (action.type === "toggleCelebration") {
-      if (state.celebrate) {
-        celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
-      } else {
-        if (celebrationWin) celebrationWin.destroy();
-      }
-    }
-  },
-});
-
 // Don't show the app in dock
-if (process.platform !== "darwin")
+if (process.platform === "darwin")
   app.dock.hide();
 
 // Scheme must be registered before the app is ready
@@ -54,9 +40,7 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    win = createAppWindow("");
-  }
+  mainWindow.openAndNavigate();
 });
 
 // This method will be called when Electron has finished
@@ -79,22 +63,21 @@ app.on("ready", async () => {
   
   //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
   setTimeout(() => {
-    win = manager.createAppWindow("", false, true);
-    tray = manager.createTray(win);
+    mainWindow.openAndNavigate();
+    tray.createTray();
   }, 500);
   
   if (store.getters.celebrate)
     setTimeout(() => {
-      celebrationWin = manager.createCelebrationWindow(screen.getPrimaryDisplay());
+      celebrationWindow.OpenWindow(screen.getPrimaryDisplay());
     }, 3000);
 
   autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on("before-quit", async () => {
-  celebrationSub();
-  win.destroy();
-  if (celebrationWin) celebrationWin.destroy();
+  mainWindow.destroy();
+  celebrationWindow.destroy();
   tray.destroy();
 });
 
