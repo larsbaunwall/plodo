@@ -1,6 +1,6 @@
 "use strict";
 /* global __static */
-import { app, Tray, Menu } from "electron";
+import { app, Tray, Menu, dialog } from "electron";
 import path from "path";
 import mainWindow from "../windows/MainAppWindow";
 import { autoUpdater } from "electron-updater";

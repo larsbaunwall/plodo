@@ -1,20 +1,18 @@
 "use strict";
 /* global __static */
-import { app, protocol, screen } from "electron";
+import { app, protocol, screen, ipcMain } from "electron";
+import { autoUpdater } from "electron-updater";
+
 import store from "./store";
 import logging from "./common/Logging";
 import ApiService from "./common/ApiService";
-import { autoUpdater } from "electron-updater";
+import UIService from "./common/UIService";
 
 import tray from "./windows/Tray";
 import mainWindow from "./windows/MainAppWindow";
 import celebrationWindow from "./windows/CelebrationWindow";
 
 const DEBUG = process.env.NODE_ENV !== "production";
-
-ApiService.init();
-logging.init();
-celebrationWindow.subscribeToCelebration();
 
 autoUpdater.logger = logging.log;
 autoUpdater.logger.transports.file.level = "info";
@@ -61,6 +59,11 @@ app.on("ready", async () => {
     }
   }
   
+  ApiService.init();
+  logging.init();
+  UIService.init();
+  celebrationWindow.subscribeToCelebration();
+
   //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
   setTimeout(() => {
     mainWindow.openAndNavigate();

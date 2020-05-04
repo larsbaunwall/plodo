@@ -3,8 +3,8 @@ import Vuex from "vuex";
 import { createPersistedState, createSharedMutations } from "vuex-electron";
 import createPromiseAction from "./promise-action";
 import ApiService from "../common/ApiService";
-import { remote, ipcRenderer } from "electron";
-import { stat } from "fs";
+import UIService from "../common/UIService";
+import PromiseIpcBase from "electron-promise-ipc/build/base";
 
 Vue.use(Vuex);
 
@@ -19,6 +19,8 @@ export default new Vuex.Store({
     audience: 0,
     accessToken: "",
     session: emptySession,
+    screens: [],
+    celebrationScreen: 0,
     stream: {
       connected: false,
     }
@@ -57,6 +59,12 @@ export default new Vuex.Store({
     },
     setSessionStream(state, isConnected) {
       state.stream.connected = isConnected;
+    },
+    setScreens(state, screens) {
+      state.screens = screens;
+    },
+    setCelebrationScreen(state, screen){
+      state.celebrationScreen = screen;
     }
   },
   actions: {
@@ -100,6 +108,13 @@ export default new Vuex.Store({
     },
     updateSessionStreamState({commit}, isConnected){
       commit("setSessionStream", isConnected);
+    },
+    enumerateScreens({commit}){
+      commit("setScreens", UIService.getAllDisplays());
+    },
+    changeCelebrationScreen({commit}, screen)
+    {
+      commit("setCelebrationScreen", screen);
     }
   },
   getters: {
@@ -108,6 +123,8 @@ export default new Vuex.Store({
     celebrate: (state) => state.celebrate,
     audience: (state) => state.audience,
     sessionStream: (state) => state.stream,
+    celebrationScreen: (state) => state.celebrationScreen,
+    allScreens: (state) => state.screens,
   },
   plugins: [createPersistedState(), createSharedMutations(), createPromiseAction()],
   strict: process.env.NODE_ENV !== "production",

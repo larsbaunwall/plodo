@@ -1,22 +1,26 @@
 "use strict";
 /* global __static */
-import { BrowserWindow, screen } from "electron";
+import { BrowserWindow, screen} from "electron";
 import ensurePlodoProtocol from "./windowHelper";
 import store from "../store";
+import UIService from "../common/UIService";
 
 let win;
 let celebrateSubscription = () => {};
 
-const OpenWindow = (display = screen.getPrimaryDisplay()) => {
-  const { width, height } = display.size;
+const OpenWindow = () => {
+  const savedDisplay = store.getters.allScreens.find(x => x.id === store.getters.celebrationScreen.id);
+  if(!savedDisplay) store.dispatch("changeCelebrationScreen", UIService.getPrimaryDisplay());
+
+  const display = store.getters.celebrationScreen;
 
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    minWidth: width,
-    minHeight: height,
-    width: width,
-    height: height,
+    x: display.bounds.x,
+    y: display.bounds.y,
+    minWidth: display.size.width,
+    minHeight: display.size.height,
+    width: display.size.width,
+    height: display.size.height,
     simpleFullscreen: true,
     useContentSize: true,
     alwaysOnTop: true,
@@ -42,6 +46,8 @@ const OpenWindow = (display = screen.getPrimaryDisplay()) => {
     win.loadURL("plodo://./index.html/#/celebrate");
   }
 
+  win.webContents.send("celebration-started");
+
   return win;
 };
 
@@ -51,10 +57,15 @@ const subscribeToCelebration = () => {
     after: (action, state) => {
       if (action.type === "toggleCelebration") {
         if (state.celebrate) {
-          OpenWindow(screen.getPrimaryDisplay());
+          OpenWindow();
         } else {
           destroy();
         }
+      }
+      if(action.type ==="changeCelebrationScreen") {
+        // Destroy and recreate window for now, so TwoJS resizing is not needed
+        destroy();
+        OpenWindow();
       }
     },
   });

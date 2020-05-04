@@ -11,21 +11,12 @@
           >{{ $store.getters.activeSession.id }}</span>
         </a>
       </router-link>
-      <!-- <router-link
-            tag="li"
-            active-class="is-active"
-            :to="{name: 'Settings'}"
-            exact
-          >
-            <a>
-              <b-icon
-                icon="cog"
-                size="is-small"
-                aria-hidden="true"
-              />
-              <span>Settings</span>
-            </a>
-      </router-link>-->
+      <router-link tag="li" active-class="is-active" :to="{name: 'Settings'}" exact>
+        <a>
+          <b-icon icon="cog" size="is-small" aria-hidden="true" />
+          <span>Settings</span>
+        </a>
+      </router-link>
     </ul>
   </div>
 </template>
