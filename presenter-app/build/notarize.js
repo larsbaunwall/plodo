@@ -1,11 +1,12 @@
 require('dotenv').config();
 const { notarize } = require('electron-notarize');
+const {IS_LOCAL_DEV} = require("./buildTools");
 
 exports.default = async function notarizing(context) {
-  const { electronPlatformName, appOutDir } = context;  
-  if (electronPlatformName !== 'darwin') {
-    return;
-  }
+  const { electronPlatformName, appOutDir } = context;
+
+  if (electronPlatformName !== 'darwin') return;
+  if(IS_LOCAL_DEV) return;
 
   const appName = context.packager.appInfo.productFilename;
 

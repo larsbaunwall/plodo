@@ -1,3 +1,5 @@
+const {IS_LOCAL_DEV} = require("./build/buildTools");
+
 module.exports = {
   css: {
     loaderOptions: {
@@ -12,13 +14,15 @@ module.exports = {
       customFileProtocol: "plodo://./", // Make sure to add "./" to the end of the protocol
       copyright: "Copyright © 2020 plodo, part of thinkability ApS",
       builderOptions: {
-        publish: ["github"],
+        publish: IS_LOCAL_DEV 
+          ? [] 
+          : ["github"],
         win: {
           appId: "io.plodo.presenter",
           certificateSubjectName:
             "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
           sign: "./build/sign.js",
-          signDlls: true,
+          signDlls: !IS_LOCAL_DEV,
           target: [
             {
               target: "nsis",

@@ -5,6 +5,9 @@ exports.default = async function(configuration) {
   const url = process.env.KV_URL;
   const keyname = process.env.KV_KEYNAME;
 
+  const {IS_LOCAL_DEV} = require("./buildTools");
+  if(IS_LOCAL_DEV) return;
+
   require("child_process").execSync(
     `AzureSignTool.exe sign -kvu ${url} -kvi ${login} -kvs ${password} -kvc ${keyname} -tr http://timestamp.digicert.com -v "${configuration.path}"`,
     {
