@@ -8,12 +8,16 @@ const init = () => {
   if(!store.getters.allScreens.find(x => x.id === store.getters.celebrationScreen.id))
     store.dispatch("changeCelebrationScreen", getPrimaryDisplay());
 
-  //TODO: Change celebration screen if display is removed (implement this in CelebrationWindow module)
+  //TODO: Change celebration screen if display is removed (implement this in CelebrationWindow modulef)
   screen.on("display-added", (evt, display) => store.dispatch("enumerateScreens"));
   screen.on("display-removed", (evt, display) => store.dispatch("enumerateScreens"));
   screen.on("display-metrics-changed", (evt, display) => store.dispatch("enumerateScreens"));
 };
 
+
+/**
+ * @returns {{id, size, bounds, isPrimary}[]} all displays
+ */
 const getAllDisplays = () => {
   const primary = getPrimaryDisplay();
   return screen.getAllDisplays().map(display => {
@@ -32,6 +36,9 @@ const getAllDisplays = () => {
   });
 };
 
+/**
+ * @returns {{id, size, bounds, isPrimary}} the primary display
+ */
 const getPrimaryDisplay = () => {
   const display = screen.getPrimaryDisplay();
 

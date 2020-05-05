@@ -9,6 +9,10 @@ const DEBUG = process.env.NODE_ENV !== "production";
 let win;
 const isMac = process.platform === "darwin";
 
+
+/**
+ * @param {String} route
+ */
 const openAndNavigate = route => {
   if (!win) createWindow();
   navigate(win, route);
@@ -23,6 +27,9 @@ const toggleWindow = () => {
   }
 };
 
+/**
+ * @returns{BrowserWindow} window
+ */
 const getWindow = () => win;
 
 const showWindow = () => {
@@ -34,6 +41,11 @@ const showWindow = () => {
   }
 };
 
+
+/**
+ * @param {BrowserWindow} win
+ * @returns {{x:Number, y:Number}}
+ */
 const getWindowPosition = win => {
   const windowBounds = win.getBounds();
   const trayBounds = tray.getTray().getBounds();

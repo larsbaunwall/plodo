@@ -8,6 +8,9 @@ import UIService from "../common/UIService";
 let win;
 let celebrateSubscription = () => {};
 
+/**
+ * @returns {BrowserWindow} win
+ */
 const OpenWindow = () => {
   const savedDisplay = store.getters.allScreens.find(x => x.id === store.getters.celebrationScreen.id);
   if(!savedDisplay) store.dispatch("changeCelebrationScreen", UIService.getPrimaryDisplay());

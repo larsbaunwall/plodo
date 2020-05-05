@@ -1,6 +1,6 @@
 "use strict";
 /* global __static */
-import { app, Tray, Menu, dialog } from "electron";
+import { app, Tray, Menu, dialog, BrowserWindow } from "electron";
 import path from "path";
 import mainWindow from "../windows/MainAppWindow";
 import { autoUpdater } from "electron-updater";
@@ -10,8 +10,16 @@ autoUpdater.logger = log;
 
 let tray;
 
+
+/**
+ * @returns {Tray} existing tray
+ */
 const getTray = () => { return tray; };
 
+
+/**
+ * @returns {Tray} new tray
+ */
 const createTray = () => {
   const menu = Menu.buildFromTemplate([
     {
@@ -60,6 +68,9 @@ const createTray = () => {
 const destroy = () => {if(tray) tray.destroy();};
 
 
+/**
+ * @param {BrowserWindow} mainWindow
+ */
 const showUpdateDialog = async (mainWindow) => {
   try {
     const result = await autoUpdater.checkForUpdates();
