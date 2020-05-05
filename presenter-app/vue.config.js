@@ -49,6 +49,9 @@ module.exports = {
           sign: false
         },
         mas: {
+          extendInfo: {
+            ElectronTeamID: "BDGTWK6TNS",
+          },
           type: "distribution",
           category: "public.app-category.productivity",
           entitlements: "./build/entitlements.mas.plist",

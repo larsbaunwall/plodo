@@ -8,5 +8,9 @@
     <true/>
     <key>com.apple.security.cs.allow-dyld-environment-variables</key>
     <true/>
+    <key>com.apple.security.application-groups</key>
+    <array>
+      <string>BDGTWK6TNS.io.plodo.presenter</string>
+    </array>
   </dict>
 </plist>
