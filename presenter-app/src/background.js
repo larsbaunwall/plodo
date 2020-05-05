@@ -14,12 +14,11 @@ import celebrationWindow from "./windows/CelebrationWindow";
 
 const DEBUG = process.env.NODE_ENV !== "production";
 
-autoUpdater.logger = logging.log;
+autoUpdater.logger = logging.logger;
 autoUpdater.logger.transports.file.level = "info";
 
 // Don't show the app in dock
-if (process.platform === "darwin")
-  app.dock.hide();
+if (process.platform === "darwin") app.dock.hide();
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -58,7 +57,7 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
-  
+
   ApiService.init();
   logging.init();
   UIService.init();
@@ -69,7 +68,7 @@ app.on("ready", async () => {
     mainWindow.openAndNavigate();
     tray.createTray();
   }, 500);
-  
+
   if (store.getters.celebrate)
     setTimeout(() => {
       celebrationWindow.OpenWindow(screen.getPrimaryDisplay());

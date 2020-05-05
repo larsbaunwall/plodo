@@ -1,5 +1,9 @@
-import { app } from "electron";
+import {createProtocol} from "vue-cli-plugin-electron-builder/lib";
+let protocolCreated = false;
 
 export default () => {
-  if (!app.isDefaultProtocolClient("plodo")) app.setAsDefaultProtocolClient("plodo");
+  if(!protocolCreated)
+    createProtocol("plodo");
+
+  protocolCreated = true;
 };

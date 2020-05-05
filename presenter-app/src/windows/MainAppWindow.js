@@ -1,14 +1,14 @@
 "use strict";
 /* global __static */
-import { app, BrowserWindow, screen, Menu } from "electron";
+import { BrowserWindow, screen } from "electron";
 import path from "path";
 import ensurePlodoProtocol from "./windowHelper";
+import logging from "../common/Logging";
 import tray from "./Tray";
 
 const DEBUG = process.env.NODE_ENV !== "production";
 let win;
 const isMac = process.platform === "darwin";
-
 
 /**
  * @param {String} route
@@ -40,7 +40,6 @@ const showWindow = () => {
     win.focus();
   }
 };
-
 
 /**
  * @param {BrowserWindow} win
@@ -100,7 +99,7 @@ const createWindow = (hideOnBlur = false, hideOnClose = true) => {
   });
 };
 
-const navigate = (window, route) => {
+const navigate = (window, route = "") => {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${route}`);
@@ -111,6 +110,8 @@ const navigate = (window, route) => {
   }
 };
 
-const destroy = () => {if (win) win.destroy();};
+const destroy = () => {
+  if (win) win.destroy();
+};
 
 export default { openAndNavigate, toggleWindow, getWindow, destroy };

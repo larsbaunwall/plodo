@@ -17,6 +17,10 @@ module.exports = {
         publish: IS_LOCAL_DEV 
           ? [] 
           : ["github"],
+        protocols: [{
+          name: "plodo",
+          schemes: ["plodo"]
+        }],
         win: {
           appId: "io.plodo.presenter",
           certificateSubjectName:
