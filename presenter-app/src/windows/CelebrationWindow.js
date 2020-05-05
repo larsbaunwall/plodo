@@ -31,12 +31,12 @@ const OpenWindow = () => {
     frame: false,
     focusable: false,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
 
   win.setMenu(null);
-  win.setAlwaysOnTop(true, "screen-saver");
+  win.setAlwaysOnTop(true, "screen-saver", 1);
 
   win.setIgnoreMouseEvents(true);
 

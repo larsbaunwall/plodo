@@ -11,6 +11,7 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      nodeIntegration: true,
       customFileProtocol: "plodo://./", // Make sure to add "./" to the end of the protocol
       copyright: "Copyright © 2020 plodo, part of thinkability ApS",
       builderOptions: {

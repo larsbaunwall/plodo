@@ -76,9 +76,9 @@ const createWindow = (hideOnBlur = false, hideOnClose = true) => {
     width: width,
     height: height,
     icon: path.join(__static, "icon.png"),
-    frame: !isMac,
+    frame: true,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
 
