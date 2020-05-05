@@ -58,6 +58,7 @@ module.exports = {
           category: "public.app-category.productivity",
           entitlements: "./build/entitlements.mas.plist",
           entitlementsInherit: "./build/entitlements.mas.inherit.plist",
+          bundleVersion: "${version}"
         },
         afterSign: "./build/notarize.js",
       },
