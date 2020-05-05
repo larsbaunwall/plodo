@@ -42,7 +42,7 @@ module.exports = {
           hardenedRuntime : true,
           gatekeeperAssess: false,
           entitlements: "./build/entitlements.mac.plist",
-          entitlementsInherit: "./build/entitlements.mac.plist",
+          entitlementsInherit: "./build/entitlements.mac.inherit.plist",
           target: ["pkg", "dmg", "zip", "mas"],
         },
         dmg: {
@@ -56,6 +56,7 @@ module.exports = {
           type: "distribution",
           category: "public.app-category.productivity",
           entitlements: "./build/entitlements.mas.plist",
+          entitlementsInherit: "./build/entitlements.mas.inherit.plist",
         },
         afterSign: "./build/notarize.js",
       },
