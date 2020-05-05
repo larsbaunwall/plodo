@@ -70,10 +70,10 @@ export default new Vuex.Store({
   actions: {
     async createSession({ commit, dispatch, getters }, { votingOptions }) {
       try {
-        const data = await ApiService.joinSession(votingOptions);
+        const {sessionId, accessToken} = await ApiService.joinSession(votingOptions);
 
-        commit("setToken", { token: data.accessToken.token });
-        commit("setSession", { sessionId: data.sessionId, votingOptions: votingOptions });
+        commit("setToken", { token: accessToken.token });
+        commit("setSession", { sessionId: sessionId, votingOptions: votingOptions });
 
         ApiService.connectEventStream();
       } catch (e) {

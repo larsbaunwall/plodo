@@ -23,11 +23,12 @@ import {
   faAsterisk,
   faInfoCircle,
   faSpinner,
+  faExternalLinkAlt,
 
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
-
+  faHeart,
 } from "@fortawesome/free-regular-svg-icons";
 
 library.add(
@@ -44,6 +45,8 @@ library.add(
   faAsterisk,
   faInfoCircle,
   faSpinner,
+  faExternalLinkAlt,
+  faHeart
 );
 
 import "@/assets/scss/plodo.scss";

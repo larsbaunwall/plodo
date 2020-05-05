@@ -15,6 +15,7 @@ const {
 
 let evtSource = null;
 let sseReconnectFrequencySeconds = 1;
+let shouldCloseEvtSource = false;
 
 const axiosInstance = axios.create({
   baseURL: `${apiEndpoint}/${apiVersion}`,
@@ -39,15 +40,18 @@ const ApiService = {
 
     if (process.type === "main") {
       ipcMain.on("CONNECT_EVENT_STREAM", (evt, args) => this.onConnectEventStream());
-      ipcMain.on("CLOSE_EVENT_STREAM", (evt, args) => {
-        if (evtSource) evtSource.close();
-      });
+      ipcMain.on("CLOSE_EVENT_STREAM", (evt, args) => this.onCloseEventStream());
     }
 
-    if(store.getters.activeSession.id !== "")
-      this.connectEventStream();
+    if (store.getters.activeSession.id !== "") this.connectEventStream();
   },
 
+  /**
+   * Create a new session on the server
+   *
+   * @param {{id}[]} votingOptions for the sessions
+   * @returns {{sessionId:String, accessToken:{}}} session data
+   */
   async joinSession(votingOptions) {
     const { data } = await axiosInstance.post("sessions", {
       votingOptions: votingOptions.map(x => x.id),
@@ -56,6 +60,11 @@ const ApiService = {
     return data;
   },
 
+  /**
+   * Abandon a session on the server
+   *
+   * @param {String} sessionId
+   */
   async leaveSession(sessionId) {
     await axiosInstance.delete(`sessions/${sessionId}`, {
       headers: { Authorization: `Bearer ${store.getters.accessToken}` },
@@ -78,22 +87,32 @@ const ApiService = {
       return;
     }
 
+    this.onCloseEventStream();
+  },
+
+  onCloseEventStream() {
+    shouldCloseEvtSource = true;
     if (evtSource) evtSource.close();
+    store.dispatch("updateSessionStreamState", null);
+    console.log("stream closed");
   },
 
   onConnectEventStream() {
     console.log("Connecting eventstream");
+    shouldCloseEvtSource = false;
     const waitFunc = () => sseReconnectFrequencySeconds * 1000;
     const tryToSetupFunc = () => {
-      setupEventSource();
-      sseReconnectFrequencySeconds *= 2;
-      if (sseReconnectFrequencySeconds >= 64) {
-        sseReconnectFrequencySeconds = 64;
+      if (!shouldCloseEvtSource) {
+        setupEventSource();
+        sseReconnectFrequencySeconds *= 2;
+        if (sseReconnectFrequencySeconds >= 64) {
+          sseReconnectFrequencySeconds = 64;
+        }
       }
     };
 
     const setupEventSource = () => {
-      if(evtSource) evtSource.close();
+      if (evtSource) evtSource.close();
 
       evtSource = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}`, {
         withCredentials: true,
@@ -113,12 +132,12 @@ const ApiService = {
         this.closeEventStream();
       });
 
-      evtSource.onopen = (e) => {
+      evtSource.onopen = e => {
         sseReconnectFrequencySeconds = 1;
-        console.log("Eventstream opened", {e});
+        console.log("Eventstream opened", { e });
       };
-      evtSource.onerror = (e) => {
-        console.log("Eventstream error", {e});
+      evtSource.onerror = e => {
+        console.log("Eventstream error", { e });
         evtSource.close();
         store.dispatch("updateSessionStreamState", false);
         setTimeout(tryToSetupFunc, waitFunc());
