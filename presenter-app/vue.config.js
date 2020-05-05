@@ -52,6 +52,7 @@ module.exports = {
           extendInfo: {
             ElectronTeamID: "BDGTWK6TNS",
           },
+          artifactName: "plodo-${version}-mas.${ext}",
           type: "distribution",
           category: "public.app-category.productivity",
           entitlements: "./build/entitlements.mas.plist",
