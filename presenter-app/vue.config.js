@@ -39,6 +39,7 @@ module.exports = {
         },
         mac: {
           appId: "io.plodo.presenter",
+          bundleVersion: "${version}",
           category: "public.app-category.productivity",
           hardenedRuntime : true,
           gatekeeperAssess: false,
@@ -59,7 +60,6 @@ module.exports = {
           entitlements: "./build/entitlements.mas.plist",
           entitlementsInherit: "./build/entitlements.mas.inherit.plist",
           provisioningProfile: process.env.PROVISIONING_PROFILE,
-          bundleVersion: "${version}"
         },
         afterSign: "./build/notarize.js",
       },
