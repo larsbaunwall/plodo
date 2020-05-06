@@ -39,7 +39,6 @@ module.exports = {
         },
         mac: {
           appId: "io.plodo.presenter",
-          bundleVersion: "${version}",
           category: "public.app-category.productivity",
           hardenedRuntime : true,
           gatekeeperAssess: false,
