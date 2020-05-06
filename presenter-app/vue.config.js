@@ -1,4 +1,4 @@
-const {IS_LOCAL_DEV} = require("./build/buildTools");
+const {IS_LOCAL_DEV, PACKAGE_VERSION} = require("./build/buildTools");
 
 module.exports = {
   css: {
@@ -15,7 +15,7 @@ module.exports = {
       customFileProtocol: "plodo://./", // Make sure to add "./" to the end of the protocol
       copyright: "Copyright © 2020 plodo, part of thinkability ApS",
       builderOptions: {
-        buildVersion: "${version}",
+        buildVersion: PACKAGE_VERSION,
         publish: IS_LOCAL_DEV 
           ? [] 
           : ["github"],
