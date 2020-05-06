@@ -15,6 +15,7 @@ module.exports = {
       customFileProtocol: "plodo://./", // Make sure to add "./" to the end of the protocol
       copyright: "Copyright © 2020 plodo, part of thinkability ApS",
       builderOptions: {
+        buildVersion: "${version}",
         publish: IS_LOCAL_DEV 
           ? [] 
           : ["github"],
