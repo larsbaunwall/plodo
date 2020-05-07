@@ -25,8 +25,8 @@ module.exports = {
         }],
         win: {
           appId: "io.plodo.presenter",
-          certificateSubjectName:
-            "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
+          // certificateSubjectName:
+          //   "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
           sign: "./build/sign.js",
           signDlls: !IS_LOCAL_DEV,
           target: ["nsis","portable","appx"],
