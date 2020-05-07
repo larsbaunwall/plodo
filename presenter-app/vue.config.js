@@ -29,14 +29,12 @@ module.exports = {
             "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
           sign: "./build/sign.js",
           signDlls: !IS_LOCAL_DEV,
-          target: [
-            {
-              target: "nsis",
-            },
-            {
-              target: "portable",
-            },
-          ],
+          target: ["nsis","portable","appx"],
+        },
+        appx: {
+          backgroundColor: "#FFFFFF",
+          publisherDisplayName: "plodo.io",
+          artifactName: "plodo-${version}-appx.${ext}"
         },
         mac: {
           appId: "io.plodo.presenter",
