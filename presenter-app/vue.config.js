@@ -34,7 +34,7 @@ module.exports = {
         appx: {
           backgroundColor: "#FFFFFF",
           publisherDisplayName: "thinkability ApS",
-          publisher: "CN = Thinkability ApS, O = Thinkability ApS, STREET = Birk Centerpark 40, L = Herning, S = Midtjylland, PostalCode = 7400, C = DK",
+          publisher: "Thinkability ApS",
           artifactName: "plodo-${version}-signed.${ext}",
           applicationId: "thinkabilityApS.plodo"
         },
