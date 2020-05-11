@@ -8,6 +8,7 @@ import tray from "./Tray";
 
 const DEBUG = process.env.NODE_ENV !== "production";
 let win;
+let loadedRoute;
 const isMac = process.platform === "darwin";
 
 /**
@@ -73,15 +74,17 @@ const createWindow = (hideOnBlur = false, hideOnClose = true) => {
 
   // Create the browser window.
   win = new BrowserWindow({
+    title: "Welcome",
     width: width,
     height: height,
+    maximizable: false,
     icon: path.join(__static, "icon.png"),
     frame: true,
+    titleBarStyle: isMac ? "hidden" : "default",
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
-
   win.setMenu(null);
 
   win.on("blur", () => {
@@ -97,16 +100,23 @@ const createWindow = (hideOnBlur = false, hideOnClose = true) => {
       win.hide();
     }
   });
+
+  const position = getWindowPosition(win);
+  win.setPosition(Math.round(position.x), Math.round(position.y), false);
 };
 
 const navigate = (window, route = "") => {
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${route}`);
-  } else {
-    ensurePlodoProtocol();
-    // Load the index.html when not in development
-    window.loadURL(`plodo://./index.html${route}`);
+  if (route != loadedRoute) {
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+      // Load the url of the dev server if in development mode
+      window.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${route}`);
+    } else {
+      ensurePlodoProtocol();
+      // Load the index.html when not in development
+      window.loadURL(`plodo://./index.html${route}`);
+    }
+
+    loadedRoute = route;
   }
 };
 

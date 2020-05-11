@@ -37,6 +37,7 @@ export default {};
 }
 
 .tabs {
-  margin-top: 1rem;
+  padding-top: 1rem;
+  -webkit-app-region: drag;
 }
 </style>
