@@ -6,10 +6,11 @@ import mainWindow from "../windows/MainAppWindow";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 
+const DEBUG = process.env.NODE_ENV !== "production";
+
 autoUpdater.logger = log;
 
 let tray;
-
 
 /**
  * @returns {Tray} existing tray
@@ -23,10 +24,17 @@ const getTray = () => { return tray; };
 const createTray = () => {
   const menu = Menu.buildFromTemplate([
     {
-      label: "Open plodo",
+      label: "Toggle plodo",
       click: () => {
-        mainWindow.openAndNavigate();
+        mainWindow.toggleWindow();
       },
+    },
+    {
+      label: "Open DevTools",
+      click: () => {
+        mainWindow.getWindow().webContents.openDevTools();
+      },
+      visible: DEBUG
     },
     {
       label: "Check for updates",
@@ -46,21 +54,12 @@ const createTray = () => {
 
   tray = new Tray(path.join(__static, "icon.png"));
   tray.setToolTip("plodo");
-  tray.setContextMenu(menu);
-
-  tray.on("right-click", tray.popUpContextMenu);
-  tray.on("double-click", () => mainWindow.toggleWindow());
-  tray.on("click", event => {
-    mainWindow.toggleWindow();
-
-    // if(DEBUG)
-    //   mainWindow.openDevTools({ mode: "detach" });
-
-    // // Show devtools when command clicked
-    // if (mainWindow.isVisible() && process.defaultApp && event.metaKey) {
-    //   //mainWindow.openDevTools({ mode: "detach" });
-    // }
+  
+  tray.on("right-click", () => {
+    tray.popUpContextMenu(menu);
   });
+  tray.on("double-click", mainWindow.toggleWindow);
+  tray.on("click", mainWindow.toggleWindow);
 
   return tray;
 };

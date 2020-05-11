@@ -61,17 +61,18 @@ app.on("ready", async () => {
   ApiService.init();
   logging.init();
   UIService.init();
-  celebrationWindow.subscribeToCelebration();
+
+  tray.createTray();
 
   //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
   setTimeout(() => {
     mainWindow.openAndNavigate();
-    tray.createTray();
   }, 500);
 
   if (store.getters.celebrate)
     setTimeout(() => {
       celebrationWindow.OpenWindow(screen.getPrimaryDisplay());
+      celebrationWindow.subscribeToCelebration();
     }, 3000);
 
   autoUpdater.checkForUpdatesAndNotify();
