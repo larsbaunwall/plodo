@@ -1,12 +1,13 @@
 "use strict";
 /* global __static */
 import { BrowserWindow, screen } from "electron";
+import { is } from "electron-util";
+import Positioner from "electron-positioner";
 import path from "path";
 import ensurePlodoProtocol from "./windowHelper";
 import logging from "../common/Logging";
 import tray from "./Tray";
 
-const DEBUG = process.env.NODE_ENV !== "production";
 let win;
 let loadedRoute;
 const isMac = process.platform === "darwin";
@@ -49,27 +50,21 @@ const showWindow = () => {
 const getWindowPosition = win => {
   const windowBounds = win.getBounds();
   const trayBounds = tray.getTray().getBounds();
+  const positioner = new Positioner(win);
 
-  if (process.platform === "darwin") {
+  if (is.macos) {
     // Center window horizontally below the tray icon
     const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2);
-
     // Position window 4 pixels vertically below the tray icon
     const y = Math.round(trayBounds.y + trayBounds.height + 4);
-
     return { x: x, y: y };
   } else {
-    //Windows - center on screen
-    const display = screen.getPrimaryDisplay().workAreaSize;
-    return {
-      x: Math.round(display.width / 2 - windowBounds.width / 2),
-      y: Math.round(display.height / 2 - windowBounds.height / 2),
-    };
+    return positioner.calculate("trayBottomCenter", trayBounds);
   }
 };
 
 const createWindow = (hideOnBlur = false, hideOnClose = true) => {
-  const height = 685;
+  const height = 715;
   const width = 400;
 
   // Create the browser window.
@@ -80,9 +75,9 @@ const createWindow = (hideOnBlur = false, hideOnClose = true) => {
     maximizable: false,
     icon: path.join(__static, "icon.png"),
     frame: true,
-    titleBarStyle: isMac ? "hidden" : "default",
+    titleBarStyle: "hidden",
     webPreferences: {
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      nodeIntegration: true,
     },
   });
   win.setMenu(null);

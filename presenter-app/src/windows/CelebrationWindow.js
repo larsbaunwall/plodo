@@ -31,7 +31,7 @@ const OpenWindow = () => {
     frame: false,
     focusable: false,
     webPreferences: {
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      nodeIntegration: true,
     },
   });
 
