@@ -47,11 +47,6 @@
         >open source</a>. If you like it, help us by
         <twemoji cssClass="twa twa-1x" emojis="⭐" /> our repo on GitHub or recommend plodo to a friend <twemoji cssClass="twa twa-1x" emojis="❤" />
       </p>
-      <!-- <h2 class="title is-6">
-        Be a superstar: Support us
-        <twemoji cssClass="twa twa-1x" emojis="😎" />
-      </h2>
-      <p>You can support plodo by donating</p>-->
     </div>
   </div>
 </template>
