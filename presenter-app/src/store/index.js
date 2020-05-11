@@ -4,7 +4,6 @@ import { createPersistedState, createSharedMutations } from "vuex-electron";
 import createPromiseAction from "./promise-action";
 import ApiService from "../common/ApiService";
 import UIService from "../common/UIService";
-import PromiseIpcBase from "electron-promise-ipc/build/base";
 
 Vue.use(Vuex);
 
@@ -127,5 +126,5 @@ export default new Vuex.Store({
     allScreens: (state) => state.screens,
   },
   plugins: [createPersistedState(), createSharedMutations(), createPromiseAction()],
-  strict: process.env.NODE_ENV !== "production",
+  strict: true
 });

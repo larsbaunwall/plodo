@@ -1,10 +1,9 @@
 import electronLog from "electron-log";
+import {is} from "electron-util";
 console.log = electronLog.log;
 
-const DEBUG = process.env.NODE_ENV !== "production";
-
 const init = () => {
-  if(DEBUG){
+  if(is.development){
     electronLog.transports.file.level = "silly";
   } else {
     electronLog.transports.file.level = "warn";

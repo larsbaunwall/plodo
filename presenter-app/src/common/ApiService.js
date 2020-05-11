@@ -2,10 +2,9 @@
 import axios from "axios";
 import https from "https";
 import EventSource from "eventsource";
+import {is} from "electron-util";
 import store from "../store";
 import { ipcMain, ipcRenderer } from "electron";
-
-const DEBUG = process.env.NODE_ENV === "development";
 
 const {
   apiEndpoint,
@@ -19,7 +18,7 @@ let shouldCloseEvtSource = false;
 
 const axiosInstance = axios.create({
   baseURL: `${apiEndpoint}/${apiVersion}`,
-  httpsAgent: new https.Agent({ rejectUnauthorized: process.env.NODE_ENV !== "development" }),
+  httpsAgent: new https.Agent({ rejectUnauthorized: !is.development }),
 });
 
 const ApiService = {
@@ -32,7 +31,7 @@ const ApiService = {
         return request;
       },
       error => {
-        if (DEBUG) console.log("Could not complete API request", { error });
+        if (is.development) console.log("Could not complete API request", { error });
 
         Promise.reject(error);
       }
