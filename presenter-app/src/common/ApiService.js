@@ -2,7 +2,7 @@
 import axios from "axios";
 import https from "https";
 import EventSource from "eventsource";
-import {is} from "electron-util";
+import {is, api} from "electron-util";
 import store from "../store";
 import { ipcMain, ipcRenderer } from "electron";
 
@@ -11,6 +11,8 @@ const {
   apiVersion,
   streamEndpoint,
 } = require(`../static/config.${process.env.NODE_ENV}.json`);
+
+const version = api.app.getVersion();
 
 let evtSource = null;
 let sseReconnectFrequencySeconds = 1;
@@ -25,6 +27,8 @@ const ApiService = {
   init() {
     axiosInstance.interceptors.request.use(
       request => {
+        request.headers["X-App-Version"] = version;
+        
         if (store.getters.accessToken) {
           request.headers.Authorization = `Bearer ${store.getters.accessToken}`;
         }
@@ -113,7 +117,7 @@ const ApiService = {
     const setupEventSource = () => {
       if (evtSource) evtSource.close();
 
-      evtSource = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}`, {
+      evtSource = new EventSource(`${streamEndpoint}?access_token=${store.getters.accessToken}&appVersion=${version}`, {
         withCredentials: true,
       });
 
