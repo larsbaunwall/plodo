@@ -94,7 +94,7 @@ const _createWindow = (hideOnBlur = false, hideOnClose = true) => {
     }
   });
 
-  _positionWindow();
+  _positionWindow(win);
 };
 
 const _navigate = (window, route = "") => {
