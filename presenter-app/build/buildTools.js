@@ -1,2 +1,3 @@
-exports.IS_LOCAL_DEV = process.env.VUE_APP_IS_LOCAL_DEV === "true";
+require("dotenv").config();
+exports.IS_LOCAL_DEV = process.env.IS_LOCAL === "true";
 exports.PACKAGE_VERSION = require("../package.json").version;

@@ -45,7 +45,9 @@ module.exports = {
           gatekeeperAssess: false,
           entitlements: "./build/entitlements.mac.plist",
           entitlementsInherit: "./build/entitlements.mac.inherit.plist",
-          target: ["pkg", "dmg", "zip", "mas"],
+          target: IS_LOCAL_DEV 
+            ? ["dmg"] 
+            : ["pkg", "dmg", "zip", "mas"],
         },
         dmg: {
           sign: false
