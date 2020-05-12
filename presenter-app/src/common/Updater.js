@@ -1,12 +1,13 @@
 import { dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 import {activeWindow} from "electron-util";
+import logging from "../common/Logging";
 
 let updater;
 autoUpdater.autoDownload = false;
 
 autoUpdater.on("error", error => {
-  console.log("Error downloading updates", error);
+  logging.log("Error downloading updates", error);
   dialog.showErrorBox("Error downloading updates", error == null ? "unknown" : (error.stack || error).toString());
 });
 
