@@ -1,6 +1,6 @@
 "use strict";
 /* global __static */
-import { app, protocol, screen, ipcMain } from "electron";
+import { app, protocol, screen } from "electron";
 import { autoUpdater } from "electron-updater";
 import { is, enforceMacOSAppLocation } from "electron-util";
 
@@ -83,6 +83,7 @@ app.on("ready", async () => {
       celebrationWindow.subscribeToCelebration();
     }, 3000);
 
+  // Manual update check for now
   //if(!is.macAppStore && !is.windowsStore) autoUpdater.checkForUpdatesAndNotify();
 });
 
