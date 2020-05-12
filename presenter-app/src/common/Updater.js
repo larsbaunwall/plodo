@@ -4,7 +4,7 @@ import {activeWindow} from "electron-util";
 import logging from "../common/Logging";
 
 let updater;
-autoUpdater.autoDownload = false;
+//autoUpdater.autoDownload = false;
 
 autoUpdater.on("error", error => {
   logging.log("Error downloading updates", error);

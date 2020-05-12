@@ -83,7 +83,7 @@ app.on("ready", async () => {
       celebrationWindow.subscribeToCelebration();
     }, 3000);
 
-  if(!is.macAppStore && !is.windowsStore) autoUpdater.checkForUpdatesAndNotify();
+  //if(!is.macAppStore && !is.windowsStore) autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on("before-quit", async () => {
