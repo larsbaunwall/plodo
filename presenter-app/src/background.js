@@ -8,12 +8,12 @@ import store from "./store";
 import logging from "./common/Logging";
 import ApiService from "./common/ApiService";
 import UIService from "./common/UIService";
-import ErrorHandling from "./common/ErrorHandling";
 
 import tray from "./windows/Tray";
 import mainWindow from "./windows/MainAppWindow";
 import celebrationWindow from "./windows/CelebrationWindow";
 
+logging.log("Starting background process...");
 autoUpdater.logger = logging.logger;
 autoUpdater.logger.transports.file.level = "info";
 
@@ -37,7 +37,7 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  mainWindow.openAndNavigate();
+  //mainWindow.openAndNavigate();
 });
 
 // This method will be called when Electron has finished
@@ -57,14 +57,20 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", e.toString());
     }
   }
+  logging.log("App ready...");
 
   enforceMacOSAppLocation();
 
+  logging.log("Location enforced...");
   ApiService.init();
+  logging.log("ApiService init...");
   logging.init();
+  logging.log("Logging init...");
   UIService.init();
+  logging.log("UIService init...");
 
   tray.createTray();
+  logging.log("Created tray...");
 
   //Wait some time before opening windows on launch, re https://github.com/electron/electron/issues/2170
   setTimeout(() => {
@@ -85,6 +91,8 @@ app.on("before-quit", async () => {
   celebrationWindow.destroy();
   tray.destroy();
 });
+
+process.on("uncaughtException", err => logging.log({ err }));
 
 // Exit cleanly on request from parent process in development mode.
 if (is.development) {
