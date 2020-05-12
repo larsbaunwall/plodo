@@ -1,23 +1,21 @@
 "use strict";
 /* global __static */
 import { BrowserWindow, screen } from "electron";
-import { is } from "electron-util";
+import { platform } from "electron-util";
 import Positioner from "electron-positioner";
 import path from "path";
 import ensurePlodoProtocol from "./windowHelper";
-import logging from "../common/Logging";
 import tray from "./Tray";
 
 let win;
 let loadedRoute;
-const isMac = process.platform === "darwin";
 
 /**
  * @param {String} route
  */
 const openAndNavigate = route => {
-  if (!win) createWindow();
-  navigate(win, route);
+  if (!win) _createWindow();
+  _navigate(win, route);
   showWindow();
 };
 
@@ -36,8 +34,7 @@ const getWindow = () => win;
 
 const showWindow = () => {
   if (!win.isVisible()) {
-    const position = getWindowPosition(win);
-    win.setPosition(Math.round(position.x), Math.round(position.y), false);
+    _positionWindow(win);
     win.show();
     win.focus();
   }
@@ -45,25 +42,26 @@ const showWindow = () => {
 
 /**
  * @param {BrowserWindow} win
- * @returns {{x:Number, y:Number}}
  */
-const getWindowPosition = win => {
-  const windowBounds = win.getBounds();
+const _positionWindow = win => {
   const trayBounds = tray.getTray().getBounds();
   const positioner = new Positioner(win);
 
-  if (is.macos) {
-    // Center window horizontally below the tray icon
-    const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2);
-    // Position window 4 pixels vertically below the tray icon
-    const y = Math.round(trayBounds.y + trayBounds.height + 4);
-    return { x: x, y: y };
-  } else {
-    return positioner.calculate("trayBottomCenter", trayBounds);
-  }
+  const pos = platform(
+    {
+      macos: () => { 
+        const pos = positioner.calculate("trayCenter", trayBounds);
+        return  {x: pos.x, y: pos.y + 4};
+      },
+      windows: positioner.calculate("trayBottomCenter", trayBounds),
+      default: positioner.calculate("center")
+    }
+  );
+
+  win.setPosition(pos.x, pos.y);
 };
 
-const createWindow = (hideOnBlur = false, hideOnClose = true) => {
+const _createWindow = (hideOnBlur = false, hideOnClose = true) => {
   const height = 715;
   const width = 400;
 
@@ -96,11 +94,10 @@ const createWindow = (hideOnBlur = false, hideOnClose = true) => {
     }
   });
 
-  const position = getWindowPosition(win);
-  win.setPosition(Math.round(position.x), Math.round(position.y), false);
+  _positionWindow();
 };
 
-const navigate = (window, route = "") => {
+const _navigate = (window, route = "") => {
   if (route != loadedRoute) {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
       // Load the url of the dev server if in development mode
