@@ -21,7 +21,7 @@ module.exports = {
             }),
             new PrerenderSPAPlugin({
                 staticDir: path.join(__dirname, 'dist'),
-                routes: [ '/', '/start', '/session' ]
+                routes: [ '/', '/start', '/session', '/privacy' ]
               }),
             //new BundleAnalyzerPlugin(),
         ]
