@@ -58,6 +58,7 @@ module.exports = {
           },
           artifactName: "plodo-${version}-mas.${ext}",
           type: "distribution",
+          hardenedRuntime : false,
           category: "public.app-category.productivity",
           entitlements: "./build/entitlements.mas.plist",
           entitlementsInherit: "./build/entitlements.mas.inherit.plist",
