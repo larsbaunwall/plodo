@@ -9,6 +9,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '*',
+    redirect: {name: "Start"}
+  },
+  {
     path: '/start/:id?',
     name: 'Start',
     component: Start,
