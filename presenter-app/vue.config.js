@@ -25,8 +25,8 @@ module.exports = {
         }],
         win: {
           appId: "io.plodo.presenter",
-          certificateSubjectName:
-            "CN=Thinkability ApS, O=Thinkability ApS, STREET=Birk Centerpark 40, L=Herning, S=Midtjylland, PostalCode=7400, C=DK",
+          // certificateSubjectName:
+          //   "CN=Thinkability ApS, O=Thinkability ApS, STREET=Birk Centerpark 40, L=Herning, S=Midtjylland, PostalCode=7400, C=DK",
           sign: "./build/sign.js",
           signDlls: !IS_LOCAL_DEV,
           target: ["nsis","portable","appx"],
@@ -34,9 +34,9 @@ module.exports = {
         appx: {
           backgroundColor: "#FFFFFF",
           publisherDisplayName: "thinkability ApS",
-          publisher: "CN=Thinkability ApS, O=Thinkability ApS, STREET=Birk Centerpark 40, L=Herning, S=Midtjylland, PostalCode=7400, C=DK",
-          artifactName: "plodo-${version}-signed.${ext}",
-          applicationId: "thinkabilityApS.plodo"
+          publisher: "CN=5E388DCB-74D9-4FB1-AECC-D03E344D0121",
+          artifactName: "plodo-${version}-unsigned.${ext}",
+          identityName: "thinkabilityApS.plodo",
         },
         mac: {
           appId: "io.plodo.presenter",
