@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Start from '../views/Start.vue'
 import Session from "../views/Session.vue";
+import Privacy from "../views/PrivacyPolicy.vue";
 import store from '../store';
 
 Vue.use(VueRouter)
@@ -18,7 +19,13 @@ const routes = [
     name: 'Session',
     component: Session,
     props: true
-  }
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: Privacy,
+    props: true
+  },
 ]
 
 const router = new VueRouter({
@@ -28,7 +35,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    if (to.name !== 'Start' && !store.getters.isAuthenticated)
+    if (to.name === 'Session' && !store.getters.isAuthenticated)
     {
       let dest = { name: 'Start', params: { id: to.params?.id } };
       next(dest)
