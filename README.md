@@ -23,7 +23,7 @@ Start session | Playing session
 ## Mobile client
 Source code available in [/client-app](https://github.com/larsbaunwall/plodo/tree/master/client-app)
 
-Access the web app from desktop and mobile at https://www-qa.plodo.io
+Access the web app from desktop and mobile at https://www.plodo.io
 
 Join session | Give feedback
 --- | --- |
@@ -31,11 +31,11 @@ Join session | Give feedback
 
 # How do I install it?
 
-plodo will be available from the Mac App Store, Windows Store and on the Office 365 Marketplace once it is released.
+plodo will be available from the Mac App Store and Windows Store once it is released.
 
-You can find beta releases on the [Releases tab](https://github.com/larsbaunwall/plodo/releases) :star:
+You can find releases on the [Releases tab](https://github.com/larsbaunwall/plodo/releases) :star: 
 
-The feedback client is available at https://www-qa.plodo.io :muscle:
+The latest releases are always available at https://www.plodo.io too :muscle:
 
 Please try it out - and follow our repo for more updates!
 
@@ -49,4 +49,4 @@ We will publish a list of stuff we would much appreciate some help with. UI enha
 
 # Sponsors
 
-<img src="/artwork/logo/thinkability-logo.png" width="200px" />
+<a href="https://www.thinkability.dk"><img src="/artwork/logo/thinkability-logo.png" width="150px" /></a>
