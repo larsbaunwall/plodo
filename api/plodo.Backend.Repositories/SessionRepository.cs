@@ -13,9 +13,6 @@ namespace plodo.Backend.Repositories
     {
         public SessionRepository(ISession session) : base(session)
         {
-            Cassandra.Diagnostics.CassandraTraceSwitch.Level = TraceLevel.Verbose;
-            // Add a standard .NET trace listener
-            Trace.Listeners.Add(new ConsoleTraceListener());
         }
 
         public async Task<bool> StoreSession(Model.Session session)
