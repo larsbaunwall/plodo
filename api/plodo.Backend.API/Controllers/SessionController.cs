@@ -110,10 +110,6 @@ namespace plodo.Backend.API.Controllers
 
                 return Ok();
             }
-            catch (SessionNotFoundException)
-            {
-                throw new Validation.SessionNotFoundException($"The session '{sessionId}' does not exist.");
-            }
             catch (AudienceNotInSessionException)
             {
                 throw new NotAuthorizedForSessionException($"You cannot vote in session '{sessionId}'. Sign up as audience first.");

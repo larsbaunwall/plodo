@@ -67,11 +67,6 @@ namespace plodo.Backend.Services
 
         public async Task RecordVote(string sessionId, Guid audienceId, string vote)
         {
-            var session = await GetSession(sessionId);
-            
-            if(session == null)
-                throw new SessionNotFoundException();
-
             var inSession = await _sessionRepo.IsInSession(sessionId, audienceId);
             
             if(!inSession)
