@@ -1,16 +1,14 @@
-using Lamar;
 using plodo.Backend.Repositories;
 
-namespace plodo.Backend.Services
+namespace plodo.Backend.Services;
+
+public class ServiceRegistry : Lamar.ServiceRegistry
 {
-    public class ServiceRegistry : Lamar.ServiceRegistry
+    public ServiceRegistry()
     {
-        public ServiceRegistry()
-        {
-            IncludeRegistry<RepositoryRegistry>();
+        IncludeRegistry<RepositoryRegistry>();
             
-            For<ISessionService>().Use<SessionService>();
-            For<ISecurityTokenService>().Use<SecurityTokenService>();
-        }
+        For<ISessionService>().Use<SessionService>();
+        For<ISecurityTokenService>().Use<SecurityTokenService>();
     }
 }

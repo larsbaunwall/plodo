@@ -1,9 +1,5 @@
 ﻿using System;
 
-namespace plodo.Backend.Services.Exceptions
-{
-    public class AudienceNotInSessionException : Exception
-    {
-        
-    }
-}
+namespace plodo.Backend.Services.Exceptions;
+
+public class AudienceNotInSessionException : Exception;

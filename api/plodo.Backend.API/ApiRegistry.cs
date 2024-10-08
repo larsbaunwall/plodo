@@ -1,12 +1,11 @@
 using Lamar;
 
-namespace plodo.Backend.API
+namespace plodo.Backend.API;
+
+public class ApiRegistry : ServiceRegistry
 {
-    public class ApiRegistry : ServiceRegistry
+    public ApiRegistry()
     {
-        public ApiRegistry()
-        {
-            IncludeRegistry<Services.ServiceRegistry>();
-        }
+        IncludeRegistry<Services.ServiceRegistry>();
     }
 }

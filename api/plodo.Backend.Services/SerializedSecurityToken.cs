@@ -1,9 +1,8 @@
-namespace plodo.Backend.Services
+namespace plodo.Backend.Services;
+
+public class SerializedSecurityToken
 {
-    public class SerializedSecurityToken
-    {
-        public string Token { get; set; }
-        public int Expires { get; set; }
-        public string Type { get; set; }
-    }
+    public required string Token { get; set; }
+    public int Expires { get; set; }
+    public string Type { get; set; }
 }

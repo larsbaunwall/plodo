@@ -23,7 +23,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo
     .Console(theme: AnsiConsoleTheme.Code)
     .WriteTo
-    .ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces)
+    .ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces)
     .WriteTo.File(
         @"D:\home\LogFiles\Application\serilog.log",
         fileSizeLimitBytes: 1_000_000,
@@ -106,11 +106,11 @@ app.MapServerSentEvents("/session-stream", new ServerSentEventsOptions
 
 app.UseSerilogLogContext(options =>
 {
-    options.EnrichersForContextFactory = context => new[]
-    {
+    options.EnrichersForContextFactory = context =>
+    [
         new PropertyEnricher("TraceIdentifier", context.TraceIdentifier),
-        new PropertyEnricher("RequestHeaders", context.Request?.Headers),
-    };
+        new PropertyEnricher("RequestHeaders", context.Request?.Headers)
+    ];
 });
 
 app.UseSerilogRequestLogging();
