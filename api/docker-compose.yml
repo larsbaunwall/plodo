@@ -1,0 +1,12 @@
+﻿services:
+  plodo.backend.api:
+    image: plodo.backend.api
+    build:
+      context: .
+      dockerfile: plodo.Backend.API/Dockerfile
+
+  plodo.backend.api-1:
+    image: plodo.backend.api-1
+    build:
+      context: .
+      dockerfile: plodo.Backend.API/Dockerfile
