@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -32,9 +33,9 @@ namespace plodo.Backend.API.Configurations
         {
             var apiDescription = context.ApiDescription;
             var apiVersion = apiDescription.GetApiVersion();
-            var model = apiDescription.ActionDescriptor.GetApiVersionModel(ApiVersionMapping.Implicit);
+            var model = apiDescription.ActionDescriptor.GetApiVersionMetadata();
 
-            operation.Deprecated = model.DeprecatedApiVersions.Contains(apiVersion);
+            //operation.Deprecated = model..DeprecatedApiVersions.Contains(apiVersion);
 
             if (operation.Parameters == null)
             {
@@ -104,7 +105,7 @@ namespace plodo.Backend.API.Configurations
                 BearerFormat = "JWT",
                 Scheme = "bearer"
             });
-            
+
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {

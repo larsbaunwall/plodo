@@ -9,7 +9,7 @@ namespace plodo.Backend.API.Configurations
 {
     public static class ConfigureAuthenticationExtension
     {
-        public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfiguration rootConfig)
+        public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfigurationManager rootConfig)
         {
             var signingKey = Convert.FromBase64String(rootConfig["Jwt:SigningSecret"]);
 
@@ -25,7 +25,7 @@ namespace plodo.Backend.API.Configurations
                         OnMessageReceived = context =>
                         {
                             var accessToken = context.Request.Query["access_token"];
-                            
+
                             var path = context.HttpContext.Request.PathBase;
                             if (!string.IsNullOrEmpty(accessToken) &&
                                 (path.StartsWithSegments("/session-stream")))
@@ -37,9 +37,9 @@ namespace plodo.Backend.API.Configurations
                             return Task.CompletedTask;
                         }
                     };
-                    
+
                     options.SaveToken = true;
-                    
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,

@@ -1,0 +1,6 @@
+@plodo.Backend.API_HostAddress = http://localhost:5177
+
+GET {{plodo.Backend.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

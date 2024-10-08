@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using Lib.AspNetCore.ServerSentEvents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,7 @@ using SessionNotFoundException = plodo.Backend.Services.Exceptions.SessionNotFou
 
 namespace plodo.Backend.API.Controllers
 {
-    [Route("v{version:apiVersion}/sessions")] 
+    [Route("v{version:apiVersion}/sessions")]
     [ApiController]
     [ApiVersion("1")]
     public class SessionController : ControllerBase
@@ -38,12 +39,12 @@ namespace plodo.Backend.API.Controllers
         {
             var options = request.VotingOptions.Select(x => new Session.VoteOption(x.ToLower()));
             var hostId = Guid.NewGuid();
-            
+
             var (sessionId, token) = await _sessionService.CreateSession(hostId, options.ToList());
 
             return new CreateSessionResponse {SessionId = sessionId, UserId = hostId, AccessToken = new AccessToken(token)};
         }
-        
+
         /// <summary>
         /// Close a feedback session
         /// </summary>
@@ -76,7 +77,7 @@ namespace plodo.Backend.API.Controllers
             {
                 var audienceId = Guid.NewGuid();
                 var (session, token) = await _sessionService.JoinSession(sessionId, audienceId);
-                
+
                 var votingOptions = session.VotingOptions.Select(x => x.Icon);
                 return new JoinSessionResponse{VotingOptions = votingOptions, UserId = audienceId, AccessToken = new AccessToken(token)};
             }
@@ -99,11 +100,11 @@ namespace plodo.Backend.API.Controllers
         {
             if (!HttpContext.User.HasClaim("session_id", sessionId))
                 throw new NotAuthorizedForSessionException($"You cannot vote in session '{sessionId}'. Sign up as audience first.");
-            
+
             try
             {
                 var audienceId = Guid.Parse(HttpContext.User.FindFirst("audience_id").Value);
-                
+
                 await _sessionService.RecordVote(sessionId, audienceId, request.Vote);
                 await _serverSentEventsService.SendEventAsync(sessionId,
                     new ServerSentEvent {Type = "vote", Data = new[] {request.Vote.ToString().ToLower()}});

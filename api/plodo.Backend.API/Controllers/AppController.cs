@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using plodo.Backend.API.Models;
@@ -31,8 +32,8 @@ namespace plodo.Backend.API.Controllers
                 var ghRelease = appVersion == "latest"
                     ? "https://github.com/larsbaunwall/plodo/releases/latest/download"
                     : $"https://github.com/larsbaunwall/plodo/releases/download/{appVersion}";
-                    
-                
+
+
                 using var client = new HttpClient();
                 var winRelease =
                     await client.GetStringAsync(
@@ -41,7 +42,7 @@ namespace plodo.Backend.API.Controllers
                 var macRelease =
                     await client.GetStringAsync(
                         $"{ghRelease}/latest-mac.yml");
-            
+
                 var yamlSerializer = new YamlDotNet.Serialization.Deserializer();
                 var win = yamlSerializer.Deserialize<Dictionary<string, object>>(winRelease);
                 var mac = yamlSerializer.Deserialize<Dictionary<string, object>>(macRelease);
