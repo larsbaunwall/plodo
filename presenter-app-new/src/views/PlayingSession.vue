@@ -55,14 +55,25 @@ async function toggleCelebration() {
   }
 }
 
-function copySessionId() {
-  navigator.clipboard.writeText(sessionId.value);
-  // Show success notification
+const copyMessage = ref('');
+
+async function copySessionId() {
+  try {
+    await navigator.clipboard.writeText(sessionId.value);
+    copyMessage.value = 'Session ID copied to clipboard!';
+  } catch (error) {
+    console.error('Failed to copy session ID:', error);
+    copyMessage.value = 'Failed to copy session ID.';
+  }
+  setTimeout(() => { copyMessage.value = ''; }, 2000);
 }
 </script>
 
 <template>
   <div class="playing-session">
+    <div v-if="copyMessage" class="notification is-info" style="margin-bottom: 1rem;">
+      {{ copyMessage }}
+    </div>
     <div class="level">
       <div class="level-left">
         <div class="level-item">

@@ -28,7 +28,7 @@ function selectScreen(screen) {
             :key="screen.id" 
             :value="screen"
           >
-            {{ screen.isPrimary ? 'Primary Display' : `Display ${screen.id}` }}
+            {{ screen.is_primary ? 'Primary Display' : `Display ${screen.id}` }}
           </option>
         </select>
       </div>

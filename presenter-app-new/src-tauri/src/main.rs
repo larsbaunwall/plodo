@@ -62,16 +62,93 @@ fn toggle_celebration(state: State<CelebrationState>, app_handle: tauri::AppHand
 
 #[tauri::command]
 fn get_screens() -> Vec<Screen> {
-    // In a real implementation, this would use platform-specific APIs
-    // to get actual screen information
-    vec![
-        Screen {
+    // Use tauri's window API to get actual screen information
+    let mut screens = Vec::new();
+    
+    #[cfg(target_os = "windows")]
+    {
+        use windows::Win32::Graphics::Gdi::{EnumDisplayMonitors, GetMonitorInfoW, HDC, HMONITOR, MONITORINFO, MONITORINFOEXW};
+        use windows::Win32::Foundation::{BOOL, LPARAM, RECT};
+        
+        unsafe extern "system" fn enum_monitor(monitor: HMONITOR, _: HDC, _: *mut RECT, data: LPARAM) -> BOOL {
+            let screens = &mut *(data.0 as *mut Vec<Screen>);
+            let mut info = MONITORINFOEXW::default();
+            info.monitorInfo.cbSize = std::mem::size_of::<MONITORINFOEXW>() as u32;
+            
+            if GetMonitorInfoW(monitor, &mut info as *mut MONITORINFOEXW as *mut MONITORINFO).as_bool() {
+                let rc = info.monitorInfo.rcMonitor;
+                screens.push(Screen {
+                    id: format!("{}", screens.len() + 1),
+                    size: Size {
+                        width: (rc.right - rc.left) as u32,
+                        height: (rc.bottom - rc.top) as u32,
+                    },
+                    bounds: Bounds {
+                        x: rc.left,
+                        y: rc.top,
+                    },
+                    is_primary: (info.monitorInfo.dwFlags & 1) != 0, // MONITORINFOF_PRIMARY = 1
+                });
+            }
+            
+            BOOL(1) // Continue enumeration
+        }
+        
+        unsafe {
+            EnumDisplayMonitors(
+                HDC(0),
+                std::ptr::null(),
+                Some(enum_monitor),
+                LPARAM(&mut screens as *mut _ as isize),
+            );
+        }
+    }
+    
+    #[cfg(target_os = "macos")]
+    {
+        use core_graphics::display::{CGDisplay, CGDisplayBounds};
+        
+        let displays = CGDisplay::active_displays().unwrap_or_default();
+        for (i, display_id) in displays.iter().enumerate() {
+            let bounds = CGDisplayBounds(*display_id);
+            screens.push(Screen {
+                id: format!("{}", i + 1),
+                size: Size {
+                    width: bounds.size.width as u32,
+                    height: bounds.size.height as u32,
+                },
+                bounds: Bounds {
+                    x: bounds.origin.x as i32,
+                    y: bounds.origin.y as i32,
+                },
+                is_primary: CGDisplay::main().id() == *display_id,
+            });
+        }
+    }
+    
+    #[cfg(target_os = "linux")]
+    {
+        // For Linux, we'd use X11 or Wayland APIs
+        // This is a simplified fallback for now
+        screens.push(Screen {
             id: "primary".to_string(),
             size: Size { width: 1920, height: 1080 },
             bounds: Bounds { x: 0, y: 0 },
             is_primary: true,
-        }
-    ]
+        });
+    }
+    
+    // If no screens were detected, provide a fallback
+    if screens.is_empty() {
+        screens.push(Screen {
+            id: "primary".to_string(),
+            size: Size { width: 1920, height: 1080 },
+            bounds: Bounds { x: 0, y: 0 },
+            is_primary: true,
+        });
+    }
+    
+    screens
 }
 
 #[derive(serde::Serialize)]

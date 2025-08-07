@@ -12,7 +12,11 @@ class UIService {
     
     // If active screen is no longer available, default to primary display
     const screens = sessionStore.allScreens;
-    if (screens.length > 0 && !screens.find(x => x.id === sessionStore.celebrationScreen.id)) {
+    const celebrationScreen = sessionStore.celebrationScreen;
+    const celebrationScreenId = (celebrationScreen && typeof celebrationScreen === 'object' && 'id' in celebrationScreen)
+      ? celebrationScreen.id
+      : celebrationScreen;
+    if (screens.length > 0 && !screens.find(x => x.id === celebrationScreenId)) {
       sessionStore.changeCelebrationScreen(await this.getPrimaryDisplay());
     }
     
