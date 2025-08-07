@@ -5,7 +5,6 @@ import { useSessionStore } from '../stores/session';
 class ApiService {
   private api: AxiosInstance;
   private eventSource: EventSource | null = null;
-  private sessionStore = useSessionStore();
 
   constructor() {
     this.api = axios.create({
@@ -47,12 +46,13 @@ class ApiService {
       this.closeEventStream();
     }
 
+    const sessionStore = this.getSessionStore();
     const url = `${apiConfig.streamEndpoint}?sessionId=${sessionId}`;
     this.eventSource = new EventSource(url);
 
     this.eventSource.onopen = () => {
       console.log('Event stream connected');
-      this.sessionStore.setStreamConnection(true);
+      sessionStore.setStreamConnection(true);
     };
 
     this.eventSource.onmessage = (event) => {
@@ -66,11 +66,11 @@ class ApiService {
 
     this.eventSource.onerror = () => {
       console.error('Event stream error');
-      this.sessionStore.setStreamConnection(false);
-      this.sessionStore.setReconnecting(true);
+      sessionStore.setStreamConnection(false);
+      sessionStore.setReconnecting(true);
       
       setTimeout(() => {
-        if (this.sessionStore.isSessionActive) {
+        if (sessionStore.isSessionActive) {
           this.connectEventStream(sessionId);
         }
       }, 3000);
@@ -81,24 +81,30 @@ class ApiService {
     if (this.eventSource) {
       this.eventSource.close();
       this.eventSource = null;
-      this.sessionStore.setStreamConnection(false);
+      const sessionStore = this.getSessionStore();
+      sessionStore.setStreamConnection(false);
     }
   }
 
   private handleStreamEvent(data: any) {
+    const sessionStore = this.getSessionStore();
     switch (data.type) {
       case 'vote':
-        this.sessionStore.recordVote(data.emojiId);
+        sessionStore.recordVote(data.emojiId);
         break;
       case 'audience-join':
-        this.sessionStore.updateAudienceCount(data.count);
+        sessionStore.updateAudienceCount(data.count);
         break;
       case 'audience-leave':
-        this.sessionStore.updateAudienceCount(data.count);
+        sessionStore.updateAudienceCount(data.count);
         break;
       default:
         console.log('Unknown stream event:', data);
     }
+  }
+
+  private getSessionStore() {
+    return useSessionStore();
   }
 }
 

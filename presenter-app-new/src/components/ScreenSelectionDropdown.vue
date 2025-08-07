@@ -55,17 +55,43 @@ function onScreenChange(screenId: string) {
   }
 }
 
-onMounted(() => {
-  // Initialize with mock screen data for now
-  // In a real implementation, this would come from Tauri's monitor API
-  sessionStore.setAllScreens([
-    {
-      id: 'primary',
-      size: { width: 1920, height: 1080 },
-      bounds: { x: 0, y: 0 },
-      isPrimary: true
-    }
-  ]);
+onMounted(async () => {
+  // TODO: Replace mock data with actual monitor data from Tauri's monitor API
+  // See: https://tauri.app/v1/api/js/modules/window/#getallmonitors
+  // Example implementation:
+  try {
+    // const { getAllMonitors } = await import('@tauri-apps/api/window');
+    // const monitors = await getAllMonitors();
+    // sessionStore.setAllScreens(
+    //   monitors.map((monitor, idx) => ({
+    //     id: monitor.name || `monitor-${idx}`,
+    //     size: { width: monitor.size.width, height: monitor.size.height },
+    //     bounds: { x: monitor.position.x, y: monitor.position.y },
+    //     isPrimary: monitor.isPrimary
+    //   }))
+    // );
+    
+    // Fallback: Mock data for now until Tauri monitor API is implemented
+    sessionStore.setAllScreens([
+      {
+        id: 'primary',
+        size: { width: 1920, height: 1080 },
+        bounds: { x: 0, y: 0 },
+        isPrimary: true
+      }
+    ]);
+  } catch (e) {
+    console.error('Failed to fetch monitors:', e);
+    // Fallback to mock data
+    sessionStore.setAllScreens([
+      {
+        id: 'primary',
+        size: { width: 1920, height: 1080 },
+        bounds: { x: 0, y: 0 },
+        isPrimary: true
+      }
+    ]);
+  }
 });
 </script>
 

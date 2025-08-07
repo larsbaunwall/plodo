@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
+export interface Screen {
+  id: string;
+  size: { width: number; height: number };
+  bounds: { x: number; y: number };
+  isPrimary: boolean;
+}
+
 export interface VotingOption {
   id: string;
   name: string;
@@ -33,10 +40,10 @@ export const useSessionStore = defineStore('session', () => {
 
   const celebration = ref({
     active: false,
-    screen: null as any
+    screen: null as Screen | null
   });
 
-  const allScreens = ref<any[]>([]);
+  const allScreens = ref<Screen[]>([]);
 
   const isSessionActive = computed(() => activeSession.value.id !== '');
   
@@ -45,7 +52,7 @@ export const useSessionStore = defineStore('session', () => {
   );
 
   function createSession(options: VotingOption[]) {
-    const sessionId = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const sessionId = crypto.randomUUID().substring(0, 8).toUpperCase();
     activeSession.value = {
       id: sessionId,
       options,
@@ -87,11 +94,11 @@ export const useSessionStore = defineStore('session', () => {
     celebration.value.active = !celebration.value.active;
   }
 
-  function setCelebrationScreen(screen: any) {
+  function setCelebrationScreen(screen: Screen) {
     celebration.value.screen = screen;
   }
 
-  function setAllScreens(screens: any[]) {
+  function setAllScreens(screens: Screen[]) {
     allScreens.value = screens;
   }
 
