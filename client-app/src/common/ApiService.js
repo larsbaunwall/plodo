@@ -34,6 +34,7 @@ const ApiService = {
 
     return {
       votingOptions: data.votingOptions,
+      userId: data.userId,
       accessToken: {
         token: data.accessToken.token,
         type: data.accessToken.type,
