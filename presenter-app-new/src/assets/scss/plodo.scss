@@ -1,0 +1,102 @@
+// Import Bulma's core
+@import "bulma/sass/utilities/_all";
+
+// Set your colors
+$primary: #00d1b2;
+$primary-invert: findColorInvert($primary);
+$twitter: #4099FF;
+$twitter-invert: findColorInvert($twitter);
+
+// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+$colors: (
+    "white": ($white, $black),
+    "black": ($black, $white),
+    "light": ($light, $light-invert),
+    "dark": ($dark, $dark-invert),
+    "primary": ($primary, $primary-invert),
+    "info": ($info, $info-invert),
+    "success": ($success, $success-invert),
+    "warning": ($warning, $warning-invert),
+    "danger": ($danger, $danger-invert),
+    "twitter": ($twitter, $twitter-invert)
+);
+
+// Links
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+// Import Bulma and Buefy styles
+@import "bulma";
+
+// Custom styles
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.tab-menu {
+  padding: 0.5rem;
+  background-color: $light;
+}
+
+.celebration-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: transparent;
+}
+
+.card {
+  margin-bottom: 1rem;
+}
+
+.session-health {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.session-health-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.session-health-indicator.connected {
+  background-color: $success;
+}
+
+.session-health-indicator.disconnected {
+  background-color: $danger;
+}
+
+.smiley-counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: $light;
+  margin-bottom: 0.5rem;
+}
+
+.smiley-counter-emoji {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.smiley-counter-count {
+  font-weight: bold;
+}
