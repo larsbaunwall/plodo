@@ -1,0 +1,40 @@
+{
+  "productName": "plodo",
+  "version": "0.1.0",
+  "identifier": "io.plodo.presenter",
+  "build": {
+    "beforeDevCommand": "vite",
+    "beforeBuildCommand": "vite build",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "plodo",
+        "label": "main",
+        "width": 400,
+        "height": 715,
+        "resizable": false,
+        "visible": true
+      },
+      {
+        "title": "Celebrate",
+        "label": "celebration",
+        "width": 800,
+        "height": 600,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false
+  }
+}
