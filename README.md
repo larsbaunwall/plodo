@@ -39,7 +39,43 @@ The latest releases are always available at https://www.plodo.io too :muscle:
 
 Please try it out - and follow our repo for more updates!
 
-# Can I contribute?
+# Development & Contributing
+
+## For Developers & AI Agents
+
+📋 **[See AGENT_INSTRUCTIONS.md](./AGENT_INSTRUCTIONS.md) for comprehensive development documentation**
+
+This document contains detailed information about:
+- Project architecture and technology stack
+- Development environment setup
+- Build processes and deployment
+- Code organization patterns
+- Common issues and solutions
+
+## Quick Start
+
+### Prerequisites
+- Node.js 14.x - 16.x (avoid Node 18+ due to legacy dependencies)
+- npm or yarn package manager
+
+### Setup
+```bash
+# Clone repository
+git clone https://github.com/larsbaunwall/plodo.git
+cd plodo
+
+# Setup client app (web application)
+cd client-app
+npm install
+npm run serve
+
+# Setup presenter app (Electron - Windows/macOS only)
+cd ../presenter-app
+yarn install
+yarn electron:serve
+```
+
+## Can I contribute?
 
 Certainly! Just open a new issue for the stuff you want to see in plodo.
 
