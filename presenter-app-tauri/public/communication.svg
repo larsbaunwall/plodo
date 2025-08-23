@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+  <!-- Background circle -->
+  <circle cx="100" cy="75" r="60" fill="#3273dc" opacity="0.1"/>
+  
+  <!-- People icons -->
+  <g fill="#3273dc">
+    <!-- Person 1 -->
+    <circle cx="75" cy="60" r="8"/>
+    <rect x="69" y="68" width="12" height="18" rx="2"/>
+    
+    <!-- Person 2 -->
+    <circle cx="125" cy="60" r="8"/>
+    <rect x="119" y="68" width="12" height="18" rx="2"/>
+    
+    <!-- Person 3 -->
+    <circle cx="100" cy="90" r="8"/>
+    <rect x="94" y="98" width="12" height="18" rx="2"/>
+  </g>
+  
+  <!-- Speech bubbles -->
+  <g fill="#48c774" opacity="0.8">
+    <!-- Bubble 1 -->
+    <ellipse cx="60" cy="45" rx="15" ry="10"/>
+    <polygon points="68,50 75,55 68,55"/>
+    
+    <!-- Bubble 2 -->
+    <ellipse cx="140" cy="45" rx="15" ry="10"/>
+    <polygon points="132,50 125,55 132,55"/>
+    
+    <!-- Bubble 3 -->
+    <ellipse cx="100" cy="120" rx="15" ry="10"/>
+    <polygon points="108,115 115,110 108,110"/>
+  </g>
+  
+  <!-- Emoji in bubbles -->
+  <g fill="white" font-family="Arial" font-size="8" text-anchor="middle">
+    <text x="60" y="49">😊</text>
+    <text x="140" y="49">👍</text>
+    <text x="100" y="124">💡</text>
+  </g>
+  
+  <!-- Title -->
+  <text x="100" y="25" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#363636">
+    Communication & Feedback
+  </text>
+</svg>

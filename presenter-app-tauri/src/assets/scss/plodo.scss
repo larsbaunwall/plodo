@@ -1,0 +1,297 @@
+// Plodo Presenter - Migrated from original to Bulma v1 + Buefy
+// Based exactly on the original plodo.scss but adapted for modern Bulma v1 syntax
+
+// IMPORTANT: @use must be first
+@use "sass:color";
+@use "sass:math";
+
+// Configure Bulma with our original Plodo colors and fonts
+@use "bulma/sass" with (
+  $primary: #1B1464,
+  $success: #22D56D,
+  $info: #97F2F1,
+  $link: #1B1464,
+  $text: #1B1464,
+  $body-background-color: #fafafa,
+  $background: #fafafa,
+  $border: #dbdbdb,
+  $radius: 4px,
+  $radius-small: 2px,
+  $radius-large: 6px,
+  $family-sans-serif: ("Quicksand", "Helvetica Neue", "Helvetica", "Arial", sans-serif)
+);
+
+// Import external resources AFTER @use  
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
+@import "twemoji-amazing.scss";
+
+// Define our original Plodo colors for use in custom styles
+$primary: #1B1464;
+$secondary: #2E3192;
+$danger: #F02B5C;
+$success: #22D56D;
+$highlight: #97F2F1;
+$text-light: #757b84;  // Custom text light color from original
+
+// Calculate lightened colors exactly as original (using modern Sass color functions)
+$lightblue: color.adjust($primary, $lightness: 70%);      // Original: lighten($primary, 70%)
+$lightblue-darker: color.adjust($primary, $lightness: 65%); // Original: lighten($primary, 65%)
+
+// Standard colors from original
+$white: #FFF;
+$black: #000;
+
+// Note: Buefy CSS is imported in main.ts for Vue 3 compatibility
+
+// Body transparency from original - critical for Tauri window transparency
+html {
+    background-color: transparent !important;  // Original: none!important
+}
+
+// Original utility class
+.justify-content-center {
+    justify-content: center;
+}
+
+// Recreate the original $colors map functionality as individual classes
+// This provides the same .is-secondary, .is-highlight etc. classes that the original had
+
+// Background colors (recreating original $colors map behavior)
+.has-background-secondary {
+  background-color: $secondary !important;
+  color: $white !important;  // Equivalent to $secondary-invert
+}
+
+.has-background-highlight {
+  background-color: $highlight !important;
+  color: $black !important;  // highlight on light background = dark text
+}
+
+.has-background-lightblue {
+  background-color: $lightblue !important;
+  color: $primary !important;  // light blue background = primary text
+}
+
+.has-background-lightblue-darker {
+  background-color: $lightblue-darker !important;
+  color: $primary !important;
+}
+
+// Button variants (recreating original .is-secondary, .is-highlight functionality)
+.button {
+  &.is-secondary {
+    background-color: $secondary;
+    border-color: $secondary;
+    color: $white;
+    
+    &:hover {
+      background-color: color.adjust($secondary, $lightness: -10%);
+      border-color: color.adjust($secondary, $lightness: -10%);
+    }
+  }
+  
+  &.is-highlight {
+    background-color: $highlight;
+    border-color: $highlight;
+    color: $black;
+    
+    &:hover {
+      background-color: color.adjust($highlight, $lightness: -10%);
+      border-color: color.adjust($highlight, $lightness: -10%);
+    }
+  }
+  
+  &.is-lightblue {
+    background-color: $lightblue;
+    border-color: $lightblue;
+    color: $primary;
+    
+    &:hover {
+      background-color: color.adjust($lightblue, $lightness: -10%);
+      border-color: color.adjust($lightblue, $lightness: -10%);
+    }
+  }
+  
+  &.is-lightblue-darker {
+    background-color: $lightblue-darker;
+    border-color: $lightblue-darker;
+    color: $primary;
+    
+    &:hover {
+      background-color: color.adjust($lightblue-darker, $lightness: -10%);
+      border-color: color.adjust($lightblue-darker, $lightness: -10%);
+    }
+  }
+}
+
+// Text colors 
+.has-text-secondary {
+  color: $secondary !important;
+}
+
+.has-text-highlight {
+  color: $highlight !important;
+}
+
+.has-text-lightblue {
+  color: $lightblue !important;
+}
+
+.has-text-lightblue-darker {
+  color: $lightblue-darker !important;
+}
+
+// Border colors
+.has-border-secondary {
+  border-color: $secondary !important;
+}
+
+.has-border-highlight {
+  border-color: $highlight !important;
+}
+
+// Card shadow from original using primary color
+.card {
+  &.plodo-card {
+    box-shadow: 0 0.5em 1em -0.125em rgba($primary, 0.1), 0 0px 0 1px rgba($primary, 0.02);
+  }
+}
+
+// Hero sections using original color combinations
+.hero {
+  &.is-secondary {
+    background-color: $secondary;
+    color: $white;
+  }
+  
+  &.is-highlight {
+    background-color: $highlight;
+    color: $black;
+  }
+  
+  &.is-lightblue {
+    background-color: $lightblue;
+    color: $primary;
+  }
+  
+  &.is-plodo-gradient {
+    background: linear-gradient(135deg, $primary 0%, $secondary 100%);
+    color: $white;
+  }
+  
+  &.is-highlight-gradient {
+    background: linear-gradient(135deg, $highlight 0%, $lightblue 100%);
+    color: $primary;
+  }
+}
+
+// Notification variants
+.notification {
+  &.is-secondary {
+    background-color: $secondary;
+    color: $white;
+  }
+  
+  &.is-highlight {
+    background-color: $highlight;
+    color: $black;
+  }
+  
+  &.is-lightblue {
+    background-color: $lightblue;
+    color: $primary;
+  }
+}
+
+// Tab styling using original colors
+.tabs {
+  .tab-item {
+    &.is-active {
+      border-bottom-color: $primary;
+      color: $primary;
+    }
+  }
+}
+
+// Progress bars
+.progress {
+  &.is-secondary {
+    &::-webkit-progress-value {
+      background-color: $secondary;
+    }
+    &::-moz-progress-bar {
+      background-color: $secondary;
+    }
+  }
+  
+  &.is-highlight {
+    &::-webkit-progress-value {
+      background-color: $highlight;
+    }
+    &::-moz-progress-bar {
+      background-color: $highlight;
+    }
+  }
+}
+
+// Additional utility classes for the original color scheme
+.align-items-center {
+    align-items: center;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.text-center {
+    text-align: center;
+}
+
+// Session health indicators (if used in the app)
+.session-health {
+  .health-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    
+    &.healthy {
+      background-color: $success;
+    }
+    
+    &.warning {
+      background-color: #ffb84d;
+    }
+    
+    &.error {
+      background-color: $danger;
+    }
+  }
+}
+
+// Voting configurator styles (if used)
+.voting-configurator {
+  .smiley-option {
+    padding: 1rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: $secondary;
+      background-color: rgba($secondary, 0.1);
+    }
+    
+    &.selected {
+      border-color: $primary;
+      background-color: rgba($primary, 0.1);
+    }
+    
+    .emoji {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}

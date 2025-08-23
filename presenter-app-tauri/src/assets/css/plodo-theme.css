@@ -1,0 +1,66 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+
+/* Plodo Custom Theme */
+:root {
+  --plodo-primary: #1B1464;
+  --plodo-secondary: #2E3192;
+  --plodo-success: #22D56D;
+  --plodo-danger: #F02B5C;
+  --plodo-highlight: #F7D794;
+  --plodo-lightblue: #E3F0F7;
+  --plodo-white-bis: #fafafa;
+}
+
+/* Override Bulma primary colors */
+.has-text-primary {
+  color: var(--plodo-primary) !important;
+}
+
+.has-text-secondary {
+  color: var(--plodo-secondary) !important;
+}
+
+.button.is-primary {
+  background-color: var(--plodo-primary);
+  border-color: var(--plodo-primary);
+}
+
+.button.is-secondary {
+  background-color: var(--plodo-secondary);
+  border-color: var(--plodo-secondary);
+  color: #fff;
+}
+
+.button.is-secondary.is-outlined {
+  background-color: transparent;
+  border-color: var(--plodo-secondary);
+  color: var(--plodo-secondary);
+}
+
+.button.is-secondary.is-outlined:hover {
+  background-color: var(--plodo-secondary);
+  color: #fff;
+}
+
+.button.is-success {
+  background-color: var(--plodo-success);
+  border-color: var(--plodo-success);
+}
+
+.has-background-lightblue {
+  background-color: var(--plodo-lightblue) !important;
+}
+
+.has-background-highlight {
+  background-color: var(--plodo-highlight) !important;
+}
+
+.title.has-text-secondary {
+  color: var(--plodo-secondary) !important;
+}
+
+/* Custom typography */
+body {
+  font-family: 'Quicksand', sans-serif;
+}
