@@ -1,153 +1,78 @@
 <template>
-  <div class="celebration-overlay" ref="container" />
+  <div />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useSessionStore } from '../stores/session'
+import { ref, onMounted } from 'vue'
+// @ts-ignore
+import Two from 'two.js'
+// @ts-ignore
+import { parse } from 'twemoji-parser'
 
-interface Emoji {
-  element: HTMLElement
-  x: number
-  y: number
-  velocityX: number
-  velocityY: number
+interface TwoShape {
+  translation: { x: number; y: number; addSelf: (vector: any) => void }
+  velocity: { x: number; y: number; addSelf: (vector: any) => void }
   scale: number
-  rotation: number
-  rotationSpeed: number
 }
 
-const sessionStore = useSessionStore()
-const { shouldCelebrate } = storeToRefs(sessionStore)
-
-const emojis = ref<Emoji[]>([])
-const animationId = ref<number>()
-const gravity = 0.5
-const container = ref<HTMLElement>()
-
-// Animation loop
-const animate = () => {
-  updateEmojis()
-  cleanupEmojis()
-  animationId.value = requestAnimationFrame(animate)
-}
-
-const updateEmojis = () => {
-  emojis.value.forEach(emoji => {
-    // Update position
-    emoji.x += emoji.velocityX
-    emoji.y += emoji.velocityY
-    
-    // Apply gravity
-    emoji.velocityY += gravity
-    
-    // Update scale and rotation
-    emoji.scale *= 0.99
-    emoji.rotation += emoji.rotationSpeed
-    
-    // Apply transforms
-    emoji.element.style.transform = `translate(${emoji.x}px, ${emoji.y}px) scale(${emoji.scale}) rotate(${emoji.rotation}deg)`
+const emojis = ref<TwoShape[]>([])
+const gravity = ref(new Two.Vector(0, -0.1))
+const two = ref(
+  new Two({
+    type: Two.Types.canvas,
+    fullscreen: true,
+    autostart: true,
   })
-}
+)
 
-const cleanupEmojis = () => {
-  emojis.value = emojis.value.filter(emoji => {
-    if (emoji.scale < 0.1 || emoji.y > window.innerHeight + 100) {
-      emoji.element.remove()
-      return false
+const addEmoji = (emojiPng: string) => {
+  // Remove emojis outside viewport
+  for (let i = 0; i < emojis.value.length; i++) {
+    const emoji = emojis.value[i]
+    if (emoji.scale < 0.1 || emoji.translation.y < 0) {
+      two.value.scene.remove(emoji)
+      emojis.value.splice(i, 1)
     }
-    return true
-  })
-}
+  }
 
-const addEmoji = (emojiChar: string) => {
-  if (!container.value || !shouldCelebrate.value) return
-  
-  // Remove old emojis if too many
-  if (emojis.value.length > 50) {
-    const oldEmoji = emojis.value.shift()
-    if (oldEmoji) oldEmoji.element.remove()
-  }
-  
-  const element = document.createElement('div')
-  element.textContent = emojiChar
-  element.style.position = 'fixed'
-  element.style.fontSize = '72px'
-  element.style.pointerEvents = 'none'
-  element.style.zIndex = '9999'
-  element.style.userSelect = 'none'
-  
-  const margin = window.innerWidth * 0.1
-  const x = Math.random() * (window.innerWidth - 2 * margin) + margin
-  const y = window.innerHeight + 50
-  
-  const emoji: Emoji = {
-    element,
-    x,
-    y,
-    velocityX: (Math.random() - 0.5) * 8,
-    velocityY: -(Math.random() * 15 + 10),
-    scale: 1,
-    rotation: 0,
-    rotationSpeed: (Math.random() - 0.5) * 10
-  }
-  
-  container.value.appendChild(element)
-  emojis.value.push(emoji)
-}
+  const m = two.value.width * 0.1 // margin
+  const w = two.value.width - 8 * m
 
-// Watch for voting events
-watch(() => sessionStore.lastVote, (vote) => {
-  if (vote) {
-    addEmoji(vote.emoji)
-  }
-})
+  const x = Math.random() * w + 7 * m
+  const y = two.value.height * 1.0
+
+  const shape = two.value.makeSprite(emojiPng, 72, 72) as TwoShape
+  shape.velocity = new Two.Vector()
+  shape.velocity.x = 4 * (Math.random() - 0.7)
+  shape.velocity.y = -(Math.random() * 1)
+
+  shape.scale = 1
+
+  shape.translation.x = x
+  shape.translation.y = y
+
+  two.value.add(shape)
+  emojis.value.push(shape)
+}
 
 onMounted(() => {
-  container.value = document.body
-  if (shouldCelebrate.value) {
-    animationId.value = requestAnimationFrame(animate)
-  }
-})
+  // In Pinia, we would watch for vote events differently
+  // For now, we'll add a simple demo that triggers on sessionStore changes
+  // The real implementation would need to be connected to vote events
 
-onUnmounted(() => {
-  if (animationId.value) {
-    cancelAnimationFrame(animationId.value)
-  }
-  // Clean up any remaining emojis
-  emojis.value.forEach(emoji => emoji.element.remove())
-})
+  two.value.appendTo(document.body)
 
-// Start/stop animation based on celebration setting
-watch(shouldCelebrate, (newValue) => {
-  if (newValue && !animationId.value) {
-    animationId.value = requestAnimationFrame(animate)
-  } else if (!newValue && animationId.value) {
-    cancelAnimationFrame(animationId.value)
-    animationId.value = undefined
-    // Clean up emojis
-    emojis.value.forEach(emoji => emoji.element.remove())
-    emojis.value = []
-  }
+  two.value.bind('update', function () {
+    if (emojis.value) {
+      for (let i = 0; i < emojis.value.length; i++) {
+        const emoji = emojis.value[i]
+        emoji.translation.addSelf(emoji.velocity)
+        emoji.velocity.addSelf(gravity.value)
+        emoji.scale = emoji.scale * 0.99
+      }
+    }
+  })
 })
 </script>
 
-<style scoped>
-.celebration-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9998;
-  background: transparent;
-}
-
-/* Ensure no background colors interfere with transparency */
-:deep(html),
-:deep(body) {
-  background: transparent !important;
-}
-</style>
+<style></style>

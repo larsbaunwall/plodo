@@ -1,9 +1,9 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
-import Buefy from "buefy";
-import "buefy/dist/buefy.css";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faPlay,
   faCog,
@@ -19,10 +19,11 @@ import {
   faInfoCircle,
   faSpinner,
   faExternalLinkAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import App from "./App.vue";
-import router from "./router";
-import "./assets/scss/plodo.scss";
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons'
+import App from './App.vue'
+import router from './router'
+import './assets/scss/plodo.scss'
 
 // Add FontAwesome icons to library
 library.add(
@@ -39,21 +40,22 @@ library.add(
   faAsterisk,
   faInfoCircle,
   faSpinner,
-  faExternalLinkAlt
-);
+  faExternalLinkAlt,
+  faPlus
+)
 
-const app = createApp(App);
+const app = createApp(App)
 
 // Register FontAwesome component globally (for Buefy)
-app.component("vue-fontawesome", FontAwesomeIcon);
+app.component('vue-fontawesome', FontAwesomeIcon)
 
 // Configure Buefy with FontAwesome integration like original app
 app.use(Buefy, {
-  defaultIconComponent: "vue-fontawesome",
-  defaultIconPack: "fas",
-});
+  defaultIconComponent: 'vue-fontawesome',
+  defaultIconPack: 'fas',
+})
 
-app.use(createPinia());
-app.use(router);
+app.use(createPinia())
+app.use(router)
 
-app.mount("#app");
+app.mount('#app')

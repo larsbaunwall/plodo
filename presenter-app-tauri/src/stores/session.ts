@@ -31,7 +31,7 @@ export const useSessionStore = defineStore('session', () => {
   const sessionStartTime = ref<Date | null>(null)
 
   // Getters
-  const totalVotes = computed(() => 
+  const totalVotes = computed(() =>
     votingResults.value.reduce((sum, result) => sum + result.count, 0)
   )
 
@@ -50,20 +50,20 @@ export const useSessionStore = defineStore('session', () => {
   const createSession = async (config: SessionConfig) => {
     // Generate a simple session ID (6 uppercase alphanumeric characters)
     const sessionId = Math.random().toString(36).substr(2, 6).toUpperCase()
-    
+
     const sessionConfigWithId = {
       ...config,
-      id: sessionId
+      id: sessionId,
     }
-    
+
     sessionConfig.value = sessionConfigWithId
     sessionStartTime.value = new Date()
     isSessionActive.value = true
-    
+
     // Initialize voting results
     votingResults.value = config.votingOptions.map(option => ({
       optionId: option.id,
-      count: 0
+      count: 0,
     }))
 
     // Reset session health
@@ -92,8 +92,9 @@ export const useSessionStore = defineStore('session', () => {
 
   const updateSessionHealth = () => {
     // Simple health calculation based on voting activity
-    const avgVotesPerOption = totalVotes.value / (sessionConfig.value?.votingOptions.length || 1)
-    
+    const avgVotesPerOption =
+      totalVotes.value / (sessionConfig.value?.votingOptions.length || 1)
+
     if (avgVotesPerOption >= 10) {
       sessionHealth.value = { score: 100, status: 'excellent' }
     } else if (avgVotesPerOption >= 5) {
@@ -112,17 +113,17 @@ export const useSessionStore = defineStore('session', () => {
     votingResults,
     sessionHealth,
     sessionStartTime,
-    
+
     // Getters
     totalVotes,
     sessionDuration,
     topVotingOption,
-    
+
     // Actions
     createSession,
     endSession,
     addVote,
     resetVotes,
-    updateSessionHealth
+    updateSessionHealth,
   }
 })

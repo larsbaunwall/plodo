@@ -13,30 +13,30 @@ const routes = [
       {
         path: '',
         name: 'Setup',
-        component: SetupScreen
+        component: SetupScreen,
       },
       {
         path: '/session',
         name: 'PlayingSession',
-        component: PlayingSession
+        component: PlayingSession,
       },
       {
         path: '/celebration',
         name: 'Celebration',
-        component: CelebrationScreen
+        component: CelebrationScreen,
       },
       {
         path: '/settings',
         name: 'Settings',
-        component: SettingsScreen
-      }
-    ]
-  }
+        component: SettingsScreen,
+      },
+    ],
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 export default router

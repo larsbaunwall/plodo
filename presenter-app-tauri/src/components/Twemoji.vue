@@ -1,5 +1,8 @@
 <template>
-  <span :class="cssClass">{{ emojis }}</span>
+  <span>
+    <!-- For now, just render the emoji directly until twemoji-parser types are resolved -->
+    <span :class="cssClass">{{ emojis }}</span>
+  </span>
 </template>
 
 <script setup lang="ts">
@@ -9,14 +12,23 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  cssClass: 'twa twa-1x'
+  cssClass: 'twa twa-30px',
 })
+
+// Note: The original used twemoji-parser to convert to images
+// This simplified version just renders the emoji directly
+// TODO: Properly integrate twemoji-parser with TypeScript types
 </script>
 
 <style scoped>
 .twa {
   display: inline-block;
   font-style: normal;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 1em;
+  height: 1em;
 }
 
 .twa-1x {

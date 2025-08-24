@@ -8,20 +8,4 @@
   </div>
 </template>
 
-<style scoped>
-#app {
-  height: 100vh;
-  width: 100vw;
-}
-</style>
-<style>
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-}
-</style>
+<style scoped></style>

@@ -3,25 +3,24 @@
     <section class="section has-text-centered">
       <img
         id="welcomeBanner"
-        src="/communication.svg"
+        src="../assets/artwork/communication.svg"
         width="80%"
-        alt="Welcome to Plodo"
       />
     </section>
     <section class="section">
       <div class="container has-text-centered is-mobile">
         <h1 class="title has-text-secondary is-3">Welcome to plodo</h1>
         <h2 class="subtitle">Set up a new feedback session:</h2>
-        <voting-configurator 
-          :max-number-of-options="3" 
-          @options-changed="handleOptionsChanged" 
+        <voting-configurator
+          :max-number-of-options="3"
+          @options-changed="handleOptionsChanged"
         />
         <button
           class="button is-success is-rounded is-large"
           :disabled="votingOptions.length === 0"
           @click="startSession"
         >
-          <i class="fas fa-play"></i>
+          <b-icon icon="play" size="is-small" />
           <span>Start session</span>
         </button>
       </div>
@@ -29,21 +28,22 @@
     <section class="section has-text-centered has-text-grey-light">
       <div class="content is-size-7">
         <p>
-          Plodo is free, if you like it, please consider 
-          <a 
-            class="has-text-grey" 
-            href="https://paypal.me/larslb" 
-            target="_blank" 
+          Plodo is free, if you like it, please consider
+          <a
+            class="has-text-grey"
+            href="https://paypal.me/larslb"
+            target="_blank"
             @click.prevent="openExternalBrowser"
-          >supporting</a> us.
-          <br/>
-          Read more about plodo at
-          <a 
-            class="has-text-grey" 
-            href="https://www.plodo.io" 
-            target="_blank" 
+            >supporting</a
+          >
+          us. <br />Read more about plodo at
+          <a
+            class="has-text-grey"
+            href="https://www.plodo.io"
+            target="_blank"
             @click.prevent="openExternalBrowser"
-          >https://www.plodo.io</a>
+            >https://www.plodo.io</a
+          >
         </p>
       </div>
     </section>
@@ -55,6 +55,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from '../stores/session'
 import VotingConfigurator from '../components/VotingConfigurator.vue'
+import { openUrl } from '@tauri-apps/plugin-opener'
 
 interface VotingOption {
   id: string
@@ -69,9 +70,7 @@ const votingOptions = ref<VotingOption[]>([])
 const openExternalBrowser = async (event: Event) => {
   const target = event.target as HTMLAnchorElement
   if (target.href) {
-    // For now, just log the URL. In production, you'd use Tauri's shell API
-    console.log('Would open:', target.href)
-    // await open(target.href)
+    await openUrl(target.href)
   }
 }
 

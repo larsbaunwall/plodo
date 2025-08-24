@@ -1,0 +1,13 @@
+dist/
+dist-ssr/
+node_modules/
+src-tauri/target/
+src-tauri/gen/
+*.local
+.DS_Store
+*.tsbuildinfo
+coverage/
+yarn.lock
+package-lock.json
+*.min.js
+*.min.css

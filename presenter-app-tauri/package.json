@@ -7,7 +7,18 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "lint": "eslint . --ext .vue,.js,.ts",
+    "lint:fix": "eslint . --ext .vue,.js,.ts --fix",
+    "lint:rust": "cd src-tauri && cargo clippy -- -D warnings",
+    "lint:rust:fix": "cd src-tauri && cargo clippy --fix --allow-dirty",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:rust": "cd src-tauri && cargo fmt",
+    "format:rust:check": "cd src-tauri && cargo fmt --check",
+    "type-check": "vue-tsc --noEmit",
+    "lint:all": "yarn lint && yarn lint:rust",
+    "format:all": "yarn format && yarn format:rust"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.0.0",
@@ -19,15 +30,28 @@
     "buefy": "^3.0.1",
     "bulma": "^1.0.4",
     "pinia": "^3.0.3",
+    "twemoji-parser": "^14.0.0",
+    "two.js": "^0.8.19",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.34.0",
     "@tauri-apps/cli": "^2",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
     "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-vue": "^10.4.0",
+    "prettier": "^3.6.2",
     "sass-embedded": "^1.90.0",
     "typescript": "~5.6.2",
     "vite": "^6.0.3",
+    "vue-eslint-parser": "^10.2.0",
     "vue-tsc": "^2.1.10"
   }
 }

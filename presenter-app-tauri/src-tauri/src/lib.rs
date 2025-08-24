@@ -55,15 +55,12 @@ pub fn run() {
                             }
                         } else {
                             // Create the window if it doesn't exist
-                            let window = WebviewWindowBuilder::new(
-                                app,
-                                "main",
-                                WebviewUrl::default(),
-                            )
-                            .title("Plodo Presenter")
-                            .inner_size(800.0, 600.0)
-                            .build()
-                            .unwrap();
+                            let window =
+                                WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
+                                    .title("Plodo Presenter")
+                                    .inner_size(800.0, 600.0)
+                                    .build()
+                                    .unwrap();
                             let _ = window.show();
                             let _ = window.set_focus();
                         }

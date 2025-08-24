@@ -3,11 +3,11 @@
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <span class="icon is-small has-text-secondary">
-            <i class="fas fa-asterisk"></i>
-          </span>
+          <b-icon class="has-text-secondary" icon="asterisk" size="is-small" />
         </div>
-        <div class="level-item has-text-secondary has-text-weight-bold">Session ID</div>
+        <div class="level-item has-text-secondary has-text-weight-bold">
+          Session ID
+        </div>
       </div>
       <div class="level-right">
         <div class="level-item">
@@ -16,24 +16,22 @@
               class="button is-family-monospace has-text-secondary has-text-weight-bold"
               title="Copy to clipboard"
               @click="copySessionId()"
-            >{{ sessionStore.sessionConfig?.id || 'N/A' }}</button>
+            >
+              {{ activeSession.id }}
+            </button>
             <button
               class="button has-text-secondary"
               title="Copy to clipboard"
               @click="copySessionId()"
             >
-              <span class="icon is-small">
-                <i class="fas fa-copy"></i>
-              </span>
+              <b-icon icon="copy" size="is-small" />
             </button>
             <button
               class="button has-text-grey"
               title="Open in browser"
               @click="openSessionInBrowser()"
             >
-              <span class="icon is-small">
-                <i class="fas fa-external-link-alt"></i>
-              </span>
+              <b-icon icon="external-link-alt" size="is-small" />
             </button>
           </div>
         </div>
@@ -43,9 +41,7 @@
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <span class="icon is-small">
-            <i class="fas fa-tv"></i>
-          </span>
+          <b-icon class icon="tv" size="is-small" />
         </div>
         <div class="level-item">Screen</div>
       </div>
@@ -58,71 +54,80 @@
     <div class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
-          <span class="icon is-small">
-            <i class="far fa-heart"></i>
-          </span>
+          <b-icon icon="heart" pack="far" size="is-small" />
         </div>
         <div class="level-item">Show celebration</div>
       </div>
       <div class="level-right">
         <div class="level-item">
-          <label class="switch">
-            <input type="checkbox" v-model="shouldCelebrate">
-            <span class="slider round"></span>
-          </label>
+          <b-switch
+            v-model="shouldCelebrate"
+            size="is-small"
+            title="Toggle celebration on screen"
+          />
         </div>
       </div>
     </div>
     <div class="buttons is-centered">
       <button class="button is-secondary is-rounded" @click="quitSession">
-        <span class="icon is-small">
-          <i class="fas fa-sign-out-alt"></i>
-        </span>
+        <b-icon icon="sign-out-alt" size="is-small" />
         <span>End session</span>
       </button>
     </div>
     <smiley-counter
-      v-for="opt in sessionStore.sessionConfig?.votingOptions || []"
+      v-for="opt in activeSession.options"
       :key="opt.id"
-      :smiley="opt.emoji"
-      :count="getVoteCount(opt.id)"
+      :smiley="opt.id"
+      :count="opt.count"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from '../stores/session'
 import SmileyCounter from '../components/SmileyCounter.vue'
 import ScreenSelectionDropdown from '../components/ScreenSelectionDropdown.vue'
+import { openUrl } from '@tauri-apps/plugin-opener'
 
 const router = useRouter()
 const sessionStore = useSessionStore()
-const selectedScreenId = ref('')
 
-const shouldCelebrate = computed({
-  get() {
-    return false // We'll implement celebration later
-  },
-  set(_val: boolean) {
-    // Toggle celebration
+const activeSession = computed(() => {
+  if (!sessionStore.sessionConfig) return { id: '', options: [] }
+
+  return {
+    id: sessionStore.sessionConfig.id || '',
+    options: sessionStore.sessionConfig.votingOptions.map(opt => ({
+      id: opt.id,
+      emoji: opt.emoji,
+      label: opt.label,
+      count: getVoteCount(opt.id),
+    })),
   }
 })
 
+const celebrate = computed(() => {
+  // This would come from store in the original
+  return false
+})
+
+const shouldCelebrate = computed({
+  get() {
+    return celebrate.value
+  },
+  set(val: boolean) {
+    // In the original this would dispatch to store
+    console.log('Toggle celebration:', val)
+  },
+})
+
 const getVoteCount = (optionId: string) => {
-  const result = sessionStore.votingResults.find((r: any) => r.optionId === optionId)
+  const result = sessionStore.votingResults.find(
+    (r: any) => r.optionId === optionId
+  )
   return result ? result.count : 0
-}
-
-const copySessionInfo = async () => {
-  // For now, just log. In production, copy session details to clipboard
-  console.log('Would copy session info to clipboard')
-}
-
-const handleScreenChange = (screenId: string) => {
-  selectedScreenId.value = screenId
-  // Handle screen change
 }
 
 const quitSession = async () => {
@@ -131,71 +136,36 @@ const quitSession = async () => {
 }
 
 const copySessionId = async () => {
-  // For now, just log. In production, copy session ID to clipboard
-  console.log('Would copy session ID to clipboard:', sessionStore.sessionConfig?.id)
+  // In the original this used clipboard.writeText
+  // For Tauri, we'd use @tauri-apps/plugin-clipboard
+  console.log('Would copy to clipboard:', activeSession.value.id)
 }
 
 const openSessionInBrowser = async () => {
-  // For now, just log. In production, open URL in browser
-  const sessionId = sessionStore.sessionConfig?.id
-  console.log('Would open in browser:', `https://www.plodo.io/#/start/${sessionId}`)
+  await openUrl(`https://www.plodo.io/#/start/${activeSession.value.id}`)
 }
 </script>
 
 <style scoped>
-/* Switch styles */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+#sessionId {
+  padding: 5px;
+  margin-left: -5px;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
+/* #sessionId:hover {c
+  border: solid 1px $primary;
+  border-radius: 0.2em;
+  padding: 5px;
+  margin-left: -6px;
+} */
+
+/* #sessionId:hover .sessionId-btn {
+  color: $primary;
 }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
+.sessionId-btn {
+  color: $light;
+  margin-left: 0.5em;
+} */
 </style>

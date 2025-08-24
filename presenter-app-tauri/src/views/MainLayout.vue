@@ -8,7 +8,11 @@
       <div class="level is-mobile">
         <div class="level-left">
           <div class="level-item">
-            <img id="footer-logo" src="/communication.svg" width="50px" />
+            <img
+              id="footer-logo"
+              src="../assets/artwork/logo.png"
+              width="50px"
+            />
           </div>
         </div>
         <div class="level-right">
@@ -42,5 +46,10 @@ import SessionHealth from '../components/SessionHealth.vue'
 
 footer {
   padding: 0.5rem 1rem 0.5rem;
+}
+
+#footer-logo {
+  /* filter: saturate(0%) contrast(0%) brightness(200%); */
+  /* opacity: 0.5; */
 }
 </style>
