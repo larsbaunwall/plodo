@@ -7,7 +7,7 @@
         placeholder="Select screen"
         @input="handleScreenChange"
       >
-        <option :value="primaryScreen.id">
+        <option v-if="primaryScreen" :value="primaryScreen.id">
           Primary ({{ primaryScreen.size.width }}x{{
             primaryScreen.size.height
           }})
@@ -28,6 +28,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, toRefs } from 'vue'
+import { invoke } from '@tauri-apps/api/core'
 
 interface Screen {
   id: string
@@ -54,26 +55,7 @@ const emit = defineEmits<{
 }>()
 
 const selectedScreen = ref('')
-const allScreens = ref<Screen[]>([
-  {
-    id: 'primary',
-    name: 'Primary Screen',
-    size: { width: 1920, height: 1080 },
-    isPrimary: true,
-  },
-  {
-    id: 'external-1',
-    name: 'External Monitor 1',
-    size: { width: 2560, height: 1440 },
-    isPrimary: false,
-  },
-  {
-    id: 'external-2',
-    name: 'External Monitor 2',
-    size: { width: 1366, height: 768 },
-    isPrimary: false,
-  },
-])
+const allScreens = ref<Screen[]>([])
 
 const primaryScreen = computed(() => {
   return allScreens.value.find(x => x.isPrimary) || allScreens.value[0]
@@ -83,7 +65,6 @@ const externalScreens = computed(() => {
   return allScreens.value.filter(x => !x.isPrimary)
 })
 
-// Watch for changes and emit
 const handleScreenChange = () => {
   const screen = allScreens.value.find(x => x.id === selectedScreen.value)
   if (screen) {
@@ -91,9 +72,17 @@ const handleScreenChange = () => {
   }
 }
 
-onMounted(() => {
-  selectedScreen.value = primaryScreen.value.id
-  handleScreenChange()
+onMounted(async () => {
+  try {
+    const screens = await invoke<Screen[]>('enumerate_displays')
+    allScreens.value = screens
+    if (primaryScreen.value) {
+      selectedScreen.value = primaryScreen.value.id
+      handleScreenChange()
+    }
+  } catch (e) {
+    // fallback: keep empty
+  }
 })
 </script>
 

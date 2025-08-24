@@ -47,7 +47,7 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          <screen-selection-dropdown />
+          <screen-selection-dropdown @screen-changed="handleScreenChanged" />
         </div>
       </div>
     </div>
@@ -90,6 +90,7 @@ import { useSessionStore } from '../stores/session'
 import SmileyCounter from '../components/SmileyCounter.vue'
 import ScreenSelectionDropdown from '../components/ScreenSelectionDropdown.vue'
 import { openUrl } from '@tauri-apps/plugin-opener'
+import { invoke } from '@tauri-apps/api/core'
 
 const router = useRouter()
 const sessionStore = useSessionStore()
@@ -108,18 +109,20 @@ const activeSession = computed(() => {
   }
 })
 
-const celebrate = computed(() => {
-  // This would come from store in the original
-  return false
-})
+const celebrate = computed(() => sessionStore.celebrate)
 
 const shouldCelebrate = computed({
   get() {
     return celebrate.value
   },
   set(val: boolean) {
-    // In the original this would dispatch to store
-    console.log('Toggle celebration:', val)
+    sessionStore.toggleCelebration(val)
+    if (val) {
+      const screenId = sessionStore.celebrationScreen || ''
+      invoke('show_celebration_window', { screen_id: screenId }).catch(() => {})
+    } else {
+      invoke('hide_celebration_window').catch(() => {})
+    }
   },
 })
 
@@ -130,15 +133,20 @@ const getVoteCount = (optionId: string) => {
   return result ? result.count : 0
 }
 
+const handleScreenChanged = (id: string) => {
+  sessionStore.setCelebrationScreen(id)
+}
 const quitSession = async () => {
   await sessionStore.endSession()
   router.push({ name: 'Setup' })
 }
 
 const copySessionId = async () => {
-  // In the original this used clipboard.writeText
-  // For Tauri, we'd use @tauri-apps/plugin-clipboard
-  console.log('Would copy to clipboard:', activeSession.value.id)
+  const id = activeSession.value.id
+  try {
+    await navigator.clipboard.writeText(id)
+  } catch {
+  }
 }
 
 const openSessionInBrowser = async () => {

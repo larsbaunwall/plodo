@@ -68,8 +68,8 @@ $black: #000;
 // NOW @import statements can come after @use
 @import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
 
-@forward "twemoji-amazing.scss";
-@forward "buefy/src/scss/buefy";
+@import "twemoji-amazing.scss";
+@import "buefy/src/scss/buefy";
 
 // Critical: Maintain window transparency for Tauri
 html {

@@ -3,6 +3,7 @@ use tauri::{
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
     Manager, WebviewUrl, WebviewWindowBuilder,
 };
+use tauri::{command, AppHandle, PhysicalSize};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -10,17 +11,78 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[derive(serde::Serialize)]
+struct MonitorInfo {
+    id: String,
+    name: String,
+    size: MonitorSize,
+    is_primary: bool,
+}
+
+#[derive(serde::Serialize)]
+struct MonitorSize {
+    width: u32,
+    height: u32,
+}
+
+#[command]
+fn enumerate_displays(app: AppHandle) -> Vec<MonitorInfo> {
+    let primary = app.primary_monitor().ok().flatten();
+    let mut list: Vec<MonitorInfo> = vec![];
+    if let Ok(monitors) = app.available_monitors() {
+        for m in monitors {
+            let name = m.name().cloned().unwrap_or_default();
+            let size: PhysicalSize<u32> = *m.size();
+            let is_primary = if let Some(ref p) = primary {
+                p.name() == m.name()
+            } else {
+                false
+            };
+            list.push(MonitorInfo {
+                id: name.clone(),
+                name: name.clone(),
+                size: MonitorSize { width: size.width, height: size.height },
+                is_primary,
+            });
+        }
+    }
+    list
+}
+
+#[command]
+fn show_celebration_window(app: AppHandle, _screen_id: String) -> Result<(), String> {
+    if let Some(win) = app.get_webview_window("celebration") {
+        let _ = win.show();
+        let _ = win.set_focus();
+        return Ok(());
+    }
+    let window = WebviewWindowBuilder::new(&app, "celebration", WebviewUrl::App("index.html#/celebrate".into()))
+        .title("Celebration")
+        .decorations(false)
+        .transparent(true)
+        .always_on_top(true)
+        .build()
+        .map_err(|e| e.to_string())?;
+    let _ = window.set_focus();
+    Ok(())
+}
+
+#[command]
+fn hide_celebration_window(app: AppHandle) {
+    if let Some(win) = app.get_webview_window("celebration") {
+        let _ = win.hide();
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
-            // Build tray menu
             let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let show = MenuItem::with_id(app, "show", "Show Window", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&show, &quit])?;
 
-            // Build the tray icon
             let _tray = TrayIconBuilder::with_id("main")
                 .tooltip("Plodo Presenter")
                 .icon(app.default_window_icon().unwrap().clone())
@@ -54,7 +116,6 @@ pub fn run() {
                                 let _ = window.set_focus();
                             }
                         } else {
-                            // Create the window if it doesn't exist
                             let window =
                                 WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
                                     .title("Plodo Presenter")
@@ -70,7 +131,7 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, enumerate_displays, show_celebration_window, hide_celebration_window])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
